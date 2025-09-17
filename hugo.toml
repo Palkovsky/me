@@ -1,0 +1,27 @@
+baseURL = 'https://macek.io/'
+languageCode = 'en-us'
+title = 'Dawid Macek'
+theme = 'minimal-blog'
+
+# Site parameters
+[params]
+  author = "Dawid Macek"
+  email = "dawidmacek42@gmail.com"
+  github = "https://github.com/Palkovsky"
+  linkedin = "https://www.linkedin.com/in/dawid-macek-8a1143205/"
+
+[pagination]
+  disableAliases = false
+  pagerSize = 10
+  path = 'page'
+
+# Menu configuration
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 20

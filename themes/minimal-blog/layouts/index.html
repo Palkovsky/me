@@ -1,0 +1,13 @@
+{{ define "main" }}
+<div class="home-content">
+{{ if .Site.Params.email }}
+<a href="mailto:{{ .Site.Params.email }}">E-mail</a><br/>
+{{ end }}
+{{ if .Site.Params.github }}
+<a href="{{ .Site.Params.github }}">GitHub</a><br/>
+{{ end }}
+{{ if .Site.Params.linkedin }}
+<a href="{{ .Site.Params.linkedin }}">LinkedIn</a><br/>
+{{ end }}
+</div>
+{{ end }}
