@@ -1,5 +1,6 @@
 +++
-date = '2025-09-13T09:15:00+02:00'
+date = '2023-09-13T09:15:00+02:00'
+years = ['2023']
 draft = false
 title = 'The Philosophy of Minimal Web Design'
 tags = ['design', 'minimalism', 'web development', 'philosophy']

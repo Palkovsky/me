@@ -3,6 +3,15 @@ languageCode = 'en-us'
 title = "Dawid's ramblings"
 theme = 'minimal-blog'
 
+# Taxonomies
+[taxonomies]
+  tag = "tags"
+  year = "years"
+
+# Taxonomy permalinks
+[permalinks]
+  years = "/posts/:slug/"
+
 # Site parameters
 [params]
   author = "Dawid Macek"

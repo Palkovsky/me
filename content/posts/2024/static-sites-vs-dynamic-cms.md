@@ -1,5 +1,6 @@
 +++
-date = '2025-09-12T16:45:00+02:00'
+date = '2024-09-12T16:45:00+02:00'
+years = ['2024']
 draft = false
 title = 'Static Sites vs Dynamic CMS: Choosing the Right Tool'
 tags = ['static sites', 'cms', 'web development', 'performance']

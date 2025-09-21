@@ -1,5 +1,6 @@
 +++
-date = '2025-09-15T10:30:00+02:00'
+date = '2024-09-15T10:30:00+02:00'
+years = ['2024']
 draft = false
 title = "Getting Started with Hugo: A Beginner's Guide"
 tags = ['hugo', 'web development', 'static sites']

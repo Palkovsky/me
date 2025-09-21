@@ -76,8 +76,59 @@ blockquote {
   margin-bottom: 1em;
 }
 
+.year-and-article-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 0.2em;
+}
+
+.year-and-article-header .year-header {
+  margin: 0 1em 0 0;
+  padding: 0;
+  border: none;
+  font-size: 1.2em;
+  color: #000;
+  min-width: 3em;
+  flex-shrink: 0;
+}
+
+.year-and-article-header .article-header {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.article-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.2em;
+}
+
+.year-and-article-header .article-header {
+  margin-left: 0; /* Reset margin for article header inside year container */
+}
+
 .article-title {
   margin-bottom: 0;
+  flex: 1;
+}
+
+.article-date {
+  margin-left: 1em;
+  flex-shrink: 0;
+}
+
+.article-tags,.article-summary,.article-header {
+  margin-left: 5em; /* Align with article content */
+}
+
+.article-summary {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+.article-summary p {
+  margin: 0;
 }
 
 .pagination {

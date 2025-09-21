@@ -1,7 +1,5 @@
 {{ define "main" }}
-  <h2>Tag: {{ .Title }}</h2>
-  {{ .Content }}
-  {{ range .Pages }}
-    <h3><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h3>
-  {{ end }}
+<h2><u>{{ .Title }}</u></h2>
+{{ .Content }}
+{{ partial "post-list.html" . }}
 {{ end }}

@@ -1,5 +1,6 @@
 +++
-date = '2025-09-11T11:30:00+02:00'
+date = '2024-09-11T11:30:00+02:00'
+years = ['2024']
 draft = false
 title = 'The Art of Technical Writing: Clear Communication in a Complex World'
 tags = ['writing', 'communication', 'documentation', 'technical skills']

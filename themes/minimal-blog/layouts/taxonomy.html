@@ -1,7 +1,46 @@
 {{ define "main" }}
-  <h2>{{ .Title }}</h2>
   {{ .Content }}
+  
+  {{- /* Group pages by year */ -}}
+  {{ $years := slice }}
   {{ range .Pages }}
-    <h3><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h3>
+      {{ $year := .Date.Format "2006" }}
+      {{ if not (in $years $year) }}
+          {{ $years = $years | append $year }}
+      {{ end }}
+  {{ end }}
+  {{ $years = sort $years "value" "desc" }}
+
+  {{ range $yearIndex, $year := $years }}
+      {{ $pagesInYear := slice }}
+      {{ range $.Pages }}
+          {{ if eq (.Date.Format "2006") $year }}
+              {{ $pagesInYear = $pagesInYear | append . }}
+          {{ end }}
+      {{ end }}
+      {{ $pagesInYear = sort $pagesInYear ".Date" "desc" }}
+      
+      {{ range $pageIndex, $page := $pagesInYear }}
+          <article class="article-item">
+              {{ if eq $pageIndex 0 }}
+              <div class="year-and-article-header">
+                  <h2 class="year-header">{{ $year }}</h2>
+                  <div class="article-header">
+                      <h3 class="article-title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+                      <small class="article-date">{{ $page.Date.Format "January 2" }}</small>
+                  </div>
+              </div>
+              {{ else }}
+              <div class="article-header">
+                  <h3 class="article-title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+                  <small class="article-date">{{ $page.Date.Format "January 2" }}</small>
+              </div>
+              {{ end }}
+          </article>
+      {{ end }}
+      
+      {{ if ne $yearIndex (sub (len $years) 1) }}
+          <hr/>
+      {{ end }}
   {{ end }}
 {{ end }}

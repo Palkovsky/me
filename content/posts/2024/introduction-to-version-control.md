@@ -1,5 +1,6 @@
 +++
-date = '2025-09-10T08:00:00+02:00'
+date = '2024-09-10T08:00:00+02:00'
+years = ['2024']
 draft = false
 title = 'Introduction to Version Control: Why Every Developer Needs Git'
 tags = ['git', 'version control', 'development', 'collaboration']
@@ -404,7 +405,5 @@ Version control with Git is not just a tool—it's a fundamental skill for any d
 Start with the basics: init, add, commit, push, pull. As you become comfortable, gradually introduce branching, merging, and more advanced features.
 
 Remember: the best way to learn Git is to use it daily. Even for personal projects, the habits you build will serve you well when working with teams.
-
----
 
 *What was your first experience with version control? What Git features do you wish you had learned earlier?*

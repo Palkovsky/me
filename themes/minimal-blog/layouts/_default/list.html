@@ -1,34 +1,3 @@
 {{ define "main" }}
-{{ range .Paginator.Pages }}
-<article class="article-item">
-    <h2 class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-    <small>{{ .Date.Format "January 2, 2006" }}</small>
-    <p>{{ .Summary }}</p>
-    Tags: {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
-</article>
-{{ if not (eq . (index $.Paginator.Pages (sub (len $.Paginator.Pages) 1))) }}
-<hr>
-{{ end }}
-{{ end }}
-
-{{ if gt (len .Paginator.Pages) 0 }}
-{{ end }}
-
-<!-- Pagination -->
-{{ $paginator := .Paginator }}
-{{ if gt $paginator.TotalPages 1 }}
-<nav class="pagination">
-    <p>
-        {{ if $paginator.HasPrev }}
-            <a href="{{ $paginator.Prev.URL }}">← Previous</a>
-        {{ end }}
-        
-        Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
-        
-        {{ if $paginator.HasNext }}
-            <a href="{{ $paginator.Next.URL }}">Next →</a>
-        {{ end }}
-    </p>
-</nav>
-{{ end }}
+{{ partial "post-list.html" . }}
 {{ end }}

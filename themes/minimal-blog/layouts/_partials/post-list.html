@@ -1,0 +1,78 @@
+{{- /*
+Renders a paginated list of posts grouped by year.
+
+@context {page} . The current page context (should have .Paginator.Pages available)
+
+@example: {{ partial "post-list.html" . }}
+*/}}
+
+{{ $years := slice }}
+{{ range .Paginator.Pages }}
+    {{ $year := .Date.Format "2006" }}
+    {{ if not (in $years $year) }}
+        {{ $years = $years | append $year }}
+    {{ end }}
+{{ end }}
+{{ $years = sort $years "value" "desc" }}
+
+{{ range $yearIndex, $year := $years }}
+    {{ $pagesInYear := slice }}
+    {{ range $.Paginator.Pages }}
+        {{ if eq (.Date.Format "2006") $year }}
+            {{ $pagesInYear = $pagesInYear | append . }}
+        {{ end }}
+    {{ end }}
+    {{ $pagesInYear = sort $pagesInYear ".Date" "desc" }}
+    {{ range $pageIndex, $page := $pagesInYear }}
+        <article class="article-item">
+            {{ if eq $pageIndex 0 }}
+            <div class="year-and-article-header">
+                <h2 class="year-header">{{ $year }}</h2>
+                <div class="article-header">
+                    <h3 class="article-title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+                    <small class="article-date">{{ $page.Date.Format "January 2" }}</small>
+                </div>
+            </div>
+            {{ else }}
+            <div class="article-header">
+                <h3 class="article-title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+                <small class="article-date">{{ $page.Date.Format "January 2" }}</small>
+            </div>
+            {{ end }}
+            <div class="article-summary">
+                <p>{{ $page.Summary }}</p>
+            </div>
+            <div class="article-tags">
+                {{ partial "terms.html" (dict "taxonomy" "tags" "page" $page) }}
+            </div>
+        </article>
+        {{ if lt $pageIndex (sub (len $pagesInYear) 1) }}
+        {{ end }}
+    {{ end }}
+    {{ if lt $yearIndex (sub (len $years) 1) }}
+    {{ end }}
+    {{ if ne $yearIndex (sub (len $years) 1) }}
+        <hr/>
+    {{ end }}
+{{ end }}
+
+{{ if gt (len .Paginator.Pages) 0 }}
+{{ end }}
+
+<!-- Pagination -->
+{{ $paginator := .Paginator }}
+{{ if gt $paginator.TotalPages 1 }}
+<nav class="pagination">
+    <p>
+        {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}">← Previous</a>
+        {{ end }}
+        
+        Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
+        
+        {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}">Next →</a>
+        {{ end }}
+    </p>
+</nav>
+{{ end }}

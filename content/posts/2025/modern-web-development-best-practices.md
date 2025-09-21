@@ -1,5 +1,6 @@
 +++
-date = '2025-09-17T14:30:00+02:00'
+date = '2025-09-20T14:30:00+02:00'
+years = ['2025']
 draft = false
 title = "Modern Web Development Best Practices: A Comprehensive Guide for 2025"
 tags = ['web development', 'best practices', 'performance', 'accessibility', 'security', 'javascript', 'css', 'html']
