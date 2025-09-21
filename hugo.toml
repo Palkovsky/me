@@ -1,6 +1,6 @@
 baseURL = 'https://macek.io/'
 languageCode = 'en-us'
-title = 'Dawid Macek'
+title = "Dawid's ramblings"
 theme = 'minimal-blog'
 
 # Site parameters
@@ -12,7 +12,7 @@ theme = 'minimal-blog'
 
 [pagination]
   disableAliases = false
-  pagerSize = 10
+  pagerSize = 50
   path = 'page'
 
 # Menu configuration
@@ -25,3 +25,7 @@ theme = 'minimal-blog'
     name = "Posts"
     url = "/posts/"
     weight = 20
+  [[menu.main]]
+    name = "Resume"
+    url = "/resume.pdf"
+    weight = 30

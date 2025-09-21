@@ -14,16 +14,14 @@
         <h1 class="site-title"><a href="/">{{ .Site.Title }}</a></h1>
         <nav>
             {{ range .Site.Menus.main }}
-                {{ if eq . (index $.Site.Menus.main 0) }}
-                    <span>|</span>
-                {{ end }}
                 <a href="{{ .URL }}">{{ .Name }}</a>
-                {{ if not (eq . (index $.Site.Menus.main -1)) }}<span>|</span>{{ end }}
+                {{ if not (eq (index $.Site.Menus.main (sub (len $.Site.Menus.main) 1)).Name .Name) }}<span>/</span>{{ end }}
             {{ end }}
         </nav>
     </header>
 
     <main>
+        <hr/>
         {{ block "main" . }}{{ end }}
     </main>
 
