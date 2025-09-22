@@ -1,6 +1,6 @@
-baseURL = 'https://macek.io/'
+baseURL = 'https://dawidmacek.com/'
 languageCode = 'en-us'
-title = "Dawid's ramblings"
+title = "Dawid Macek"
 theme = 'minimal-blog'
 
 # Taxonomies
@@ -15,7 +15,7 @@ theme = 'minimal-blog'
 # Site parameters
 [params]
   author = "Dawid Macek"
-  email = "dawidmacek42@gmail.com"
+  email = "me@dawidmacek.com"
   github = "https://github.com/Palkovsky"
   linkedin = "https://www.linkedin.com/in/dawid-macek-8a1143205/"
 
