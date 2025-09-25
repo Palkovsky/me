@@ -51,9 +51,6 @@ Renders a paginated list of posts grouped by year.
     {{ end }}
     {{ if lt $yearIndex (sub (len $years) 1) }}
     {{ end }}
-    {{ if ne $yearIndex (sub (len $years) 1) }}
-        <hr/>
-    {{ end }}
 {{ end }}
 
 {{ if gt (len .Paginator.Pages) 0 }}
