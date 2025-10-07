@@ -136,14 +136,32 @@ blockquote {
     margin: 0 auto;
 }
 
-article h1,h2,h3,h4,h5,h6 {
-  margin-top: 0.2em;
-  margin-bottom: 0.1em;
+:root{
+  /* Global control — change this to scale all heading vertical gaps */
+  --heading-margin-scale: 0.6; /* 1 is full size, 0.5 halves the gaps, etc. */
+
+  /* Base vertical "space units" for each heading (start value before scaling) */
+  --h1-space: 1.6rem;
+  --h2-space: 1.2rem;
+  --h3-space: 1.0rem;
+  --h4-space: 0.8rem;
+  --h5-space: 0.6rem;
+  --h6-space: 0.5rem;
+
+  /* Ratio between top and bottom margin (useful if you want top bigger) */
+  --heading-after-ratio: 0.5; /* bottom margin = top * ratio */
 }
 
+article h1 { margin-block: calc(var(--h1-space) * var(--heading-margin-scale)) calc(var(--h1-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
+article h2 { margin-block: calc(var(--h2-space) * var(--heading-margin-scale)) calc(var(--h2-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
+article h3 { margin-block: calc(var(--h3-space) * var(--heading-margin-scale)) calc(var(--h3-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
+article h4 { margin-block: calc(var(--h4-space) * var(--heading-margin-scale)) calc(var(--h4-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
+article h5 { margin-block: calc(var(--h5-space) * var(--heading-margin-scale)) calc(var(--h5-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
+article h6 { margin-block: calc(var(--h6-space) * var(--heading-margin-scale)) calc(var(--h6-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
+
 article p,ul, table, img, blockquote, pre {
-  margin-top: 0.6em;
-  margin-bottom: 0.6em;
+  margin-top: 0.4em;
+  margin-bottom: 0em;
 }
 
 .home-content {
