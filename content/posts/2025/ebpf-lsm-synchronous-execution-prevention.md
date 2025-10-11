@@ -2,8 +2,8 @@
 date = '2025-10-05T18:44:36+02:00'
 years = ['2025']
 draft = false
-title = 'eBPF + LSM: Synchronous Execution Prevention'
-tags = []
+title = 'eBPF + LSM: Synchronous execution prevention'
+tags = ['ebpf', 'lsm', 'linux', 'rust']
 +++
 
 LSM (Linux Security Modules) hooks offer a way to synchronously stop certain actions from taking place on a Linux system.
@@ -26,7 +26,7 @@ GRUB_CMDLINE_LINUX="lsm=lockdown,capability,landlock,yama,apparmor,bpf"
 
 # Finding the right hook
 
-Hooks are stored within the [`union security_list_options`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/lsm_hooks.h#L38):
+Hooks are stored inside the [`union security_list_options`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/lsm_hooks.h#L38):
 
 ```c
 union security_list_options {
@@ -202,7 +202,7 @@ int BPF_PROG(handle_bprm_check_security, struct linux_binprm *bprm) {
 ```
 
 **Note:** [`struct bprm`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/binfmts.h#L18) holds a `filename` field, so this is probably a "proper" way to get the executable path in this specific hook. 
-However, having the ability to convert [`struct path`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/path.h#L8) into a string opens up a door for many powerful functionalities in other hooks.
+However, having the ability to convert [`struct path`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/path.h#L8) into a string representation opens up a door for many powerful functionalities in different hooks.
 
 # User-space loader
 
@@ -216,13 +216,13 @@ Typical setup consists of two components:
 The loader in this case initializes an eBPF application from the build-time generated `lsm::LsmSkelBuilder`.
 
 ```rust
-use anyhow::{Result, bail};
+use anyhow::bail;
 use libbpf_rs::{*, skel::*};
 use plain::Plain;
 use std::ffi::CString;
 use std::str::FromStr;
 
-fn main() -> Result<()> {
+fn main() -> anyhow::Result<()> {
 	// These structs are build-time generated, based on the *.ebf.c program
     let mut skel_builder = lsm::LsmSkelBuilder::default();
     skel_builder.obj_builder.debug(true);
@@ -242,6 +242,17 @@ fn main() -> Result<()> {
     loop {
         std::thread::sleep(std::time::Duration::from_secs(1));
     }
+}
+
+fn bump_memlock_rlimit() -> anyhow::Result<()> {
+    let rlimit = libc::rlimit {
+        rlim_cur: 128 << 20,
+        rlim_max: 128 << 20,
+    };
+    if unsafe { libc::setrlimit(libc::RLIMIT_MEMLOCK, &rlimit) } != 0 {
+        bail!("Failed to increase rlimit");
+    }
+    Ok(())
 }
 ```
 
@@ -268,23 +279,185 @@ bash: /usr/bin/ls: Operation not permitted
 ```
 
 Great! This proves LSM hook actually works and is capable of **synchronously** preventing execution of a given exectuable.
-Asynchronous solutions might let malware run for a bit, giving it a short window to do some harm. 
+Asynchronous solutions might let malware run for a bit, giving it a brief window to do some harm. 
 
 However, the example is very limited and not scalable at all.
-What if we want to block many executables?
+What if we want to block multiple executables?
 Let's explore further.
 
 # Step 2: Blocking multiple executables
 
 A naive solution would be to create a pre-configured list of blacklisted executables stored inside a map.
-Then in probe add a loop iterating over the list, comparing the strings, and returning `-EPERM` if a match found.
-This however might not be the most optimal aproach in this specific scenario.
+Then inside the probe, add a loop iterating over the list, comparing the strings, and returning `-EPERM` if a match found.
+This however, might not be the most scalable aproach in this specific scenario.
 
-TODO
+The better solution is somewhat similar - instead of storing blacklisted images as strings, we'll store hashes.
+The hook calculates a hash of the path and check presence in the map.
+If the hash is present, execution will gets blocked.
 
-# Step 3: Bonus
+---
 
-TODO
+For the hash function, something non-cryptocraphic (i.e. fast) and with a low-collision rate is needed.
+That's why I'll usa a random function found on the internet - 64-bit variant the of the [`fnv1a`](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function):
+
+**eBPF C**:
+```c
+static __inline __u64 fnv1a(const char *data, int len) {
+    __u64 hash = 14695981039346656037u;
+    for (int i = 0; i < len; ++i) {
+        char c = data[i];
+        if (c == 0)
+            break;
+        hash ^= (unsigned char)c;
+        hash *= 1099511628211u;
+    }
+    return hash;
+}
+```
+
+**Rust** counterpart:
+```rust
+pub fn fnv1a(bytes: &[u8]) -> u64 {
+    const OFFSET_BASIS: u64 = 14695981039346656037;
+    const PRIME: u64 = 1099511628211;
+    let mut hash: u64 = OFFSET_BASIS;
+    for &b in bytes {
+        hash ^= b as u64;
+        hash = hash.wrapping_mul(PRIME);
+    }
+    hash
+}
+```
+
+---
+
+Now all the pices are in place to finish the probe implementation.
+We'll be using [`BPF_MAP_TYPE_HASH`](https://docs.kernel.org/bpf/map_hash.html) map to hold the blocked hashes.
+The probe calculates a hash of an executable path, queries the map for presence using the [`bpf_map_lookup_elem`](https://docs.ebpf.io/linux/helper-function/bpf_map_lookup_elem/) API and returns `-EPERM` (Permission Denied) if the hash was found.
+
+```c
+struct {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(max_entries, 1 << 10); // 1024 hashes
+    __type(key, __u64);           // 64-bit hash of an executable path
+    __type(value, __u8);          // Unused value. Presence in map = blocked
+} blacklisted_images SEC(".maps");
+
+SEC("lsm/bprm_check_security")
+int BPF_PROG(handle_bprm_check_security, struct linux_binprm *bprm) {
+    struct path path = BPF_CORE_READ(bprm, file, f_path);
+    const char* filepath = get_path_str(&path);
+    if (!filepath) {
+        return 0;
+    }
+
+    __u64 hash = fnv1a(filepath, MAX_PATH_LEN);
+    __u8* blocked = bpf_map_lookup_elem(&blacklisted_images, &hash);
+    bpf_printk("bprm_check_security: %s (hash: %llu). blocked %s\n", \
+               filepath, hash, blocked ? "yes" : "no");
+    return blocked ? -EPERM : 0;
+}
+```
+
+---
+
+The loader program is responsible for pre-filling the hash map of blacklisted executables, it can collect them from a policy file of some sort.
+For simplicity sake we'll be using the hardcoded values.
+The loader works as follows:
+
+
+1. Before loading the eBPF applicaiton via `skel.attach()`, loader invokes `configure_blacklisted_images()` on the `blacklisted_images` map available from the eBPF application skeleton.
+2. `configure_blacklisted_images()` holds a hard-coded lists of executables we want prevent execution of. For presentation sake I'll block standard Linux utilites that could possibly facilitate reverse-shell creation  - [`netcat`](https://linux.die.net/man/1/nc) and [`socat`](https://linux.die.net/man/1/socat).
+3. The full executable paths are resolved using `which()` function mimicing behavior of Unix utility [`known under the same name`](https://linux.die.net/man/1/which).
+4. After the successful path resolution, the path string is converted to a C-String and a `fnv1a` hash gets calculated. `libbpf-rs` APIs expect.
+5. `libbpf-rs` APIs expect byte slices (`&[u8]`) for the keys and values, so the hash must be converted into the appropriate representation using the [`plain`](https://docs.rs/plain/latest/plain/) library.  Same applies to `value`, which in this case is simply hardoced to 1 and is not used for anything.
+6. Finally the `blacklist.update(...)` is called, inserting the prepared `hash_bytes` and `value_bytes` into the map. 
+
+```rust
+fn main() -> anyhow::Result<()> {
+    // Snipped
+    let mut skel = open_skel.load()?;
+    configure_blacklisted_images(&mut skel.maps.blacklisted_images)?;
+    skel.attach()?;
+    // Snipped
+}
+
+fn configure_blacklisted_images(blacklist: &mut MapImpl<'_, libbpf_rs::Mut>) -> anyhow::Result<()> {
+    static BLOCKED_IMAGES: &[&str] = &["nc", "netcat", "ncat", "socat"];
+
+    for binary_name in BLOCKED_IMAGES {
+        let Some(full_path) = which(binary_name) else {
+            println!("Could not find {} in PATH, skipping...", binary_name);
+            continue;
+        };
+
+        let path = CString::from_str(&full_path)?;
+        let path_bytes = path.as_bytes();
+        let hash = fnv1a(path_bytes);
+        println!("Blocking image: {} (hash={})", full_path, hash);
+        let hash_bytes = unsafe { plain::as_bytes(&hash) };
+        debug_assert_eq!(blacklist.key_size() as usize, hash_bytes.len());
+
+        let value = 1u8;
+        let value_bytes = unsafe { plain::as_bytes(&value) };
+        debug_assert_eq!(blacklist.value_size() as usize, value_bytes.len());
+
+        blacklist.update(hash_bytes, value_bytes, MapFlags::ANY)?;
+    }
+
+    Ok(())
+}
+
+fn which(binary_name: &str) -> Option<String> {
+    let Ok(path) = std::env::var("PATH") else {
+        panic!("PATH environment variable not set");
+    };
+
+    for path in std::env::split_paths(&path) {
+        let full_path = path.join(binary_name);
+        if full_path.is_file() {
+            if let Ok(real_path) = std::fs::canonicalize(&full_path) {
+                return real_path.to_str().map(str::to_string);
+            }
+        }
+    }
+    None
+}
+```
+
+---
+
+Now we're ready to run the program:
+
+```bash
+$ cargo run
+...
+Blocking image: /usr/bin/nc.openbsd (hash=8606513031954460367)
+Blocking image: /usr/bin/nc.openbsd (hash=8606513031954460367)
+Could not find ncat in PATH, skipping
+Blocking image: /usr/bin/socat (hash=17480434652207905915)
+Successfully started! Please run `sudo cat /sys/kernel/debug/tracing/trace_pipe` to see output of the BPF programs.
+```
+
+An attempt at executing any of the blocked images fails with permission denied status.
+
+```bash
+$ netcat
+-bash: /usr/bin/netcat: Operation not permitted
+$ socat
+-bash: /usr/bin/socat: Operation not permitted
+$ find . -exec nc \;
+find: ‘nc’: Operation not permitted
+find: ‘nc’: Operation not permitted
+find: ‘nc’: Operation not permitted
+```
+
+---
+
+Super. 
+This aproach greatly improves scalability, allowing to block execution of thousands of paths with minimal performance and memory footprint.
+Unfortunately, it's trivially bypassable - executable can either get renamed or moved to a different directory, disarming the protection altogether.
+Still, extra LSM-based probes can be added, to for example, prevent opening a handle the blacklisted file, making it impossible to copy or rename.
 
 # Summary
 
