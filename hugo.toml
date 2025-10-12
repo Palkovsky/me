@@ -38,3 +38,7 @@ theme = 'minimal-blog'
     name = "Resume"
     url = "/resume.pdf"
     weight = 30
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
