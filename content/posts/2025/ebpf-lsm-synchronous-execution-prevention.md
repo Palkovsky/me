@@ -1,5 +1,5 @@
 +++
-date = '2025-10-05T18:44:36+02:00'
+date = '2025-10-11T18:44:36+02:00'
 years = ['2025']
 draft = false
 title = 'eBPF + LSM: Synchronous execution prevention'
@@ -27,7 +27,7 @@ Let's explore a simple use-case scenario of blocking execution of pre-configured
 # Environment
 
 I'm using `Ubuntu 22.04` VM with a generic `5.15` kernel. 
-The important bit is to ensure tha kernel was compiled with `CONFIG_BPF_LSM` and that grub boots it with eBPF for LSM turned on.
+The important bit is to ensure that kernel was compiled with `CONFIG_BPF_LSM` and that grub boots it with eBPF for LSM turned on.
 
 ```bash
 $ cat /boot/config-$(uname -r)  | grep CONFIG_BPF_LSM
@@ -49,7 +49,7 @@ union security_list_options {
 };
 ```
 
-Actual listing can be found in the [lsm_hooks_defs.h](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/include/linux/lsm_hook_defs.h):
+Actual listing can be found in the [lsm_hook_defs.h](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/include/linux/lsm_hook_defs.h):
 
 ```c
 LSM_HOOK(int, 0, binder_set_context_mgr, const struct cred *mgr)
@@ -60,7 +60,7 @@ LSM_HOOK(int, 0, binder_transfer_binder, const struct cred *from,
 ...
 ```
 
-The union holds a single pointer (union, duh...) to a hook. The macro expands to:
+The union holds a pointer to a hook. The macro expands to:
 
 ```c
 union security_list_options {
@@ -76,7 +76,7 @@ union security_list_options {
 
 Since the goal is to block execution of a given executable, we need to know which hook gets called on the `execve` syscall.
 Grepping the definition list doesn't lead to anything obvious (not a Linux kernel pro).
-We need to look into the actual syscall call implementation.
+We need to look into the actual system call implementation.
 
 As we walk [do_execve](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1928) -> [do_execveat_common](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1784) -> [bprm_execve](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1730) -> [exec_binprm](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1685) -> [search_binary_handler](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1651), we'll eventually encounter a call to [`security_bprm_check`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/security/security.c#L1339). 
 The returned value short-circuts the system call, propagating the return value up to `do_execve`.
@@ -163,7 +163,7 @@ comm=bash filename=/usr/bin/netcat
 ```
 
 This is great, but it's just a simple "audit" probe - we can do that without LSM. 
-Unfortunately, `bpftrace` doesn't support overriding a return value, as it focuses on observability rather than prevention.
+Unfortunately, [bpftrace](https://github.com/bpftrace/bpftrace) doesn't support overriding a return value, as it focuses on observability rather than prevention.
 We need to build a fully-fledged eBPF program to get the active blocking behavior. 
 
 # Step 1: Blocking `/usr/bin/ls`
@@ -174,7 +174,7 @@ Important caveat is that kernel-owned path must be copied to the eBPF-owned memo
 eBPF programs (kernel helper functions being an exception) can not work on kernel-owned pointers directly.
 Considering the stack limit of 512 bytes and filesystem path limit being 4096 bytes, the [`BPF_MAP_TYPE_PERCPU_ARRAY`](https://docs.kernel.org/bpf/map_array.html) is a good candidate for storing the path eBPF side.
 
-Walking the [`struct dentry`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/dcache.h#L92) linked list in eBPF and converting it to a string is a post material on its own.
+Walking the [`struct dentry`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/dcache.h#L92) linked list in eBPF and converting it to a string is post-worthy material on its own.
 So... to keep this LSM-focused I'll use a pre-existing functionality "borrowed" from the [tracee](https://github.com/aquasecurity/tracee/tree/main) project ❤️.
 The function I'm interested in is [`get_path_str`](https://github.com/aquasecurity/tracee/blob/0c57dbe2fc4480798841b6ddf80b4ad707dc4755/pkg/ebpf/c/common/filesystem.h#L281).
 It converts a [`struct path`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/path.h#L8) into an eBPF-owned (held in a per-cpu array) `void*` pointer. 
@@ -217,7 +217,7 @@ However, having the ability to convert [`struct path`](https://github.com/torval
 # Step 2: User-space loader
 
 [libbpf-rs](https://github.com/libbpf/libbpf-rs) will be used to create a user-space loader of the eBPF application.
-The repository contains multiple examples on setting up a starter project.
+Their Github repository contains multiple examples on setting up a starter project.
 Typical setup consists of two components:
 
 - Compile-time skeleton generator, invoking `clang` on the `*.bpf.c` sources (`build.rs`)
@@ -288,7 +288,7 @@ $ ls
 bash: /usr/bin/ls: Operation not permitted
 ```
 
-Great! This proves LSM hook actually works and is capable of **synchronously** preventing execution of a given exectuable.
+Great! This proves LSM hook actually works and is capable of **synchronously** preventing execution of a given executable.
 Asynchronous solutions might let malware run for a bit, giving it a brief window to do some harm. 
 
 However, the example is very limited and not scalable at all.
@@ -299,16 +299,16 @@ Let's explore further.
 
 A naive solution would be to create a pre-configured list of blacklisted executables stored inside a map.
 Then inside the probe, add a loop iterating over the list, comparing the strings, and returning `-EPERM` if a match found.
-This however, might not be the most scalable aproach in this specific scenario.
+This, however, might not be the most scalable approach in this specific scenario.
 
 The better solution is somewhat similar - instead of storing blacklisted images as strings, we'll store hashes.
-The hook calculates a hash of the path and check presence in the map.
-If the hash is present, execution will gets blocked.
+The hook calculates a hash of the path and checks presence in the map.
+If the hash is present, execution will get blocked.
 
 ---
 
-For the hash function, something non-cryptocraphic (i.e. fast) and with a low-collision rate is needed.
-That's why I'll usa a random function found on the internet - 64-bit variant the of the [`fnv1a`](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function):
+For the hash function, something non-cryptographic (i.e. fast) and with a low-collision rate is needed.
+That's why I'll use a random function found on the internet - 64-bit variant of the [`fnv1a`](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function):
 
 **eBPF C**:
 ```c
@@ -341,7 +341,7 @@ pub fn fnv1a(bytes: &[u8]) -> u64 {
 
 ---
 
-Now all the pices are in place to finish the probe implementation.
+Now all the pieces are in place to finish the probe implementation.
 We'll be using [`BPF_MAP_TYPE_HASH`](https://docs.kernel.org/bpf/map_hash.html) map to hold the blocked hashes.
 The probe calculates a hash of an executable path, queries the map for presence using the [`bpf_map_lookup_elem`](https://docs.ebpf.io/linux/helper-function/bpf_map_lookup_elem/) API and returns `-EPERM` (Permission Denied) if the hash was found.
 
@@ -377,11 +377,11 @@ The loader works as follows:
 
 
 1. Before loading the eBPF applicaiton via `skel.attach()`, loader invokes `configure_blacklisted_images()` on the `blacklisted_images` map available from the eBPF application skeleton.
-2. `configure_blacklisted_images()` holds a hard-coded lists of executables we want prevent execution of. For presentation sake I'll block standard Linux utilites that could possibly facilitate reverse-shell creation  - [`netcat`](https://linux.die.net/man/1/nc) and [`socat`](https://linux.die.net/man/1/socat).
-3. The full executable paths are resolved using `which()` function mimicing behavior of Unix utility [`known under the same name`](https://linux.die.net/man/1/which).
-4. After the successful path resolution, the path string is converted to a C-String and a `fnv1a` hash gets calculated. `libbpf-rs` APIs expect.
-5. `libbpf-rs` APIs expect byte slices (`&[u8]`) for the keys and values, so the hash must be converted into the appropriate representation using the [`plain`](https://docs.rs/plain/latest/plain/) library.  Same applies to `value`, which in this case is simply hardoced to 1 and is not used for anything.
-6. Finally the `blacklist.update(...)` is called, inserting the prepared `hash_bytes` and `value_bytes` into the map. 
+2. `configure_blacklisted_images()` holds a hard-coded list of executables we want to prevent execution of. For presentation's sake I'll block standard Linux utilities that could possibly facilitate reverse-shell creation - [`netcat`](https://linux.die.net/man/1/nc) and [`socat`](https://linux.die.net/man/1/socat).
+3. The full executable paths are resolved using `which()` function mimicking behavior of Unix utility [`known under the same name`](https://linux.die.net/man/1/which).
+4. After the successful path resolution, the path string is converted to a C-String and a `fnv1a` hash gets calculated.
+5. `libbpf-rs` APIs expect byte slices (`&[u8]`) for the keys and values, so the hash gets be converted into the appropriate representation using the [`plain`](https://docs.rs/plain/latest/plain/) library. Same applies to `value`, which in this case is simply hardcoded to 1 and is not used for anything.
+6. Finally, the `blacklist.update(...)` is called, inserting the prepared `hash_bytes` and `value_bytes` into the map. 
 
 ```rust
 fn main() -> anyhow::Result<()> {
@@ -464,11 +464,11 @@ find: ‘nc’: Operation not permitted
 
 ---
 
-Super. 
-This aproach greatly improves scalability, allowing to block execution of thousands of paths with minimal performance and memory footprint.
+Excellent. 
+This approach greatly improves scalability, allowing to block execution of thousands of paths with minimal performance and memory footprint.
 Unfortunately, it's trivially bypassable - executable can either get renamed or moved to a different directory, disarming the protection altogether.
 Different LSM-based probes can be added to fortify this solution. 
-One idea would be, blocking any attempts to open a blacklisted file, using the filesystem hooks.
+One idea would be, blocking any attempts to open a handle to a blacklisted file, using the filesystem hooks.
 
 # Summary
 
@@ -476,8 +476,8 @@ eBPF-backed LSM hooks are for sure a powerful capability to build on top.
 However, on their own, they still might not be perfectly suitable for building a complex prevention logic, due to restrictions set by the eBPF verifier.
 Typical security products heavily depend on regexes and custom rule engines, that might be extremely tricky to port into a native eBPF.
 
-What is see happening is a hybrid architecture: 
-- LSM-based eBPF probes reponsible for handling data parsing, creating internal event representation and dispatching a decision (e.g. permission denied) made by a detection engine implemented as a native kernel module.
+What I see happening is a hybrid architecture: 
+- LSM-based eBPF probes responsible for handling data parsing, creating internal event representation and dispatching a decision (e.g. permission denied) made by a detection engine implemented as a native kernel module.
 - Actual detection engine being implemented kernel-side, exposed to eBPF layer via custom [`KFuncs`](https://docs.ebpf.io/linux/concepts/kfuncs/).
 
-Maybe I'll explore this idea in a next blog post.
+Maybe I'll explore this further idea in a next blog post.

@@ -1,15 +1,19 @@
 {{ define "main" }}
 <div class="home-content">
     <div class="home-links">
+        <h5>
         {{ if .Site.Params.email }}
-        <h5><a href="mailto:{{ .Site.Params.email }}">{{ .Site.Params.email }}</a></h5>
+            <a href="mailto:{{ .Site.Params.email }}">{{ .Site.Params.email }}</a> 
         {{ end }}
+        <span>|</span>
         {{ if .Site.Params.github }}
-        <h5><a href="{{ .Site.Params.github }}">GitHub</a></h5>
+            <a href="{{ .Site.Params.github }}">GitHub</a>
         {{ end }}
+        <span>|</span>
         {{ if .Site.Params.linkedin }}
-        <h5><a href="{{ .Site.Params.linkedin }}">LinkedIn</a></h5>
+            <a href="{{ .Site.Params.linkedin }}">LinkedIn</a>
         {{ end }}
+        </h5>
     </div>
 </div>
 {{ end }}
