@@ -1,4 +1,4 @@
-# robots.txt for dawidmacek.com
+# robots.txt for www.dawidmacek.com
 
 # Allow major search engines
 User-agent: Googlebot
@@ -128,4 +128,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://dawidmacek.com/sitemap.xml
+Sitemap: https://www.dawidmacek.com/sitemap.xml
