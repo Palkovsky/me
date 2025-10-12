@@ -6,11 +6,23 @@ title = 'eBPF + LSM: Synchronous execution prevention'
 tags = ['ebpf', 'lsm', 'linux', 'rust']
 +++
 
-LSM (Linux Security Modules) hooks offer a way to synchronously stop certain actions from taking place on a Linux system.
-This capability might, over the time, become widely adapted by various security products.
+LSM (Linux Security Modules) hooks offer a way to synchronously hook certain actions taking place in a Linux kernel.
+This capability is widely adopted by various security products.
+Since [`Linux 5.7`](https://kernelnewbies.org/Linux_5.7), these hooks became available as eBPF probes.
 Let's explore a simple use-case scenario of blocking execution of pre-configured executables stored on the filesystem.
 
 <!--more-->
+
+## Table of Contents
+
+- [Environment](#environment)
+- [Finding the right hook](#finding-the-right-hook)
+  - [Capturing `execve`](#capturing-execve)
+- [PoC using the `bpftrace`](#poc-using-the-bpftrace)
+- [Step 1: Blocking `/usr/bin/ls`](#step-1-blocking-usrbinls)
+- [Step 2: User-space loader](#step-2-user-space-loader)
+- [Step 3: Blocking multiple executables](#step-3-blocking-multiple-executables)
+- [Summary](#summary)
 
 # Environment
 
@@ -157,20 +169,18 @@ We need to build a fully-fledged eBPF program to get the active blocking behavio
 # Step 1: Blocking `/usr/bin/ls`
 
 The initial goal is to block a hard-coded executable.
-The eBPF application needs to parse out a path from the [`struct bprm`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/binfmts.h#L18), and apply a bounded [`strncmp`](https://en.cppreference.com/w/c/string/byte/strncmp)-like logic onto it.
+The eBPF application needs to parse out a path from the [`struct bprm`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/binfmts.h#L18), and apply a [`strncmp`](https://en.cppreference.com/w/c/string/byte/strncmp)-like logic onto it.
 Important caveat is that kernel-owned path must be copied to the eBPF-owned memory, either to a map or onto the stack.
 eBPF programs (kernel helper functions being an exception) can not work on kernel-owned pointers directly.
-Considering the stack limit of 512 bytes and filesystem path limit being 4096 bytes, the per-cpu buffer is a good candidate for storing the path eBPF side.
+Considering the stack limit of 512 bytes and filesystem path limit being 4096 bytes, the [`BPF_MAP_TYPE_PERCPU_ARRAY`](https://docs.kernel.org/bpf/map_array.html) is a good candidate for storing the path eBPF side.
 
-Walking the [`struct dentry`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/dcache.h#L92) linked list in eBPF and converting it to a string is a post idea on its own.
-So... to keep this LSM-focused and concise I'll use a pre-existing functionality borrowed from the [tracee](https://github.com/aquasecurity/tracee/tree/main) project ❤️.
+Walking the [`struct dentry`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/dcache.h#L92) linked list in eBPF and converting it to a string is a post material on its own.
+So... to keep this LSM-focused I'll use a pre-existing functionality "borrowed" from the [tracee](https://github.com/aquasecurity/tracee/tree/main) project ❤️.
 The function I'm interested in is [`get_path_str`](https://github.com/aquasecurity/tracee/blob/0c57dbe2fc4480798841b6ddf80b4ad707dc4755/pkg/ebpf/c/common/filesystem.h#L281).
 It converts a [`struct path`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/path.h#L8) into an eBPF-owned (held in a per-cpu array) `void*` pointer. 
 
 ```c
 char LICENSE[] SEC("license") = "Dual MIT/GPL";
-
-#define MAX_PATH_LEN 4096
 
 static int str_equal(const char *s1, const char *s2, int max_len) {
     for (int i = 0; i < max_len; i++) {
@@ -192,7 +202,7 @@ int BPF_PROG(handle_bprm_check_security, struct linux_binprm *bprm) {
         return 0;
     }
 
-	if (str_equal(filepath, "/usr/bin/ls", MAX_PATH_LEN)) {
+	if (str_equal(filepath, "/usr/bin/ls", 12)) {
 		bpf_printk("bprm_check_security: execution blocked");
 		return -EPERM;
 	} else {
@@ -201,10 +211,10 @@ int BPF_PROG(handle_bprm_check_security, struct linux_binprm *bprm) {
 }
 ```
 
-**Note:** [`struct bprm`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/binfmts.h#L18) holds a `filename` field, so this is probably a "proper" way to get the executable path in this specific hook. 
+**Note:** [`struct bprm`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/binfmts.h#L18) holds a `filename` field, so this is probably a "proper" way to get the path in this specific hook. 
 However, having the ability to convert [`struct path`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/path.h#L8) into a string representation opens up a door for many powerful functionalities in different hooks.
 
-# User-space loader
+# Step 2: User-space loader
 
 [libbpf-rs](https://github.com/libbpf/libbpf-rs) will be used to create a user-space loader of the eBPF application.
 The repository contains multiple examples on setting up a starter project.
@@ -285,7 +295,7 @@ However, the example is very limited and not scalable at all.
 What if we want to block multiple executables?
 Let's explore further.
 
-# Step 2: Blocking multiple executables
+# Step 3: Blocking multiple executables
 
 A naive solution would be to create a pre-configured list of blacklisted executables stored inside a map.
 Then inside the probe, add a loop iterating over the list, comparing the strings, and returning `-EPERM` if a match found.
@@ -457,8 +467,17 @@ find: ‘nc’: Operation not permitted
 Super. 
 This aproach greatly improves scalability, allowing to block execution of thousands of paths with minimal performance and memory footprint.
 Unfortunately, it's trivially bypassable - executable can either get renamed or moved to a different directory, disarming the protection altogether.
-Still, extra LSM-based probes can be added, to for example, prevent opening a handle the blacklisted file, making it impossible to copy or rename.
+Different LSM-based probes can be added to fortify this solution. 
+One idea would be, blocking any attempts to open a blacklisted file, using the filesystem hooks.
 
 # Summary
 
-TODO
+eBPF-backed LSM hooks are for sure a powerful capability to build on top.
+However, on their own, they still might not be perfectly suitable for building a complex prevention logic, due to restrictions set by the eBPF verifier.
+Typical security products heavily depend on regexes and custom rule engines, that might be extremely tricky to port into a native eBPF.
+
+What is see happening is a hybrid architecture: 
+- LSM-based eBPF probes reponsible for handling data parsing, creating internal event representation and dispatching a decision (e.g. permission denied) made by a detection engine implemented as a native kernel module.
+- Actual detection engine being implemented kernel-side, exposed to eBPF layer via custom [`KFuncs`](https://docs.ebpf.io/linux/concepts/kfuncs/).
+
+Maybe I'll explore this idea in a next blog post.

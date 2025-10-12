@@ -159,7 +159,7 @@ article h4 { margin-block: calc(var(--h4-space) * var(--heading-margin-scale)) c
 article h5 { margin-block: calc(var(--h5-space) * var(--heading-margin-scale)) calc(var(--h5-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
 article h6 { margin-block: calc(var(--h6-space) * var(--heading-margin-scale)) calc(var(--h6-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
 
-article p,ul, table, img, blockquote, pre {
+article p, table, img, blockquote, pre {
   margin-top: 0.4em;
   margin-bottom: 0em;
 }
