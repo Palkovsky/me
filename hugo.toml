@@ -1,6 +1,4 @@
 baseURL = 'https://www.dawidmacek.com/'
-relativeURLs = false
-canonifyURLs = true
 languageCode = 'en-us'
 title = "Dawid Macek"
 theme = 'minimal-blog'
