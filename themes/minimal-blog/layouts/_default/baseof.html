@@ -12,7 +12,9 @@
 </head>
 <body>
     <header>
-        <h1 class="site-title"><a href="/">{{ .Site.Title }}</a></h1>
+        <h1 class="site-title">
+            <a class="no-underline" href="/">{{ .Site.Title }}</a>
+        </h1>
         <nav>
             {{ range .Site.Menus.main }}
                 <a href="{{ .URL }}">{{ .Name }}</a>
@@ -27,7 +29,7 @@
     </main>
 
     <footer>
-        <p>&copy; {{ now.Format "2006" }} {{ .Site.Params.author }}</p>
+        <p><a class="no-underline" href="/">&copy; {{ now.Format "2006" }} {{ .Site.Params.author }}</a></p>
     </footer>
 </body>
 </html>
