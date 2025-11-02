@@ -31,7 +31,7 @@ theme = 'minimal-blog'
     url = "/"
     weight = 10
   [[menu.main]]
-    name = "Posts"
+    name = "Blog"
     url = "/posts/"
     weight = 20
   [[menu.main]]
