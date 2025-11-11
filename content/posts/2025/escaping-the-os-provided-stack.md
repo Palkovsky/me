@@ -6,14 +6,6 @@ title = 'Escaping the OS-provided stack'
 tags = ['assembly', 'low level', 'hacking', 'c', 'rust']
 +++
 
-## Table of Contents
-- [Act 1: `regex` in Linux kernel](#act-1-regex-in-linux-kernel)
-- [Act 2: Proof of Concept](#act-2-proof-of-concept)
-- [Act 3: Rock & Roll](#act-3-rock--roll)
-  - [Without the stack switch](#without-the-stack-switch)
-  - [Limitations](#limitations)
-- [Finale: Stackaroo](#finale-stackaroo)
-
 User-space stacks can grow to considerable sizes - megabytes and more. 
 The size of the stack is not really a limitation there.
 However, it can still become a problem for low-level environments such as kernel space, firmware, and embedded OSes.
@@ -21,6 +13,14 @@ Such targets typically come with tiny, fixed-size stacks - not more than a few p
 This post explores a last-resort technique to bypass such a limitation.
 
 <!--more-->
+
+## Table of Contents
+- [Act 1: `regex` in Linux kernel](#act-1-regex-in-linux-kernel)
+- [Act 2: Proof of Concept](#act-2-proof-of-concept)
+- [Act 3: Rock & Roll](#act-3-rock--roll)
+  - [Without the stack switch](#without-the-stack-switch)
+  - [Limitations](#limitations)
+- [Finale: Stackaroo](#finale-stackaroo)
 
 # Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
 
