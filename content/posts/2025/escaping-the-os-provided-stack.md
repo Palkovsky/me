@@ -6,8 +6,16 @@ title = 'Escaping the OS-provided stack'
 tags = ['assembly', 'low level', 'hacking', 'c', 'rust']
 +++
 
+## Table of Contents
+- [Act 1: `regex` in Linux kernel](#act-1-regex-in-linux-kernel)
+- [Act 2: Proof of Concept](#act-2-proof-of-concept)
+- [Act 3: Rock & Roll](#act-3-rock--roll)
+  - [Without the stack switch](#without-the-stack-switch)
+  - [Limitations](#limitations)
+- [Finale: Stackaroo](#finale-stackaroo)
+
 User-space stacks can grow to considerable sizes - megabytes and more. 
-The size of the stack is not really a limitation anymore.
+The size of the stack is not really a limitation there.
 However, it can still become a problem for low-level environments such as kernel space, firmware, and embedded OSes.
 Such targets typically come with tiny, fixed-size stacks - not more than a few pages of memory.
 This post explores a last-resort technique to bypass such a limitation.
@@ -16,12 +24,12 @@ This post explores a last-resort technique to bypass such a limitation.
 
 # Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
 
-The inspiration to write this post came from research on running common Rust crates such as [regex](https://github.com/rust-lang/regex) inside a Linux kernel module.
+The inspiration to write this post came from research on adapting common Rust crates such as [regex](https://github.com/rust-lang/regex) to run as part of a Linux kernel module.
 The issue I faced was substantial stack usage, causing general protection faults in address ranges close to the `rsp`.
-It turns out the `regex` crate expected a bit more stack than kernel space could offer - 16kB on x64.
+It turned out the **`regex`** crate expected a bit more stack than kernel space could offer, which is 16kB on x64.
 
-This problem can be replicated from user space by limiting the stack with `ulimit -s` and running a sample program.
-Through trial and error, I found that the program remains stable across multiple runs with a stack size of approximately 40 kB.
+This problem can be simulated from user space by applying the stack limit using **`ulimit -s`** and running a sample program.
+Through trial and error, I found that the **`regex`** crate remains stable across multiple runs with a stack size of approximately 40 kB.
 
 ```rs
 use regex::Regex;
@@ -45,14 +53,14 @@ Segmentation fault (core dumped)
 139
 ```
 
-But the question remains - how can we overcome this limitation in an environment where the stack size cannot be easily increased?
+But the question remains - how to overcome this limitation in an environment where the stack size cannot be easily increased?
 
-# Act 2: Proof of Concept in C
+# Act 2: Proof of Concept
 
-The goal is to:
+The bypass will be performed from our program. The goal is to:
  1. Preserve the current `rsp` in a static variable.
- 2. Swap the `rsp` pointer to a user-controlled buffer (backed by global memory in this example, though it could be heap-backed).
- 3. Call a callback on the newly created "stack".
+ 2. Swap the `rsp` to a user-controlled buffer (backed by global memory in this example, though it could also be heap-backed).
+ 3. Call a callback on the new "stack".
  4. Restore the original stack pointer after the callback returns.
 
 ```c
@@ -102,9 +110,9 @@ int main() {
 
 ----
 
-The `switch_stack` function accepts a pointer to a callback that will be called on the new stack and a `void*` argument.
-The function is marked as `noinline` to prevent it from being merged into the caller's frame.
-This gives it its own predictable frame layout, making it easier to debug—though it should work as expected even when inlined.
+The **`switch_stack`** function accepts a pointer to a callback that will be called on the new stack and a **`void*`** argument.
+The function is marked as **`noinline`** to prevent it from being merged into the caller's frame.
+This gives it its own predictable frame layout, making it easier to debug - though it should work as expected even when inlined.
 
 ```c
 __attribute__((noinline)) void switch_stack(
@@ -117,13 +125,13 @@ __attribute__((noinline)) void switch_stack(
 
 The function defines a set of static variables to hold the context after the stack switch.
 We want to avoid local variables as much as possible.
-If the compiler emits an instruction referencing local stack data (e.g., `mov rax, [rsp+0x08]`) after `rsp` is swapped, the program will likely crash.
+If the compiler emits an instruction referencing local stack data (e.g., **`mov rax, [rsp+0x08]`**) after **`rsp`** is swapped, the program will likely crash.
 
-- `OLD_SP` - stores the original stack pointer so we can restore it after the callback completes
-- `CALLBACK_FN` - holds the callback function pointer in static storage
-- `CALLBACK_ARG` - holds the callback argument in static storage
-- `AUX_STACK` - a static 1MB array serving as backing storage for the new stack, with 16-byte alignment required by x86-64 ABI
-- `NEW_SP` - lazily initialized to point to the 16-byte aligned end of `AUX_STACK` since the stack grows downward
+- **`OLD_SP`** - stores the original stack pointer so we can restore it after the callback completes
+- **`CALLBACK_FN`** - holds the callback function pointer in static storage
+- **`CALLBACK_ARG`** - holds the callback argument in static storage
+- **`AUX_STACK`** - a static 1MB array serving as backing storage for the new stack, with 16-byte alignment required by x64 ABI
+- **`NEW_SP`** - lazily initialized to point to the 16-byte aligned end of **`AUX_STACK`** since the stack grows downward
 
 ```c
     static void* OLD_SP = NULL;
@@ -136,8 +144,11 @@ If the compiler emits an instruction referencing local stack data (e.g., `mov ra
 ----
 
 Before performing the stack swap, we copy the arguments to static storage.
-After `rsp` is swapped, we cannot safely access any local variables.
-If the compiler references the local stack after the swap, the program will crash.
+After **`rsp`** is swapped, we cannot safely access any existing local variables.
+If the local variable gets referenced using **`rsp`**-relative addressing, the program will likely crash.
+However, if locals are accessed through **`rbp`**-relative instructions (e.g. **`mov rax, [rbp+0x8]`**), it will actually keep working fine as the **`rbp`** was left untouched after the swap.
+
+In practice, **`rbp`**-relative addressing is used in unoptimized builds, so it's just better to avoid referencing locals after the swap altogether.
 
 ```c
     CALLBACK_FN = callback;
@@ -145,7 +156,7 @@ If the compiler references the local stack after the swap, the program will cras
 
     __asm__ volatile (
         "mov %%rsp, %0\n" // Store rsp in OLD_SP
-        "mov %1, %%rsp\n" // Store NEW_SP in rsp
+        "mov %1, %%rsp\n" // Load NEW_SP into rsp
         : "=m"(OLD_SP)
         : "r"(NEW_SP)
     );
@@ -162,7 +173,7 @@ CALLBACK_FN(CALLBACK_ARG);
 
 ----
 
-After the stack is restored, it would be safe again to access `switch_stack` local variables—if there were any.
+After the stack is restored, it would be safe again to access **`switch_stack`** local variables - if there were any.
 
 ```c
     __asm__ volatile (
@@ -174,7 +185,7 @@ After the stack is restored, it would be safe again to access `switch_stack` loc
 
 ----
 
-The compiled program appears to work as expected.
+The program appears to work as expected:
 
 ```bash
 # Unoptimized build
@@ -190,7 +201,7 @@ In callback with arg: 0xdeadbeef
 
 ----
 
-The compiled function doesn't emit instructions accessing `[rsp+offset]` after the stack swap, confirming the static variable approach works as intended. All memory accesses use RIP-relative addressing (`[rip+offset]`), which references global/static variables independently of the stack pointer.
+The compiled function doesn't emit any instructions accessing **`[rsp+offset]`** after the stack swap, confirming the static variable approach works as intended. All memory accesses use **`rip`**-relative addressing (**`[rip+offset]`**), which references global/static variables independently of the stack pointer.
 
 ```bash
 # UNOPTIMIZED
@@ -236,8 +247,10 @@ The compiled function doesn't emit instructions accessing `[rsp+offset]` after t
 
 # Act 3: Rock & Roll
 
-This Linux kernel module uses the stack excessively to demonstrate the technique under real constraints.
-The `stack_heavy_callback` function allocates 512 kB on the stack—far exceeding the kernel's 16 kB limit. 
+So, will this technique actually work in the Linux kernel? After all, this is the place where the stack limitations bit me in the butt.
+
+This module uses the stack excessively to demonstrate the technique under real constraints.
+The **`stack_heavy_callback`** function allocates 512 kB on the stack - exceeding the kernel's 16 kB limit by a large margin. 
 
 ```c
 #include <linux/init.h>
@@ -245,7 +258,7 @@ The `stack_heavy_callback` function allocates 512 kB on the stack—far exceedin
 #include <linux/kernel.h>
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Your Name");
+MODULE_AUTHOR("Dawid Macek");
 MODULE_DESCRIPTION("A simple Hello World Linux kernel module");
 MODULE_VERSION("1.0");
 
@@ -286,7 +299,7 @@ module_init(hello_init);
 module_exit(hello_exit);
 ```
 
-All the sirens and alarm bells are going off, but we're ignoring them. Safety? Throw it out the window.
+When compiling, all the sirens and alarm bells are going off, but we aren't stopping. Safety? Always off.
 
 ```bash
 $ make
@@ -320,9 +333,9 @@ $ sudo dmesg --follow
 
 ## Without the stack switch
 
-If `stack_heavy_callback` is called directly without the stack switch, we can expect either an oops or a complete kernel panic.
+If **`stack_heavy_callback`** is called directly without the stack switch, we can expect either an oops or a complete kernel panic.
 In this case, we got an oops.
-Looking at the page fault address and RSP, it's clear the code attempted to access memory outside the allocated stack bounds.
+Looking at the page fault address and **`rsp`**, it's clear the code attempted to access memory outside the allocated stack bounds.
 
 ```bash
 [ 1658.348625] BUG: unable to handle page fault for address: ffffa40d83602000
@@ -345,8 +358,7 @@ Looking at the page fault address and RSP, it's clear the code attempted to acce
 [ 1658.351291] CR2: ffffa40d83602000 CR3: 000000000200e000 CR4: 00000000003506e0
 ```
 
-This is the culprit instruction, corresponding to the `large_stack_array[i] = i % 256;` assignment.
-The `[rbp+r12*1-0x80018]` operand attempts to write to a stack address that doesn't exist.
+The culprit instruction, corresponding to the **`large_stack_array[i] = i % 256;`** attempts to write to a stack address that doesn't exist.
 
 ```bash
   3f:   42 88 9c 25 e8 ff f7    mov    BYTE PTR [rbp+r12*1-0x80018],bl
@@ -358,12 +370,13 @@ This technique comes with severe caveats:
 
 - **Stack unwinding breaks**: If the callback panics or throws an exception, the unwinding mechanism won't be able to traverse back to the original stack properly, likely crashing the program. I've had some success with [catching panics](https://github.com/Palkovsky/stackaroo/blob/ea5425cec98ef44b8de67ed91c87a347b5f240e6/examples/panic.rs#L14) on Linux-based platforms, but it doesn't seem to work on Windows.
 - **Debuggers get confused**: Debugging tools will be confused by the non-standard stack layout.
-- **No recursive swaps**: You cannot swap stacks within an already stack-swapped function—the static variables are already in use. Working around this would require extensive inline assembly, reducing portability.
+- **No recursive swaps**: You cannot swap stacks within an already stack-swapped function - the static variables are already in use. Working around this would require extensive inline assembly, reducing portability.
+- **Possibly breaks exploit-prevention solutions?**: If I were developing one, I'd be checking if the **`rsp`** falls into an expected memory range.
 
 Despite these limitations, the technique remains valuable in constrained environments where other solutions aren't feasible.
 
 # Finale: [Stackaroo](https://github.com/Palkovsky/stackaroo)
 
 After successfully using this technique in both user space and kernel modules, I packaged it into a reusable Rust library - **[stackaroo](https://github.com/Palkovsky/stackaroo)**.
-
-The library provides a clean API with support for x64 and ARM64 architectures, and includes a C FFI layer.
+The library provides a clean API with support for x64 and ARM64 architectures, and comes wiha a C FFI layer.
+You can learn more reading the [docs](https://docs.rs/stackaroo/latest/stackaroo/).
