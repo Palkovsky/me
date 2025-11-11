@@ -37,7 +37,12 @@ theme = 'minimal-blog'
   [[menu.main]]
     name = "Resume"
     url = "/resume.pdf"
+    weight = 40
+  [[menu.main]]
+    name = "RSS"
+    url = "/index.xml"
     weight = 30
+
 
 [caches]
   [caches.images]
