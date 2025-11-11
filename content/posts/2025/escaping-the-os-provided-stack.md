@@ -18,9 +18,10 @@ This post explores a last-resort technique to bypass such a limitation.
 - [Act 1: `regex` in Linux kernel](#act-1-regex-in-linux-kernel)
 - [Act 2: Proof of Concept](#act-2-proof-of-concept)
 - [Act 3: Rock & Roll](#act-3-rock--roll)
-  - [Without the stack switch](#without-the-stack-switch)
+  - [Without the stack swap](#without-the-stack-swap)
   - [Limitations](#limitations)
 - [Finale: Stackaroo](#finale-stackaroo)
+- [Conclusion](#conclusion)
 
 # Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
 
@@ -57,7 +58,7 @@ But the question remains - how to overcome this limitation in an environment whe
 
 # Act 2: Proof of Concept
 
-The bypass will be performed from our program. The goal is to:
+The bypass will be performed within our program. The goal is to:
  1. Preserve the current `rsp` in a static variable.
  2. Swap the `rsp` to a user-controlled buffer (backed by global memory in this example, though it could also be heap-backed).
  3. Call a callback on the new "stack".
@@ -331,7 +332,7 @@ $ sudo dmesg --follow
 [ 1325.551042] After stack swap.
 ```
 
-## Without the stack switch
+## Without the stack swap
 
 If **`stack_heavy_callback`** is called directly without the stack switch, we can expect either an oops or a complete kernel panic.
 In this case, we got an oops.
@@ -370,13 +371,68 @@ This technique comes with severe caveats:
 
 - **Stack unwinding breaks**: If the callback panics or throws an exception, the unwinding mechanism won't be able to traverse back to the original stack properly, likely crashing the program. I've had some success with [catching panics](https://github.com/Palkovsky/stackaroo/blob/ea5425cec98ef44b8de67ed91c87a347b5f240e6/examples/panic.rs#L14) on Linux-based platforms, but it doesn't seem to work on Windows.
 - **Debuggers get confused**: Debugging tools will be confused by the non-standard stack layout.
-- **No recursive swaps**: You cannot swap stacks within an already stack-swapped function - the static variables are already in use. Working around this would require extensive inline assembly, reducing portability.
-- **Possibly breaks exploit-prevention solutions?**: If I were developing one, I'd be checking if the **`rsp`** falls into an expected memory range.
+- **No recursive swaps**: You cannot swap stacks within an already stack-swapped function - the static variables are already in use. Recursive swaps are possible, but require extensive inline assembly, reducing portability.
+- **Possibly breaks exploit-prevention solutions?**: If I were developing one, I'd be validating if the **`rsp`** falls into an expected memory ranges.
 
 Despite these limitations, the technique remains valuable in constrained environments where other solutions aren't feasible.
 
 # Finale: [Stackaroo](https://github.com/Palkovsky/stackaroo)
 
-After successfully using this technique in both user space and kernel modules, I packaged it into a reusable Rust library - **[stackaroo](https://github.com/Palkovsky/stackaroo)**.
-The library provides a clean API with support for x64 and ARM64 architectures, and comes wiha a C FFI layer.
+After successfully using this technique in both user space and a kernel module, I packaged it into a reusable Rust library - **[stackaroo](https://github.com/Palkovsky/stackaroo)**.
+The library provides a clean API supporting x64 and ARM64 architectures and includes a C FFI layer.
 You can learn more reading the [docs](https://docs.rs/stackaroo/latest/stackaroo/).
+
+Let's see how to reduce stack usage of the `regex` example from [`Act 1`](#act-1-regex-in-linux-kernel).
+Some modifications were needed, but the code shouldn't be that hard to follow. 
+The **`callout`** returns the matching result via an in-out argument:
+
+```rs
+use regex::Regex;
+use stackaroo::swap_to_heap;
+
+fn is_match(input: &str) -> bool {
+    struct Args {
+        input: String,
+        matched: bool,
+    }
+
+    // This runs on a new stack.
+    fn callout(args: &mut Args) {
+        let Ok(re) = Regex::new(r"^[a-zA-Z]+$") else {
+            args.matched = false;
+            return;
+        };
+        args.matched = re.is_match(&args.input);
+    }
+
+    unsafe {
+        let mut args = Args {
+            input: input.to_string(),
+            matched: false,
+        };
+        // Swap rsp to 1MB of heap-backed memory.
+        swap_to_heap(callout, Some(&mut args), 1 << 20).expect("Failed to swap stack.");
+        args.matched
+    }
+}
+
+fn main() {
+    assert!(is_match("foo"));
+}
+```
+
+Testing it with limited stack proves the program remains stable, not crashing anymore.
+```bash
+$ ulimit -s
+8192 # kB
+$ ./regex-test ; echo $?
+0
+$ ulimit -s 16 # kB
+$ ./regex-test ; echo $?
+0
+```
+
+# Conclusion
+
+Stack swapping might be a last-resort technique for environments where the given stack is insufficient and cannot be easily expanded.
+While it successfully bypasses stack size limitations in constrained contexts like kernel modules, embedded systems, or firmware, it's not without significant trade-offs.
