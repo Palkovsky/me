@@ -107,6 +107,88 @@ blockquote {
   padding-left: 10px;
 }
 
+/* Consistent vertical margins for article content */
+article p,
+article ul,
+article ol,
+article pre,
+article blockquote,
+article hr,
+article table {
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Remove margins for nested lists */
+article ul ul,
+article ul ol,
+article ol ul,
+article ol ol {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Headers inside articles - asymmetric margins group headings with content below */
+article h1 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+article h2 {
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+
+article h3 {
+  margin-top: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+article h4 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+article h5 {
+  margin-top: 0.45rem;
+  margin-bottom: 0.25rem;
+}
+
+article h6 {
+  margin-top: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+
+/* First element shouldn't have top margin */
+article > *:first-child {
+  margin-top: 0;
+}
+
+/* Last element shouldn't have bottom margin */
+article > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Remove top margin when element follows a heading */
+article h1 + *,
+article h2 + *,
+article h3 + *,
+article h4 + *,
+article h5 + *,
+article h6 + * {
+  margin-top: 0;
+}
+
+/* Remove top margin from heading when it follows any element */
+article * + h1,
+article * + h2,
+article * + h3,
+article * + h4,
+article * + h5,
+article * + h6 {
+  margin-top: 0;
+}
+
 .article-item {
   margin-top: 1em;
   margin-bottom: 1em;
@@ -186,18 +268,6 @@ blockquote {
 
   /* Ratio between top and bottom margin (useful if you want top bigger) */
   --heading-after-ratio: 0.5; /* bottom margin = top * ratio */
-}
-
-article h1 { margin-block: calc(var(--h1-space) * var(--heading-margin-scale)) calc(var(--h1-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
-article h2 { margin-block: calc(var(--h2-space) * var(--heading-margin-scale)) calc(var(--h2-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
-article h3 { margin-block: calc(var(--h3-space) * var(--heading-margin-scale)) calc(var(--h3-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
-article h4 { margin-block: calc(var(--h4-space) * var(--heading-margin-scale)) calc(var(--h4-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
-article h5 { margin-block: calc(var(--h5-space) * var(--heading-margin-scale)) calc(var(--h5-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
-article h6 { margin-block: calc(var(--h6-space) * var(--heading-margin-scale)) calc(var(--h6-space) * var(--heading-margin-scale) * var(--heading-after-ratio)); }
-
-article p, table, img, blockquote, pre {
-  margin-top: 0.4em;
-  margin-bottom: 0em;
 }
 
 .home-content {

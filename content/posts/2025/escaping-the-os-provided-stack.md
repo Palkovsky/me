@@ -19,13 +19,13 @@ This post explores a last-resort technique to bypass such a limitation.
 - [Act 2: Proof of Concept](#act-2-proof-of-concept)
 - [Act 3: Rock & Roll](#act-3-rock--roll)
   - [Without the stack swap](#without-the-stack-swap)
-  - [Limitations](#limitations)
+- [Limitations](#limitations)
 - [Finale: Stackaroo](#finale-stackaroo)
 - [Conclusion](#conclusion)
 
 # Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
 
-The inspiration to write this post came from research on adapting common Rust crates such as [regex](https://github.com/rust-lang/regex) to run as part of a Linux kernel module.
+The inspiration to write this post came from doing research on adapting common Rust crates such as [regex](https://github.com/rust-lang/regex) to run as part of a Linux kernel module.
 The issue I faced was substantial stack usage, causing general protection faults in address ranges close to the `rsp`.
 It turned out the **`regex`** crate expected a bit more stack than kernel space could offer, which is 16kB on x64.
 
@@ -177,11 +177,11 @@ CALLBACK_FN(CALLBACK_ARG);
 After the stack is restored, it would be safe again to access **`switch_stack`** local variables - if there were any.
 
 ```c
-__asm__ volatile (
-    "mov %0, %%rsp\n"
-    :
-    : "m"(OLD_SP)
-);
+    __asm__ volatile (
+        "mov %0, %%rsp\n"
+        :
+        : "m"(OLD_SP)
+    );
 ```
 
 ----
@@ -300,9 +300,9 @@ module_init(hello_init);
 module_exit(hello_exit);
 ```
 
-When compiling, all the sirens and alarm bells are going off, but we aren't stopping. Safety? Always off.
+When compiling, the alarm bells are going off, but we aren't stopping. Safety? Always off.
 
-```bash
+```bash {hl_lines=[9]}
 $ make
 make -C /lib/modules/5.15.0-91-generic/build M=/vagrant/linux modules
 make[1]: Entering directory '/usr/src/linux-headers-5.15.0-91-generic'
@@ -338,7 +338,7 @@ If **`stack_heavy_callback`** is called directly without the stack switch, we ca
 In this case, we got an oops.
 Looking at the page fault address and **`rsp`**, it's clear the code attempted to access memory outside the allocated stack bounds.
 
-```bash
+```bash {hl_lines=[1,10]}
 [ 1658.348625] BUG: unable to handle page fault for address: ffffa40d83602000
 [ 1658.348831] #PF: supervisor write access in kernel mode
 [ 1658.348977] #PF: error_code(0x0002) - not-present page
@@ -365,7 +365,7 @@ The culprit instruction, corresponding to the **`large_stack_array[i] = i % 256;
   3f:   42 88 9c 25 e8 ff f7    mov    BYTE PTR [rbp+r12*1-0x80018],bl
 ```
 
-## Limitations
+# Limitations
 
 This technique comes with severe caveats:
 
@@ -378,11 +378,11 @@ Despite these limitations, the technique remains valuable in constrained environ
 
 # Finale: [Stackaroo](https://github.com/Palkovsky/stackaroo)
 
-After successfully using this technique in both user space and a kernel module, I packaged it into a reusable Rust library - **[stackaroo](https://github.com/Palkovsky/stackaroo)**.
-The library provides a clean API supporting x64 and ARM64 architectures and includes a C FFI layer.
+After successfully deploying this technique in both user space and a kernel module, I packaged it into a reusable Rust library - **[stackaroo](https://github.com/Palkovsky/stackaroo)**.
+The library provides a clean API supporting x64 and ARM64 architectures and comes with a C FFI layer.
 You can learn more reading the [docs](https://docs.rs/stackaroo/latest/stackaroo/).
 
-Let's see how to reduce stack usage of the `regex` example from [`Act 1`](#act-1-regex-in-linux-kernel).
+Let's see how to reduce stack usage of the `regex-test` example from [`Act 1`](#act-1-regex-in-linux-kernel).
 Some modifications were needed, but the code shouldn't be that hard to follow. 
 The **`callout`** returns the matching result via an in-out argument:
 
@@ -421,7 +421,7 @@ fn main() {
 }
 ```
 
-Testing it with limited stack proves the program remains stable, not crashing anymore.
+Testing it with the limited stack proves the program remains stable, not crashing anymore.
 ```bash
 $ ulimit -s
 8192 # kB

@@ -75,7 +75,7 @@ union security_list_options {
 ## Capturing `execve`
 
 Since the goal is to block execution of a given executable, we need to know which hook gets called on the `execve` syscall.
-Grepping the definition list doesn't lead to anything obvious (not a Linux kernel pro).
+Grepping the definition list doesn't lead to anything obvious.
 We need to look into the actual system call implementation.
 
 As we walk [do_execve](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1928) -> [do_execveat_common](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1784) -> [bprm_execve](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1730) -> [exec_binprm](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1685) -> [search_binary_handler](https://github.com/torvalds/linux/blob/6093a688a07da07808f0122f9aa2a3eed250d853/fs/exec.c#L1651), we'll eventually encounter a call to [`security_bprm_check`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/security/security.c#L1339). 
@@ -83,7 +83,7 @@ The returned value short-circuts the system call, propagating the return value u
 
 This is exactly what we want - synchronous hook inside a system call!
 
-```c
+```c {hl_lines=[10]}
 static int search_binary_handler(struct linux_binprm *bprm)
 {
 	struct linux_binfmt *fmt;
@@ -290,7 +290,6 @@ bash: /usr/bin/ls: Operation not permitted
 
 Great! This proves LSM hook actually works and is capable of **synchronously** preventing execution of a given executable.
 Asynchronous solutions might let malware run for a bit, giving it a brief window to do some harm. 
-
 However, the example is very limited and not scalable at all.
 What if we want to block multiple executables?
 Let's explore further.
@@ -343,7 +342,7 @@ pub fn fnv1a(bytes: &[u8]) -> u64 {
 
 Now all the pieces are in place to finish the probe implementation.
 We'll be using [`BPF_MAP_TYPE_HASH`](https://docs.kernel.org/bpf/map_hash.html) map to hold the blocked hashes.
-The probe calculates a hash of an executable path, queries the map for presence using the [`bpf_map_lookup_elem`](https://docs.ebpf.io/linux/helper-function/bpf_map_lookup_elem/) API and returns `-EPERM` (Permission Denied) if the hash was found.
+The probe calculates a hash of an executable path, queries the map for presence using the [`bpf_map_lookup_elem`](https://docs.ebpf.io/linux/helper-function/bpf_map_lookup_elem/) API and returns `-EPERM` (Permission Denied) if the hash is found.
 
 ```c
 struct {
@@ -472,12 +471,12 @@ One idea would be, blocking any attempts to open a handle to a blacklisted file,
 
 # Summary
 
-eBPF-backed LSM hooks are for sure a powerful capability to build on top.
+eBPF-backed LSM hooks are a powerful capability to build on top.
 However, on their own, they still might not be perfectly suitable for building a complex prevention logic, due to restrictions set by the eBPF verifier.
 Typical security products heavily depend on regexes and custom rule engines, that might be extremely tricky to port into a native eBPF.
 
 What I see happening is a hybrid architecture: 
-- LSM-based eBPF probes responsible for handling data parsing, creating internal event representation and dispatching a decision (e.g. permission denied) made by a detection engine implemented as a native kernel module.
-- Actual detection engine being implemented kernel-side, exposed to eBPF layer via custom [`KFuncs`](https://docs.ebpf.io/linux/concepts/kfuncs/).
+- LSM-based eBPF probes responsible for handling data parsing, creating internal event representation and dispatching a decision (e.g. permission denied) made by a performance-critical detection engine implemented in a native kernel module.
+- Actual detection engine being implemented kernel-side, exposed to eBPF layer via [`KFuncs`](https://docs.ebpf.io/linux/concepts/kfuncs/) mechanism.
 
-Maybe I'll explore this further idea in a next blog post.
+Maybe I'll explore this idea further in the next blog post.
