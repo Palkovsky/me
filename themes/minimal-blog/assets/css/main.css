@@ -10,6 +10,31 @@ body {
   min-height: 100vh;
 }
 
+/* Responsive width for larger screens */
+@media (min-width: 1024px) {
+  body {
+    max-width: 900px;
+  }
+}
+
+@media (min-width: 1280px) {
+  body {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 1536px) {
+  body {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1920px) {
+  body {
+    max-width: 1400px;
+  }
+}
+
 a {
   text-decoration: none;
 }
@@ -72,6 +97,8 @@ pre {
   overflow-x: auto;
   background-color: #f5f5f5;
   padding: 10px;
+  font-size: 0.8em;
+  border: 1px solid #000;
 }
 
 blockquote {

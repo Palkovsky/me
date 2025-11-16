@@ -37,12 +37,17 @@ theme = 'minimal-blog'
   [[menu.main]]
     name = "Resume"
     url = "/resume.pdf"
-    weight = 40
-  [[menu.main]]
-    name = "RSS"
-    url = "/index.xml"
     weight = 30
 
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "modus-operandi"  # https://gohugo.io/quick-reference/syntax-highlighting-styles
+    tabWidth = 4
 
 [caches]
   [caches.images]

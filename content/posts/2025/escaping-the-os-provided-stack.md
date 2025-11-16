@@ -135,11 +135,11 @@ If the compiler emits an instruction referencing local stack data (e.g., **`mov 
 - **`NEW_SP`** - lazily initialized to point to the 16-byte aligned end of **`AUX_STACK`** since the stack grows downward
 
 ```c
-    static void* OLD_SP = NULL;
-    static void(*CALLBACK_FN)(void*) = NULL;
-    static void* CALLBACK_ARG = NULL;
-    static char AUX_STACK[1 << 20] __attribute__((aligned(16))); // 1MB, 16-byte aligned
-    static void* NEW_SP = AUX_STACK + sizeof(AUX_STACK);
+static void* OLD_SP = NULL;
+static void(*CALLBACK_FN)(void*) = NULL;
+static void* CALLBACK_ARG = NULL;
+static char AUX_STACK[1 << 20] __attribute__((aligned(16))); // 1MB, 16-byte aligned
+static void* NEW_SP = AUX_STACK + sizeof(AUX_STACK);
 ```
 
 ----
@@ -152,15 +152,15 @@ However, if locals are accessed through **`rbp`**-relative instructions (e.g. **
 In practice, **`rbp`**-relative addressing is used in unoptimized builds, so it's just better to avoid referencing locals after the swap altogether.
 
 ```c
-    CALLBACK_FN = callback;
-    CALLBACK_ARG = arg;
+CALLBACK_FN = callback;
+CALLBACK_ARG = arg;
 
-    __asm__ volatile (
-        "mov %%rsp, %0\n" // Store rsp in OLD_SP
-        "mov %1, %%rsp\n" // Load NEW_SP into rsp
-        : "=m"(OLD_SP)
-        : "r"(NEW_SP)
-    );
+__asm__ volatile (
+    "mov %%rsp, %0\n" // Store rsp in OLD_SP
+    "mov %1, %%rsp\n" // Load NEW_SP into rsp
+    : "=m"(OLD_SP)
+    : "r"(NEW_SP)
+);
 ```
 
 ----
@@ -177,11 +177,11 @@ CALLBACK_FN(CALLBACK_ARG);
 After the stack is restored, it would be safe again to access **`switch_stack`** local variables - if there were any.
 
 ```c
-    __asm__ volatile (
-        "mov %0, %%rsp\n"
-        :
-        : "m"(OLD_SP)
-    );
+__asm__ volatile (
+    "mov %0, %%rsp\n"
+    :
+    : "m"(OLD_SP)
+);
 ```
 
 ----
