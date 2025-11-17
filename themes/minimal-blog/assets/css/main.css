@@ -240,6 +240,27 @@ article * + h6 {
   margin-left: 5em; /* Align with article content */
 }
 
+/* Stack year above article header on narrow screens */
+@media (max-width: 768px) {
+  .year-and-article-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .year-and-article-header .year-header {
+    margin: 0 0 0.5em 0;
+  }
+
+  .year-and-article-header .article-header {
+    width: 100%;
+  }
+
+  /* Remove left margin on narrow screens so content fills width */
+  .article-tags, .article-summary, .article-header {
+    margin-left: 0 !important;
+  }
+}
+
 .article-summary {
   margin-top: 0.4em;
   margin-bottom: 0.4em;
