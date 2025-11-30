@@ -8,9 +8,11 @@ Renders a paginated list of posts grouped by year.
 
 {{ $years := slice }}
 {{ range .Paginator.Pages }}
-    {{ $year := .Date.Format "2006" }}
-    {{ if not (in $years $year) }}
-        {{ $years = $years | append $year }}
+    {{ if eq .Section "posts" }}
+        {{ $year := .Date.Format "2006" }}
+        {{ if not (in $years $year) }}
+            {{ $years = $years | append $year }}
+        {{ end }}
     {{ end }}
 {{ end }}
 {{ $years = sort $years "value" "desc" }}
@@ -18,7 +20,7 @@ Renders a paginated list of posts grouped by year.
 {{ range $yearIndex, $year := $years }}
     {{ $pagesInYear := slice }}
     {{ range $.Paginator.Pages }}
-        {{ if eq (.Date.Format "2006") $year }}
+        {{ if and (eq .Section "posts") (eq (.Date.Format "2006") $year) }}
             {{ $pagesInYear = $pagesInYear | append . }}
         {{ end }}
     {{ end }}
