@@ -27,12 +27,12 @@ theme = 'minimal-blog'
 # Menu configuration
 [menu]
   [[menu.main]]
-    name = "Home"
-    url = "/"
+    name = "About"
+    url = "/about/"
     weight = 10
   [[menu.main]]
     name = "Blog"
-    url = "/posts/"
+    url = "/"
     weight = 20
 
 [markup]
