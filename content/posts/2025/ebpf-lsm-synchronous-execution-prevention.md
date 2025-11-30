@@ -8,7 +8,7 @@ tags = ['ebpf', 'lsm', 'linux', 'rust']
 
 LSM (Linux Security Modules) hooks offer a way to synchronously hook certain actions taking place in a Linux kernel.
 This capability is widely adopted by various security products.
-Since [`Linux 5.7`](https://kernelnewbies.org/Linux_5.7), these hooks became available as eBPF probes.
+Since [Linux 5.7](https://kernelnewbies.org/Linux_5.7), these hooks became available as eBPF probes.
 Let's explore a simple use-case scenario of blocking execution of pre-configured executables stored on the filesystem.
 
 <!--more-->

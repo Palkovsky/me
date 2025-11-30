@@ -34,10 +34,6 @@ theme = 'minimal-blog'
     name = "Blog"
     url = "/posts/"
     weight = 20
-  [[menu.main]]
-    name = "Resume"
-    url = "/resume.pdf"
-    weight = 30
 
 [markup]
   [markup.highlight]
