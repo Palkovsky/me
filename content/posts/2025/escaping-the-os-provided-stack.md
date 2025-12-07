@@ -22,6 +22,7 @@ This post explores a last-resort technique to bypass such a limitation.
 - [Limitations](#limitations)
 - [Finale: Stackaroo](#finale-stackaroo)
 - [Conclusion](#conclusion)
+- [Bonus: Recursive variant](#bonus-recursive-variant)
 
 # Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
 
@@ -436,3 +437,45 @@ $ ./regex-test ; echo $?
 
 Stack swapping might be a last-resort technique for environments where the given stack is insufficient and cannot be easily expanded.
 While it successfully bypasses stack size limitations in constrained contexts like kernel modules, embedded systems, or firmware, it's not without significant trade-offs.
+
+# Bonus: Recursive variant
+
+This variant avoids static variables entirely by storing the old stack pointer directly on the new stack, enabling recursive stack swaps.
+
+```c
+__attribute__((noinline)) void switch_stack(
+    void (*callback)(void*),
+    void* arg,
+    void* stack_buf,
+    uintptr_t stack_size
+) {
+    // Switch to new stack
+    __asm__ volatile (
+        // Calculate top of new stack (stack_buf + stack_size)
+        "lea (%[buf], %[size]), %%r11\n"
+        // Align to 16 bytes
+        "and $-16, %%r11\n"
+        // Save current rsp to r10
+        "mov %%rsp, %%r10\n"
+        // Switch to new stack
+        "mov %%r11, %%rsp\n"
+        // Push old rsp onto the new stack
+        "push %%r10\n"
+        :
+        : [buf] "r"(stack_buf),
+          [size] "r"(stack_size)
+        : "r10", "r11", "memory"
+    );
+
+    // Call the callback
+    callback(arg);
+
+    // Restore old stack
+    __asm__ volatile (
+        "pop %%rsp\n"
+        :
+        :
+        : "memory"
+    );
+}
+```
