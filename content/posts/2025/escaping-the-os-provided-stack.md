@@ -79,7 +79,7 @@ __attribute__((noinline)) void switch_stack(
     static void(*CALLBACK_FN)(void*) = NULL;
     static void* CALLBACK_ARG = NULL;
     static char AUX_STACK[1 << 20] __attribute__((aligned(16))); // 1MB, 16-byte aligned
-    static void* NEW_SP = AUX_STACK + sizeof(AUX_STACK);
+    static void* NEW_SP = AUX_STACK + sizeof(AUX_STACK) - 8;     // Ensure it's 16-byte aligned after the call instruction
 
     CALLBACK_FN = callback;
     CALLBACK_ARG = arg;
@@ -132,14 +132,14 @@ If the compiler emits an instruction referencing local stack data (e.g., **`mov 
 - **`CALLBACK_FN`** - holds the callback function pointer in static storage
 - **`CALLBACK_ARG`** - holds the callback argument in static storage
 - **`AUX_STACK`** - a static 1MB array serving as backing storage for the new stack, with 16-byte alignment required by x64 ABI
-- **`NEW_SP`** - lazily initialized to point to the 16-byte aligned end of **`AUX_STACK`** since the stack grows downward
+- **`NEW_SP`** - initialized to point to the 16-byte aligned end of **`AUX_STACK`** since the stack grows downward. Must subtract 8 to keep it 16-byte aligned after the `call` instruction pushes the return address onto the stack.
 
 ```c
 static void* OLD_SP = NULL;
 static void(*CALLBACK_FN)(void*) = NULL;
 static void* CALLBACK_ARG = NULL;
 static char AUX_STACK[1 << 20] __attribute__((aligned(16))); // 1MB, 16-byte aligned
-static void* NEW_SP = AUX_STACK + sizeof(AUX_STACK);
+static void* NEW_SP = AUX_STACK + sizeof(AUX_STACK) - 8;     // Ensure it's 16-byte aligned after the call instruction
 ```
 
 ----
