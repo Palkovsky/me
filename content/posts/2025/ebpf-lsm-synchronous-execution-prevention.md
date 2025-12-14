@@ -304,8 +304,6 @@ The better solution is somewhat similar - instead of storing blacklisted images 
 The hook calculates a hash of the path and checks presence in the map.
 If the hash is present, execution will get blocked.
 
----
-
 For the hash function, something non-cryptographic (i.e. fast) and with a low-collision rate is needed.
 That's why I'll use a random function found on the internet - 64-bit variant of the [`fnv1a`](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function):
 
@@ -338,8 +336,6 @@ pub fn fnv1a(bytes: &[u8]) -> u64 {
 }
 ```
 
----
-
 Now all the pieces are in place to finish the probe implementation.
 We'll be using [`BPF_MAP_TYPE_HASH`](https://docs.kernel.org/bpf/map_hash.html) map to hold the blocked hashes.
 The probe calculates a hash of an executable path, queries the map for presence using the [`bpf_map_lookup_elem`](https://docs.ebpf.io/linux/helper-function/bpf_map_lookup_elem/) API and returns `-EPERM` (Permission Denied) if the hash is found.
@@ -367,8 +363,6 @@ int BPF_PROG(handle_bprm_check_security, struct linux_binprm *bprm) {
     return blocked ? -EPERM : 0;
 }
 ```
-
----
 
 The loader program is responsible for pre-filling the hash map of blacklisted executables, it can collect them from a policy file of some sort.
 For simplicity sake we'll be using the hardcoded values.
@@ -434,8 +428,6 @@ fn which(binary_name: &str) -> Option<String> {
 }
 ```
 
----
-
 Now we're ready to run the program:
 
 ```bash
@@ -460,8 +452,6 @@ find: ‘nc’: Operation not permitted
 find: ‘nc’: Operation not permitted
 find: ‘nc’: Operation not permitted
 ```
-
----
 
 Excellent. 
 This approach greatly improves scalability, allowing to block execution of thousands of paths with minimal performance and memory footprint.
