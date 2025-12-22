@@ -2,7 +2,7 @@
 date = '2025-12-14T16:03:13+01:00'
 years = ['2025']
 draft = false
-title = 'Synchronous Kernel-Space Policy Enforcement: Bridging Rust, eBPF, and kfuncs'
+title = 'eBPF-based Policy Enforcement: Bridging Rust, kfuncs and regexes'
 tags = ['ebpf', 'linux', 'lsm', 'kernel', 'c', 'rust']
 +++
 
