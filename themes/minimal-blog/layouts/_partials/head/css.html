@@ -1,4 +1,4 @@
-{{- $cssFiles := slice "css/modern-normalize.css" "css/main.css" }}
+{{- $cssFiles := slice "css/fonts.css" "css/modern-normalize.css" "css/main.css" }}
 {{- range $cssFiles }}
   {{- with resources.Get . }}
     {{- if hugo.IsDevelopment }}

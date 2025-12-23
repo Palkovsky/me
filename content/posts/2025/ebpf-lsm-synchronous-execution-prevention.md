@@ -17,9 +17,9 @@ Let's explore a simple use-case scenario of blocking execution of pre-configured
 
 - [Environment](#environment)
 - [Finding the right hook](#finding-the-right-hook)
-  - [Capturing `execve`](#capturing-execve)
-- [PoC using the `bpftrace`](#poc-using-the-bpftrace)
-- [Step 1: Blocking `/usr/bin/ls`](#step-1-blocking-usrbinls)
+  - [Capturing execve](#capturing-execve)
+- [PoC using the bpftrace](#poc-using-the-bpftrace)
+- [Step 1: Blocking /usr/bin/ls](#step-1-blocking-usrbinls)
 - [Step 2: User-space loader](#step-2-user-space-loader)
 - [Step 3: Blocking multiple executables](#step-3-blocking-multiple-executables)
 - [Summary](#summary)

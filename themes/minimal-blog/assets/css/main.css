@@ -1,8 +1,19 @@
+/* Self-hosted Roboto Condensed fonts */
+@font-face {
+    font-family: 'Roboto';
+    src: url('/fonts/Roboto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
   display: flex;
   flex-direction: column;
   color: #222;
-  font-family: serif;
+  font-family: 'Roboto', serif;
+  font-weight: normal;
+  font-style: normal;
   line-height: 1.6;
   margin: 0;
   max-width: 768px;

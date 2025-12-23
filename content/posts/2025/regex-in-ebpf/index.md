@@ -2,7 +2,7 @@
 date = '2025-12-14T16:03:13+01:00'
 years = ['2025']
 draft = false
-title = 'eBPF-based Policy Enforcement: Bridging Rust, kfuncs and regexes'
+title = 'eBPF-based Policy Enforcement: Marrying Rust, kfuncs and regexes'
 tags = ['ebpf', 'linux', 'lsm', 'kernel', 'c', 'rust']
 +++
 
@@ -17,18 +17,18 @@ In this post, I'll explore a generic approach to bridging that gap by bringing t
 
 - [General idea](#general-idea)
 - [Architecture](#architecture)
-- [Kernel-enabled `regex` library](#kernel-enabled-regex-library)
+- [Kernel-enabled regex library](#kernel-enabled-regex-library)
   - [Heart of the library](#heart-of-the-library)
     - [FFI layer](#ffi-layer)
     - [Kernel allocator](#kernel-allocator)
     - [Building the library](#building-the-library)
 - [SIMD in the kernel](#simd-in-the-kernel)
 - [Kernel module](#kernel-module)
-  - [`switch_stack`](#switch_stack)
+  - [switch_stack](#switch_stack)
   - [Per-CPU stacks](#per-cpu-stacks)
-  - [`init_regex_set`](#init_regex_set)
-  - [`kfunc` definition](#kfunc-definition)
-  - [Thread-safety of the `REGEX_SET`](#thread-safety-of-the-regex_set)
+  - [init_regex_set](#init_regex_set)
+  - [kfunc definition](#kfunc-definition)
+  - [Thread-safety of the REGEX_SET](#thread-safety-of-the-regex_set)
   - [Module init](#module-init)
 - [Linking the static library](#linking-the-static-library)
 - [Calling a kfunc from eBPF](#calling-a-kfunc-from-ebpf)
@@ -193,7 +193,7 @@ I'm using the basic slab allocator:
 #include <linux/slab.h>
 
 void* linux_module_malloc(uintptr_t size) {
-    return kmalloc(size, GFP_KERNEL);
+    return kmalloc(size, GFP_ATOMIC);
 }
 
 void linux_module_free(const void *obj) {
@@ -260,6 +260,7 @@ We'll start by including the required headers - all standard Linux headers, exce
 We also need to implement the symbols required by the [global allocator](#kernel-allocator).
 I'm using the standard slab allocator (`kmalloc`/`kfree`).
 This approach delegates memory allocation to the kernel module, keeping the library agnostic to the specific allocator being used.
+`GPF_ATOMIC` flag is used, to avoid sleeping in the eBPF probe context.
 
 ```c {hl_lines=[9,11,12]}
 #include <linux/init.h>
@@ -272,7 +273,7 @@ This approach delegates memory allocation to the kernel module, keeping the libr
 
 #include "regex_c.h"
 
-void* linux_module_malloc(uintptr_t size) { return kmalloc(size, GFP_KERNEL); }
+void* linux_module_malloc(uintptr_t size) { return kmalloc(size, GFP_ATOMIC); }
 void linux_module_free(const void *obj) { kfree(obj); }
 ```
 
