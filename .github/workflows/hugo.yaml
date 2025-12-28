@@ -77,6 +77,12 @@ jobs:
           key: hugo-${{ github.run_id }}
           restore-keys:
             hugo-
+      - name: Download resume files
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          gh release download latest --repo Palkovsky/sibi --pattern "resume.pdf" --dir static/
+          gh release download latest --repo Palkovsky/sibi --pattern "resume.html" --dir static/
       - name: Build the site
         run: |
           hugo \
