@@ -1,0 +1,182 @@
+{{- /* SEO Meta Tags */ -}}
+
+{{- /* Basic SEO */ -}}
+<meta name="author" content="{{ .Site.Params.author }}">
+<meta name="robots" content="index, follow">
+<meta name="googlebot" content="index, follow">
+
+{{- /* Description - use page seo, description, summary, or site description */ -}}
+{{- $description := .Site.Params.description -}}
+{{- if .Params.seo -}}
+    {{- $description = .Params.seo -}}
+{{- else if .Description -}}
+    {{- $description = .Description -}}
+{{- else if .IsPage -}}
+    {{- if .Summary -}}
+        {{- $description = .Summary | plainify | truncate 160 -}}
+    {{- end -}}
+{{- end -}}
+{{- with $description -}}
+<meta name="description" content="{{ . }}">
+{{- end -}}
+
+{{- /* Keywords from tags */ -}}
+{{- with .Params.tags -}}
+<meta name="keywords" content="{{ delimit . ", " }}">
+{{- end -}}
+
+{{- /* Canonical URL */ -}}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* Open Graph */ -}}
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:locale" content="{{ .Site.LanguageCode | default "en_US" }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+{{- with $description -}}
+<meta property="og:description" content="{{ . }}">
+{{- end -}}
+<meta property="og:url" content="{{ .Permalink }}">
+{{- with .Site.Params.image -}}
+<meta property="og:image" content="{{ . | absURL }}">
+{{- end -}}
+
+{{- /* Article-specific Open Graph */ -}}
+{{- if .IsPage -}}
+{{- if not .Date.IsZero -}}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end -}}
+{{- if not .Lastmod.IsZero -}}
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end -}}
+{{- with .Site.Params.author -}}
+<meta property="article:author" content="{{ . }}">
+{{- end -}}
+{{- with .Params.tags -}}
+{{- range . -}}
+<meta property="article:tag" content="{{ . }}">
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- /* Twitter Card */ -}}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+{{- with $description -}}
+<meta name="twitter:description" content="{{ . }}">
+{{- end -}}
+{{- with .Site.Params.image -}}
+<meta name="twitter:image" content="{{ . | absURL }}">
+{{- end -}}
+{{- with .Site.Params.twitter -}}
+<meta name="twitter:site" content="{{ . }}">
+<meta name="twitter:creator" content="{{ . }}">
+{{- end -}}
+
+{{- /* LinkedIn-specific (uses Open Graph but benefits from these additions) */ -}}
+{{- /* LinkedIn recommends images of 1200x627px */ -}}
+{{- with .Site.Params.author -}}
+<meta name="author" content="{{ . }}">
+{{- end -}}
+{{- if .IsPage -}}
+{{- /* LinkedIn article tags for better categorization */ -}}
+<meta property="og:article:author" content="{{ .Site.Params.linkedin | default .Site.Params.author }}">
+{{- end -}}
+
+{{- /* JSON-LD Structured Data */ -}}
+{{- if .IsHome -}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ .Site.Title }}",
+    "url": "{{ .Site.BaseURL }}",
+    {{- with .Site.Params.description }}
+    "description": "{{ . }}",
+    {{- end }}
+    "author": {
+        "@type": "Person",
+        "name": "{{ .Site.Params.author }}"
+    }
+}
+</script>
+{{- else if .IsPage -}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ .Title }}",
+    "url": "{{ .Permalink }}",
+    {{- with $description }}
+    "description": "{{ . }}",
+    {{- end }}
+    {{- if not .Date.IsZero }}
+    "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+    {{- end }}
+    {{- if not .Lastmod.IsZero }}
+    "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
+    {{- end }}
+    "author": {
+        "@type": "Person",
+        "name": "{{ .Site.Params.author }}",
+        {{- with .Site.Params.github }}
+        "url": "{{ . }}"
+        {{- end }}
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "{{ .Site.Params.author }}"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ .Permalink }}"
+    }
+    {{- with .Params.tags }},
+    "keywords": "{{ delimit . ", " }}"
+    {{- end }}
+}
+</script>
+{{- else -}}
+{{- /* For list pages like About, taxonomy pages, etc. */ -}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ .Title }}",
+    "url": "{{ .Permalink }}",
+    {{- with $description }}
+    "description": "{{ . }}",
+    {{- end }}
+    "author": {
+        "@type": "Person",
+        "name": "{{ .Site.Params.author }}"
+    }
+}
+</script>
+{{- end -}}
+
+{{- /* BreadcrumbList for better navigation in search results */ -}}
+{{- if not .IsHome -}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ .Site.BaseURL }}"
+        }
+        {{- if .IsPage -}}
+        ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{ .Title }}",
+            "item": "{{ .Permalink }}"
+        }
+        {{- end -}}
+    ]
+}
+</script>
+{{- end -}}

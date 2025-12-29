@@ -4,6 +4,7 @@ years = ['2025']
 draft = false
 title = 'eBPF-based Policy Enforcement: Marrying Rust, kfuncs and regexes'
 tags = ['ebpf', 'linux', 'lsm', 'kernel', 'c', 'rust']
+seo = 'Build a kernel-level regex policy engine using eBPF kfuncs and Rust. Tutorial on implementing AMSI-like malicious script detection in Linux kernel.'
 +++
 
 eBPF offers unparalleled observability into the Linux kernel.

@@ -15,9 +15,12 @@ theme = 'minimal-blog'
 # Site parameters
 [params]
   author = "Dawid Macek"
+  description = "Personal blog of Dawid Macek, a software engineer specializing in security. Deep dives into eBPF, Linux kernel, Rust, and low-level systems programming."
   email = "me@dawidmacek.com"
   github = "https://github.com/Palkovsky"
   linkedin = "https://www.linkedin.com/in/dawid-macek-8a1143205/"
+  # image = "/images/og-image.png"  # Uncomment and set your default Open Graph image
+  twitter = "@damacek"
 
 [pagination]
   disableAliases = false

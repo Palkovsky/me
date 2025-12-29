@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
-    <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
     <link rel="alternate" type="application/rss+xml" href="{{.Site.BaseURL }}index.xml" title="{{ .Site.Title }}">
+
+    <!-- SEO Meta Tags -->
+    {{ partial "head/seo.html" . }}
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ "/favicon-16x16.png" | relURL }}">

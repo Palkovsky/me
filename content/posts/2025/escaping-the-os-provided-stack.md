@@ -4,6 +4,7 @@ years = ['2025']
 draft = false
 title = 'Escaping the OS-provided stack'
 tags = ['assembly', 'low level', 'hacking', 'c', 'rust']
+seo = 'Bypass kernel stack size limits with custom stack switching in C and Rust. Assembly-level technique for running stack-heavy code in constrained environments.'
 +++
 
 User-space stacks can grow to considerable sizes - megabytes and more. 
