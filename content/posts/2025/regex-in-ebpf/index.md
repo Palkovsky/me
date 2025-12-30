@@ -743,17 +743,17 @@ int kprobe_sys_clone(struct pt_regs *ctx)
 
 There are a few things to unpack here. Let's go through them one by one.
 
-#### Why can't we just `bpf_override_return` from the `readline` call?
+**Why can't we just `bpf_override_return` from the `readline` call?**
 
 This is imposed by the kfuncs design - they're not allowed to run in all types of eBPF programs, including uprobes/uretprobes.
 
-#### What if `readline` is not followed by a `fork` syscall?
+**What if `readline` is not followed by a `fork` syscall?**
 
 This is a common case - for example, when the user executes only built-in shell commands or inputs an empty string.
 By using `BPF_MAP_TYPE_LRU_HASH`, the oldest and unused entries get evicted automatically.
 The map is also bounded in size, so memory impact is predictable and won't grow indefinitely.
 
-#### What if there's a `fork` syscall without a prior `readline`?
+**What if there's a `fork` syscall without a prior `readline`?**
 
 If there's no map entry for a given `pid_tgid`, the syscall proceeds normally.
 
@@ -763,7 +763,7 @@ If that's the case, a special flag in `cmdline_t` could be set to true.
 The `kprobe` would then validate whether this flag is set.
 If not - implying the program didn't go through the expected pathway - the syscall proceeds normally, without performing extra checks.
 
-#### What's with that `get_buf` business?
+**What's with that `get_buf` business?**
 
 [`get_buf`](https://github.com/aquasecurity/tracee/blob/32789ed760403fa96e3a9ee300dae3c0f868ff25/pkg/ebpf/c/common/buffer.h#L32) is a utility function borrowed from the [tracee](https://github.com/aquasecurity/tracee/tree/main) project.
 It provides a convenient way to get a per-CPU buffer, useful in scenarios where stack memory isn't enough (512B limit).
