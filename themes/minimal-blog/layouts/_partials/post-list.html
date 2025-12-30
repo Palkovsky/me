@@ -16,7 +16,6 @@ Renders a paginated list of posts grouped by year.
     {{ end }}
 {{ end }}
 {{ $years = sort $years "value" "desc" }}
-
 {{ range $yearIndex, $year := $years }}
     {{ $pagesInYear := slice }}
     {{ range $.Paginator.Pages }}

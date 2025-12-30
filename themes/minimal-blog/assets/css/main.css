@@ -21,6 +21,25 @@ body {
   min-height: 100vh;
 }
 
+.h2-style {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Responsive width for larger screens */
 @media (min-width: 1024px) {
   body {
@@ -317,6 +336,7 @@ article * + h6 {
 
 .home-links {
   gap: 2rem;
+  font-weight: bold;
 }
 
 .home-content {

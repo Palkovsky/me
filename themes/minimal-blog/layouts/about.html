@@ -1,19 +1,17 @@
 {{ define "main" }}
+    <h1 class="visually-hidden">About & Contact - {{ .Site.Title }}</h1>
     <div class="home-content">
-        <div class="home-links">
-            <h4>
+        <div class="home-links" itemscope itemtype="https://schema.org/Person">
             {{ if .Site.Params.email }}
-                <a class="no-underline" href="mailto:{{ .Site.Params.email }}">{{ .Site.Params.email }}</a> 
+                <a class="no-underline" href="mailto:{{ .Site.Params.email }}" itemprop="email">{{ .Site.Params.email }}</a> 
             {{ end }}
             <br/>
             {{ if .Site.Params.github }}
-                <a href="{{ .Site.Params.github }}">github</a>
+                [<a href="{{ .Site.Params.github }}" rel="noopener me" aria-label="GitHub Profile" itemprop="sameAs">github</a>]
             {{ end }}
-            <span>/</span>
             {{ if .Site.Params.linkedin }}
-                <a href="{{ .Site.Params.linkedin }}">linkedin</a>
+                [<a href="{{ .Site.Params.linkedin }}" rel="noopener me" aria-label="LinkedIn Profile" itemprop="sameAs">linkedin</a>]
             {{ end }}
-            </h4>
         </div>
     </div>
 {{ end }}
