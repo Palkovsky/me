@@ -2,7 +2,7 @@
 date = '2025-12-14T16:03:13+01:00'
 years = ['2025']
 draft = false
-title = 'eBPF-based Policy Enforcement: Marrying Rust, kfuncs and regexes'
+title = 'eBPF Policy Enforcement: Marrying Rust, kfuncs and regexes'
 tags = ['ebpf', 'linux', 'lsm', 'kernel', 'c', 'rust']
 seo = 'Build a kernel-level regex policy engine using eBPF kfuncs and Rust. Tutorial on implementing AMSI-like malicious script detection in Linux kernel.'
 +++
@@ -20,9 +20,9 @@ In this post, I'll explore a generic approach to bridging that gap by bringing t
 - [Architecture](#architecture)
 - [Kernel-enabled regex library](#kernel-enabled-regex-library)
   - [Heart of the library](#heart-of-the-library)
-    - [FFI layer](#ffi-layer)
-    - [Kernel allocator](#kernel-allocator)
-    - [Building the library](#building-the-library)
+  - [FFI layer](#ffi-layer)
+  - [Kernel allocator](#kernel-allocator)
+  - [Building the library](#building-the-library)
 - [SIMD in the kernel](#simd-in-the-kernel)
 - [Kernel module](#kernel-module)
   - [switch_stack](#switch_stack)
@@ -37,7 +37,7 @@ In this post, I'll explore a generic approach to bridging that gap by bringing t
 - [Putting it together](#putting-it-together)
 - [Conclusion](#conclusion)
 
-# General idea
+## General idea
 
 Typical eBPF-native security/observability products offer some form of in-kernel (in eBPF) filtering capabilities, but they are limited when it comes to the expressivity of the available policies.
 They tend to be restricted to unsophisticated rules such as: prevent binaries from a blocklist from running, prevent writing to a given directory, drop connections from a range of IPs, etc.
@@ -54,7 +54,7 @@ The kfunc returns the decision synchronously, giving the eBPF side the opportuni
 In this post, I'll be exploring regexes, but by "policy engine" I mean: anything.
 The limiting factor being: is it performant enough to run in a synchronous kernel probe?
 
-# Architecture
+## Architecture
 
 I consider regexes on their own to be a sufficiently sophisticated "policy engine" to prove the usefulness of this technique.
 We'll start by creating a regex library linkable against a Linux kernel module.
@@ -70,7 +70,7 @@ General methodology of setting up such probes with the [libbpf-rs](https://githu
 
 ![Regex in eBPF Architecture](regex-in-ebpf-architecture.svg)
 
-# Kernel-enabled `regex` library
+## Kernel-enabled `regex` library
 
 The library will be implemented in Rust, with the C interface exposed via the FFI layer.
 By doing that, I want to drive home the idea of having the most complex logic, which in this exercise is regex matching, implemented in a safe(ish) language.
@@ -84,7 +84,7 @@ The core functionality will be handled by the Rust [regex](https://github.com/ru
 
 **FYI:** I'm not using the [Rust for Linux](https://rust-for-linux.com/) project, which is supposed to be the go-to solution for Rust in the kernel, so this might not be the "proper" way of doing things.
 
-## Heart of the library
+### Heart of the library
 
 `RegexSet` type serves as a library-owned wrapper over the [regex::RegexSet](https://docs.rs/regex/latest/regex/struct.RegexSet.html).
 It offers an API to add patterns and finalize the set.
@@ -228,7 +228,7 @@ $ nm -g target/x86_64-unknown-linuxkernel/release/libregex_c.a  | grep regex_set
 0000000000000000 T regex_set_version
 ```
 
-# SIMD in the kernel
+## SIMD in the kernel
 
 SIMD instructions commonly used by regex libraries require extra care in kernel space. 
 Using them clobbers values used by user-space processes, as the kernel does not preserve FPU state.
@@ -251,7 +251,7 @@ We can, however, get around this by applying the stack-swapping technique from m
 Each CPU will get its own 16-byte-aligned buffer, serving as a dedicated stack for regex evaluation via `regex_set_evaluate`. 
 Since `kernel_fpu_begin()`, which we need to call anyway, disables preemption, we're ruling out the possibility of two per-CPU stacks being used at the same time.
 
-# Kernel module
+## Kernel module
 
 Equipped with this knowledge, we're ready to draft the kernel module.
 I'm working on kernel `6.8.0-71` - some APIs around kfunc definitions differ slightly in newer kernels (e.g., `BTF_KFUNCS_START`/`BTF_KFUNCS_END` instead of `BTF_SET8_START`/`BTF_SET8_END`).
@@ -516,7 +516,7 @@ finish:
 }
 ```
 
-# Linking the static library
+## Linking the static library
 
 The module is more or less finished. When we try to build it now, we'll encounter linkage issues:
 
@@ -607,7 +607,7 @@ The `dmesg` output after running `insmod regex_set.ko` confirms the module loade
 [11905.029225] Regex Set: Registered eBPF kfunc 'int bpf_regex_set_match(const char*)'
 ```
 
-# Calling a kfunc from eBPF
+## Calling a kfunc from eBPF
 
 With the kernel module loaded and the kfunc registered, we can now write an eBPF program that calls `bpf_regex_set_match` to evaluate command-line arguments against our regex patterns.
 
@@ -665,7 +665,7 @@ $ netcat
 bash: /usr/bin/netcat: Operation not permitted
 ```
 
-# Blocking malicious scripts from eBPF
+## Blocking malicious scripts from eBPF
 
 The `lsm/bprm_check_security` probe provides a `struct linux_binprm*`, containing the `argv` array of the executed program.
 It's possible to reconstruct the argument string and perform regex matching against it.
@@ -769,7 +769,7 @@ If not - implying the program didn't go through the expected pathway - the sysca
 It provides a convenient way to get a per-CPU buffer, useful in scenarios where stack memory isn't enough (512B limit).
 This probe can be easily re-written without that utility.
 
-# Putting it together
+## Putting it together
 
 Let's start by adding the patterns capturing potentially malicious shell commands into our kernel module (a real implementation should be configurable):
 
@@ -799,7 +799,7 @@ $ python -c 'import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STR
 bash: fork: Operation not permitted
 ```
 
-# Conclusion
+## Conclusion
 
 This demonstrates that eBPF's limitations don't have to constrain policy expressiveness. 
 By leveraging kfuncs, complex logic can be offloaded to kernel modules while retaining eBPF's observability and enforcement capabilities.

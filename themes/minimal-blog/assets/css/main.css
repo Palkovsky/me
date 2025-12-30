@@ -60,7 +60,10 @@ header {
 }
 
 .site-title {
-  margin-bottom: 0;
+  display: block;
+  margin-top: 0.67em;
+  font-size: 2em;
+  font-weight: bold;
 }
 
 .no-underline {

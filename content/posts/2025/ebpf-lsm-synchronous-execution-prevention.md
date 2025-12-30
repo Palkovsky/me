@@ -25,7 +25,7 @@ Let's explore a simple use-case scenario of blocking execution of pre-configured
 - [Step 3: Blocking multiple executables](#step-3-blocking-multiple-executables)
 - [Summary](#summary)
 
-# Environment
+## Environment
 
 I'm using `Ubuntu 22.04` VM with a generic `5.15` kernel. 
 The important bit is to ensure that kernel was compiled with `CONFIG_BPF_LSM` and that grub boots it with eBPF for LSM turned on.
@@ -37,7 +37,7 @@ $ cat /etc/default/grub | grep lsm
 GRUB_CMDLINE_LINUX="lsm=lockdown,capability,landlock,yama,apparmor,bpf"
 ```
 
-# Finding the right hook
+## Finding the right hook
 
 Hooks are stored inside the [`union security_list_options`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/lsm_hooks.h#L38):
 
@@ -73,7 +73,7 @@ union security_list_options {
 }
 ```
 
-## Capturing `execve`
+### Capturing `execve`
 
 Since the goal is to block execution of a given executable, we need to know which hook gets called on the `execve` syscall.
 Grepping the definition list doesn't lead to anything obvious.
@@ -127,7 +127,7 @@ It indicates that `bprm_check_security` should be our probe point:
 LSM_HOOK(int, 0, bprm_check_security, struct linux_binprm *bprm)
 ```
 
-# PoC using the `bpftrace`
+## PoC using the `bpftrace`
 
 [bpftrace](https://github.com/bpftrace/bpftrace) is a neat tool to write little eBPF programs in a script-like language. 
 It can be used for prototyping or validating if a hook triggers when expected.
@@ -167,7 +167,7 @@ This is great, but it's just a simple "audit" probe - we can do that without LSM
 Unfortunately, [bpftrace](https://github.com/bpftrace/bpftrace) doesn't support overriding a return value, as it focuses on observability rather than prevention.
 We need to build a fully-fledged eBPF program to get the active blocking behavior. 
 
-# Step 1: Blocking `/usr/bin/ls`
+## Step 1: Blocking `/usr/bin/ls`
 
 The initial goal is to block a hard-coded executable.
 The eBPF application needs to parse out a path from the [`struct bprm`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/binfmts.h#L18), and apply a [`strncmp`](https://en.cppreference.com/w/c/string/byte/strncmp)-like logic onto it.
@@ -215,7 +215,7 @@ int BPF_PROG(handle_bprm_check_security, struct linux_binprm *bprm) {
 **Note:** [`struct bprm`](https://github.com/torvalds/linux/blob/971199ad2a0f1b2fbe14af13369704aff2999988/include/linux/binfmts.h#L18) holds a `filename` field, so this is probably a "proper" way to get the path in this specific hook. 
 However, having the ability to convert [`struct path`](https://github.com/torvalds/linux/blob/56019d4ff8dd5ef16915c2605988c4022a46019c/include/linux/path.h#L8) into a string representation opens up a door for many powerful functionalities in different hooks.
 
-# Step 2: User-space loader
+## Step 2: User-space loader
 
 [libbpf-rs](https://github.com/libbpf/libbpf-rs) will be used to create a user-space loader of the eBPF application.
 Their Github repository contains multiple examples on setting up a starter project.
@@ -295,7 +295,7 @@ However, the example is very limited and not scalable at all.
 What if we want to block multiple executables?
 Let's explore further.
 
-# Step 3: Blocking multiple executables
+## Step 3: Blocking multiple executables
 
 A naive solution would be to create a pre-configured list of blacklisted executables stored inside a map.
 Then inside the probe, add a loop iterating over the list, comparing the strings, and returning `-EPERM` if a match found.
@@ -460,7 +460,7 @@ Unfortunately, it's trivially bypassable - executable can either get renamed or 
 Different LSM-based probes can be added to fortify this solution. 
 One idea would be, blocking any attempts to open a handle to a blacklisted file, using the filesystem hooks.
 
-# Summary
+## Summary
 
 eBPF-backed LSM hooks are a powerful capability to build on top.
 However, on their own, they still might not be perfectly suitable for building a complex prevention logic, due to restrictions set by the eBPF verifier.

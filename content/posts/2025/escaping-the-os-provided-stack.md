@@ -25,7 +25,7 @@ This post explores a last-resort technique to bypass such a limitation.
 - [Conclusion](#conclusion)
 - [Bonus: Recursive variant](#bonus-recursive-variant)
 
-# Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
+## Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
 
 The inspiration to write this post came from doing research on adapting common Rust crates such as [regex](https://github.com/rust-lang/regex) to run as part of a Linux kernel module.
 The issue I faced was substantial stack usage, causing general protection faults in address ranges close to the `rsp`.
@@ -58,7 +58,7 @@ Segmentation fault (core dumped)
 
 But the question remains - how to overcome this limitation in an environment where the stack size cannot be easily increased?
 
-# Act 2: Proof of Concept
+## Act 2: Proof of Concept
 
 The bypass will be performed within our program. The goal is to:
  1. Preserve the current `rsp` in a static variable.
@@ -248,7 +248,7 @@ The compiled function doesn't emit any instructions accessing **`[rsp+offset]`**
     11ca:       c3                      ret
 ```
 
-# Act 3: Rock & Roll
+## Act 3: Rock & Roll
 
 So, will this technique actually work in the Linux kernel? After all, this is the place where the stack limitations bit me in the butt.
 
@@ -334,7 +334,7 @@ $ sudo dmesg --follow
 [ 1325.551042] After stack swap.
 ```
 
-## Without the stack swap
+### Without the stack swap
 
 If **`stack_heavy_callback`** is called directly without the stack switch, we can expect either an oops or a complete kernel panic.
 In this case, we got an oops.
@@ -367,7 +367,7 @@ The culprit instruction, corresponding to the **`large_stack_array[i] = i % 256;
   3f:   42 88 9c 25 e8 ff f7    mov    BYTE PTR [rbp+r12*1-0x80018],bl
 ```
 
-# Limitations
+## Limitations
 
 This technique comes with severe caveats:
 
@@ -378,7 +378,7 @@ This technique comes with severe caveats:
 
 Despite these limitations, the technique remains valuable in constrained environments where other solutions aren't feasible.
 
-# Finale: [Stackaroo](https://github.com/Palkovsky/stackaroo)
+## Finale: [Stackaroo](https://github.com/Palkovsky/stackaroo)
 
 After successfully deploying this technique in both user space and a kernel module, I packaged it into a reusable Rust library - **[stackaroo](https://github.com/Palkovsky/stackaroo)**.
 The library provides a clean API supporting x64 and ARM64 architectures and comes with a C FFI layer.
@@ -434,12 +434,12 @@ $ ./regex-test ; echo $?
 0
 ```
 
-# Conclusion
+## Conclusion
 
 Stack swapping might be a last-resort technique for environments where the given stack is insufficient and cannot be easily expanded.
 While it successfully bypasses stack size limitations in constrained contexts like kernel modules, embedded systems, or firmware, it's not without significant trade-offs.
 
-# Bonus: Recursive variant
+## Bonus: Recursive variant
 
 This variant avoids static variables entirely by storing the old stack pointer directly on the new stack, enabling recursive stack swaps.
 

@@ -19,9 +19,9 @@
 </head>
 <body>
     <header>
-        <h1 class="site-title">
+        <span class="site-title">
             <a class="no-underline" href="/">{{ .Site.Title }}</a>
-        </h1>
+        </span>
         <nav>
             {{ range .Site.Menus.main }}
                 <a href="{{ .URL }}">{{ .Name }}</a>
