@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title | truncate 60 "" }}{{ end }}</title>
     <link rel="alternate" type="application/rss+xml" href="{{.Site.BaseURL }}index.xml" title="{{ .Site.Title }}">
 
     <!-- SEO Meta Tags -->
