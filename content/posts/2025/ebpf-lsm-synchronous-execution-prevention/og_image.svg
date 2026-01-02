@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+    <linearGradient id="blockedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#b91c1c"/>
+    </linearGradient>
+    <linearGradient id="ebpfGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="strongGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowhead" markerWidth="12" markerHeight="9" refX="10" refY="4.5" orient="auto">
+      <polygon points="0 0, 12 4.5, 0 9" fill="#f59e0b"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.08">
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#58a6ff" stroke-width="0.5"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#grid)"/>
+  </g>
+
+  <!-- Left: execve call -->
+  <g transform="translate(100, 200)">
+    <rect x="0" y="0" width="220" height="80" rx="10" fill="#374151" opacity="0.6" stroke="#6b7280" stroke-width="1"/>
+    <text x="110" y="35" fill="#e5e7eb" font-family="monospace" font-size="18" text-anchor="middle">execve()</text>
+    <text x="110" y="60" fill="#9ca3af" font-family="monospace" font-size="13" text-anchor="middle">/usr/bin/netcat</text>
+  </g>
+
+  <!-- Arrow from execve to LSM -->
+  <line x1="340" y1="240" x2="430" y2="240" stroke="#f59e0b" stroke-width="3"/>
+  <polygon points="430,235 430,245 445,240" fill="#f59e0b"/>
+
+  <!-- Center: LSM + eBPF -->
+  <g transform="translate(460, 160)">
+    <!-- LSM Hook outer -->
+    <rect x="0" y="0" width="300" height="160" rx="12" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="8,4" opacity="0.7"/>
+    <text x="150" y="30" fill="#f59e0b" font-family="monospace" font-size="14" text-anchor="middle" font-weight="bold">LSM: bprm_check_security</text>
+    
+    <!-- eBPF Program inner -->
+    <rect x="20" y="50" width="260" height="90" rx="8" fill="url(#ebpfGrad)" opacity="0.15"/>
+    <rect x="20" y="50" width="260" height="90" rx="8" fill="none" stroke="#06b6d4" stroke-width="2"/>
+    <text x="150" y="80" fill="#06b6d4" font-family="monospace" font-size="16" text-anchor="middle" font-weight="bold">eBPF Program</text>
+    <text x="150" y="105" fill="#67e8f9" font-family="monospace" font-size="12" text-anchor="middle">hash(path) → map_lookup()</text>
+    <text x="150" y="125" fill="#8b949e" font-family="monospace" font-size="11" text-anchor="middle">blacklisted? → return -EPERM</text>
+  </g>
+
+  <!-- Arrow to result -->
+  <line x1="780" y1="240" x2="880" y2="240" stroke="#ef4444" stroke-width="3"/>
+  <polygon points="880,235 880,245 895,240" fill="#ef4444"/>
+
+  <!-- Right: Blocked result -->
+  <g transform="translate(910, 185)">
+    <rect x="0" y="0" width="200" height="110" rx="12" fill="#ef4444" opacity="0.9"/>
+    <text x="100" y="40" fill="#fff" font-family="monospace" font-size="15" text-anchor="middle">-EPERM</text>
+    <line x1="30" y1="55" x2="170" y2="55" stroke="#fff" stroke-width="1" opacity="0.3"/>
+    <text x="100" y="85" fill="#fecaca" font-family="monospace" font-size="20" text-anchor="middle" font-weight="bold">⛔ BLOCKED</text>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="530" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="42" text-anchor="middle" font-weight="bold">
+    eBPF + LSM: Synchronous Execution Prevention
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="580" fill="#8b949e" font-family="monospace" font-size="18" text-anchor="middle">
+    Block executables at kernel level before they run
+  </text>
+</svg>

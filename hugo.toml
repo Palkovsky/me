@@ -19,7 +19,9 @@ theme = 'minimal-blog'
   email = "me@dawidmacek.com"
   github = "https://github.com/Palkovsky"
   linkedin = "https://www.linkedin.com/in/dawid-macek-8a1143205/"
-  # image = "/images/og-image.png"  # Uncomment and set your default Open Graph image
+  resume = "/resume.pdf"
+#  photo = "/photo.png"
+  og_image = "/og_image.svg"
   twitter = "@damacek"
 
 [pagination]

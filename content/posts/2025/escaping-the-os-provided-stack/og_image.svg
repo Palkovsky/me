@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+    <linearGradient id="stackGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b"/>
+      <stop offset="100%" style="stop-color:#c92a2a"/>
+    </linearGradient>
+    <linearGradient id="stackGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#51cf66"/>
+      <stop offset="100%" style="stop-color:#2f9e44"/>
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffd43b"/>
+      <stop offset="100%" style="stop-color:#fab005"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.1">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#58a6ff" stroke-width="0.5"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#grid)"/>
+  </g>
+  
+  <!-- OS Stack (small, red) -->
+  <g transform="translate(120, 80)">
+    <text x="100" y="-10" fill="#8b949e" font-family="monospace" font-size="18" text-anchor="middle">Limited Stack</text>
+    <text x="100" y="15" fill="#ff6b6b" font-family="monospace" font-size="14" text-anchor="middle">16kB limit</text>
+    
+    <!-- Stack blocks -->
+    <rect x="0" y="40" width="200" height="50" rx="6" fill="url(#stackGrad1)" opacity="0.9"/>
+    <text x="100" y="72" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">main()</text>
+    
+    <rect x="0" y="95" width="200" height="50" rx="6" fill="url(#stackGrad1)" opacity="0.7"/>
+    <text x="100" y="127" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">init()</text>
+    
+    <rect x="0" y="150" width="200" height="50" rx="6" fill="url(#stackGrad1)" opacity="0.5"/>
+    <text x="100" y="182" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">switch_stack()</text>
+    
+    <!-- RSP indicator -->
+    <g filter="url(#glow)">
+      <path d="M -50 175 L -15 175" stroke="#ffd43b" stroke-width="3" marker-end="url(#arrowhead)"/>
+      <text x="-80" y="180" fill="#ffd43b" font-family="monospace" font-size="14" text-anchor="middle">rsp</text>
+    </g>
+    
+    <!-- Stack limit warning -->
+    <line x1="-30" y1="220" x2="230" y2="220" stroke="#ff6b6b" stroke-width="3" stroke-dasharray="8,5"/>
+    <text x="100" y="250" fill="#ff6b6b" font-family="monospace" font-size="14" text-anchor="middle">⚠ LIMIT</text>
+  </g>
+  
+  <!-- Arrow showing swap -->
+  <g transform="translate(420, 200)">
+    <defs>
+      <marker id="arrowhead" markerWidth="12" markerHeight="9" refX="11" refY="4.5" orient="auto">
+        <polygon points="0 0, 12 4.5, 0 9" fill="#ffd43b"/>
+      </marker>
+    </defs>
+    <path d="M 0 0 C 100 -60 160 -60 260 0" stroke="url(#arrowGrad)" stroke-width="4" fill="none" marker-end="url(#arrowhead)" filter="url(#glow)"/>
+    <text x="130" y="-70" fill="#ffd43b" font-family="monospace" font-size="18" text-anchor="middle" font-weight="bold">SWAP RSP</text>
+  </g>
+  
+  <!-- New Stack (large, green) -->
+  <g transform="translate(780, 50)">
+    <text x="120" y="0" fill="#8b949e" font-family="monospace" font-size="18" text-anchor="middle">Auxiliary Stack</text>
+    <text x="120" y="25" fill="#51cf66" font-family="monospace" font-size="14" text-anchor="middle">1MB buffer</text>
+    
+    <!-- Stack blocks -->
+    <rect x="0" y="45" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.9"/>
+    <text x="120" y="75" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">callback()</text>
+    
+    <rect x="0" y="95" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.8"/>
+    <text x="120" y="125" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">regex::new()</text>
+    
+    <rect x="0" y="145" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.7"/>
+    <text x="120" y="175" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">heavy_work()</text>
+    
+    <rect x="0" y="195" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.6"/>
+    <text x="120" y="225" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">...</text>
+    
+    <rect x="0" y="245" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.5"/>
+    <text x="120" y="275" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">deep_recursion()</text>
+    
+    <rect x="0" y="295" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.4"/>
+    <rect x="0" y="345" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.3"/>
+    <rect x="0" y="395" width="240" height="45" rx="6" fill="url(#stackGrad2)" opacity="0.2"/>
+    
+    <!-- New RSP indicator -->
+    <g filter="url(#glow)">
+      <path d="M -50 270 L -15 270" stroke="#51cf66" stroke-width="3"/>
+      <polygon points="-15,265 -15,275 -5,270" fill="#51cf66"/>
+      <text x="-80" y="275" fill="#51cf66" font-family="monospace" font-size="14" text-anchor="middle">rsp</text>
+    </g>
+    
+    <!-- Plenty of room indicator -->
+    <text x="120" y="465" fill="#51cf66" font-family="monospace" font-size="14" text-anchor="middle">✓ PLENTY OF ROOM</text>
+  </g>
+  
+  <!-- Title -->
+  <text x="600" y="600" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="42" text-anchor="middle" font-weight="bold">
+    Escaping the OS-Provided Stack
+  </text>
+</svg>
