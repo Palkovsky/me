@@ -3,7 +3,7 @@ date = '2025-11-10T12:00:00+02:00'
 years = ['2025']
 draft = false
 title = 'Escaping the OS-provided stack'
-tags = ['assembly', 'low level', 'hacking', 'c', 'rust']
+tags = ['assembly', 'low level', 'hacking', 'c', 'rust', 'stack tricks']
 seo = 'Bypass kernel stack size limits with custom stack switching in C and Rust. Assembly-level technique for running stack-heavy code in constrained environments.'
 og_image = 'og_image.svg'
 +++
