@@ -116,7 +116,7 @@
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "{{ .Site.Title }}",
-    "url": "{{ .Site.BaseURL }}",
+    "url": {{ printf "\"%s\"" .Site.BaseURL | safeJS }},
     {{- with .Site.Params.description }}
     "description": "{{ . }}",
     {{- end }}
@@ -125,7 +125,16 @@
     {{- end }}
     "author": {
         "@type": "Person",
-        "name": "{{ .Site.Params.author }}"
+        "name": "{{ .Site.Params.author }}",
+        "url": {{ printf "\"%sabout/\"" .Site.BaseURL | safeJS }}
+        {{- if or .Site.Params.github .Site.Params.linkedin }},
+        "sameAs": [
+            {{- $profiles := slice -}}
+            {{- with .Site.Params.github }}{{ $profiles = $profiles | append . }}{{ end -}}
+            {{- with .Site.Params.linkedin }}{{ $profiles = $profiles | append . }}{{ end -}}
+            {{- range $i, $p := $profiles }}{{ if $i }}, {{ end }}{{ printf "\"%s\"" $p | safeJS }}{{ end -}}
+        ]
+        {{- end }}
     }
 }
 </script>
@@ -135,7 +144,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "{{ .Title }}",
-    "url": "{{ .Permalink }}",
+    "url": {{ printf "\"%s\"" .Permalink | safeJS }},
     {{- with $description }}
     "description": "{{ . }}",
     {{- end }}
@@ -148,8 +157,14 @@
     "author": {
         "@type": "Person",
         "name": "{{ .Site.Params.author }}",
-        {{- with .Site.Params.github }}
-        "url": "{{ . }}"
+        "url": {{ printf "\"%sabout/\"" .Site.BaseURL | safeJS }}
+        {{- if or .Site.Params.github .Site.Params.linkedin }},
+        "sameAs": [
+            {{- $profiles := slice -}}
+            {{- with .Site.Params.github }}{{ $profiles = $profiles | append . }}{{ end -}}
+            {{- with .Site.Params.linkedin }}{{ $profiles = $profiles | append . }}{{ end -}}
+            {{- range $i, $p := $profiles }}{{ if $i }}, {{ end }}{{ printf "\"%s\"" $p | safeJS }}{{ end -}}
+        ]
         {{- end }}
     },
     "publisher": {
@@ -158,7 +173,7 @@
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "{{ .Permalink }}"
+        "@id": {{ printf "\"%s\"" .Permalink | safeJS }}
     }
     {{- with .Params.tags }},
     "keywords": "{{ delimit . ", " }}"
@@ -172,7 +187,7 @@
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "{{ .Title }}",
-    "url": "{{ .Permalink }}",
+    "url": {{ printf "\"%s\"" .Permalink | safeJS }},
     {{- with $description }}
     "description": "{{ . }}",
     {{- end }}
@@ -181,7 +196,16 @@
     {{- end }}
     "author": {
         "@type": "Person",
-        "name": "{{ .Site.Params.author }}"
+        "name": "{{ .Site.Params.author }}",
+        "url": {{ printf "\"%sabout/\"" .Site.BaseURL | safeJS }}
+        {{- if or .Site.Params.github .Site.Params.linkedin }},
+        "sameAs": [
+            {{- $profiles := slice -}}
+            {{- with .Site.Params.github }}{{ $profiles = $profiles | append . }}{{ end -}}
+            {{- with .Site.Params.linkedin }}{{ $profiles = $profiles | append . }}{{ end -}}
+            {{- range $i, $p := $profiles }}{{ if $i }}, {{ end }}{{ printf "\"%s\"" $p | safeJS }}{{ end -}}
+        ]
+        {{- end }}
     }
 }
 </script>
@@ -198,14 +222,14 @@
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "{{ .Site.BaseURL }}"
+            "item": {{ printf "\"%s\"" .Site.BaseURL | safeJS }}
         }
         {{- if .IsPage -}}
         ,{
             "@type": "ListItem",
             "position": 2,
             "name": "{{ .Title }}",
-            "item": "{{ .Permalink }}"
+            "item": {{ printf "\"%s\"" .Permalink | safeJS }}
         }
         {{- end -}}
     ]

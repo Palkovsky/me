@@ -22,10 +22,10 @@
         <span class="site-title">
             <a class="no-underline" href="/">{{ .Site.Title }}</a>
         </span>
-        <nav>
+        <nav aria-label="Main navigation">
             {{ range .Site.Menus.main }}
-                <a href="{{ .URL }}">{{ .Name }}</a>
-                {{ if not (eq (index $.Site.Menus.main (sub (len $.Site.Menus.main) 1)).Name .Name) }}<span>/</span>{{ end }}
+                <a href="{{ .URL }}"{{ if eq .URL $.RelPermalink }} aria-current="page"{{ end }}>{{ .Name }}</a>
+                {{ if not (eq (index $.Site.Menus.main (sub (len $.Site.Menus.main) 1)).Name .Name) }}<span aria-hidden="true">/</span>{{ end }}
             {{ end }}
         </nav>
     </header>
