@@ -47,6 +47,25 @@
 <meta property="og:image:height" content="630">
 {{- end -}}
 
+{{- /* Date Meta Tags for SEO */ -}}
+{{- $pageDate := .Date -}}
+{{- if .IsHome -}}
+    {{- /* For home/list pages, use the most recent post date */ -}}
+    {{- range first 1 (where .Site.RegularPages "Section" "posts") -}}
+        {{- $pageDate = .Date -}}
+    {{- end -}}
+{{- else if not .IsPage -}}
+    {{- /* For other list pages, use the most recent page in that section */ -}}
+    {{- range first 1 .Pages -}}
+        {{- $pageDate = .Date -}}
+    {{- end -}}
+{{- end -}}
+{{- if not $pageDate.IsZero -}}
+<meta name="last-modified" content="{{ $pageDate.Format "2006-01-02" }}">
+<meta name="updated" content="{{ $pageDate.Format "2006-01-02" }}">
+<meta name="date" content="{{ $pageDate.Format "2006-01-02" }}" scheme="YYYY-MM-DD">
+{{- end -}}
+
 {{- /* Article-specific Open Graph */ -}}
 {{- if .IsPage -}}
 <meta property="article:section" content="Blog">
@@ -101,6 +120,9 @@
     {{- with .Site.Params.description }}
     "description": "{{ . }}",
     {{- end }}
+    {{- if not $pageDate.IsZero }}
+    "dateModified": {{ $pageDate.Format "\"2006-01-02T15:04:05-07:00\"" | safeJS }},
+    {{- end }}
     "author": {
         "@type": "Person",
         "name": "{{ .Site.Params.author }}"
@@ -118,10 +140,10 @@
     "description": "{{ . }}",
     {{- end }}
     {{- if not .Date.IsZero }}
-    "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+    "datePublished": {{ .Date.Format "\"2006-01-02T15:04:05-07:00\"" | safeJS }},
     {{- end }}
     {{- if not .Lastmod.IsZero }}
-    "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
+    "dateModified": {{ .Lastmod.Format "\"2006-01-02T15:04:05-07:00\"" | safeJS }},
     {{- end }}
     "author": {
         "@type": "Person",
@@ -153,6 +175,9 @@
     "url": "{{ .Permalink }}",
     {{- with $description }}
     "description": "{{ . }}",
+    {{- end }}
+    {{- if not $pageDate.IsZero }}
+    "dateModified": {{ $pageDate.Format "\"2006-01-02T15:04:05-07:00\"" | safeJS }},
     {{- end }}
     "author": {
         "@type": "Person",
