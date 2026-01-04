@@ -30,13 +30,33 @@ Renders a paginated list of posts grouped by year.
             <div class="year-and-article-header">
                 <h2 class="year-header">{{ $year }}</h2>
                 <div class="article-header">
-                    <h3 class="article-title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+                    <h3 class="article-title">
+                        <a href="{{ $page.RelPermalink }}" class="title-link">
+                            {{- $page.Title -}}
+                            {{- with $page.Params.og_image -}}
+                                {{- $img := $page.Resources.GetMatch . -}}
+                                {{- with $img -}}
+                                    <img src="{{ .RelPermalink }}" alt="" class="title-hover-preview" aria-hidden="true">
+                                {{- end -}}
+                            {{- end -}}
+                        </a>
+                    </h3>
                     <small class="article-date">{{ $page.Date.Format "January 2" }}</small>
                 </div>
             </div>
             {{ else }}
             <div class="article-header">
-                <h3 class="article-title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+                <h3 class="article-title">
+                    <a href="{{ $page.RelPermalink }}" class="title-link">
+                        {{- $page.Title -}}
+                        {{- with $page.Params.og_image -}}
+                            {{- $img := $page.Resources.GetMatch . -}}
+                            {{- with $img -}}
+                                <img src="{{ .RelPermalink }}" alt="" class="title-hover-preview" aria-hidden="true">
+                            {{- end -}}
+                        {{- end -}}
+                    </a>
+                </h3>
                 <small class="article-date">{{ $page.Date.Format "January 2" }}</small>
             </div>
             {{ end }}

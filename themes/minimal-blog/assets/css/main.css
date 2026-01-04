@@ -400,3 +400,44 @@ article * + h6 {
     text-align: center;
   }
 }
+
+/* Article title hover preview */
+.title-link {
+  position: relative;
+}
+
+.title-hover-preview {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  max-width: min(60vw, 600px);
+  max-height: min(50vh, 450px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  z-index: 100;
+  border: 3px solid #222;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  margin-top: 0.5em;
+  pointer-events: none;
+  padding: 6px;
+  outline: 1px solid #666;
+  outline-offset: -1px;
+}
+
+/* Position preview above title when it would overflow viewport */
+.title-hover-preview.above {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+/* Only show on hover for non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  .title-link:hover .title-hover-preview {
+    display: block;
+  }
+}
