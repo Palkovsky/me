@@ -15,7 +15,7 @@ theme = 'minimal-blog'
 # Site parameters
 [params]
   author = "Dawid Macek"
-  description = "Personal blog of Dawid Macek, an engineer specializing in the security software. Deep dives into eBPF, Linux kernel, Rust, and low-level systems programming."
+  description = "Deep dives into eBPF, Linux kernel, Rust, and low-level systems programming by Dawid Macek, a security software engineer."
   email = "me@dawidmacek.com"
   github = "https://github.com/Palkovsky"
   linkedin = "https://www.linkedin.com/in/dawid-macek-8a1143205/"

@@ -84,5 +84,5 @@
   <line x1="560" y1="272" x2="720" y2="272" stroke="#ef9a9a" stroke-width="1"/>
   <text x="565" y="295" font-family="Arial, sans-serif" font-size="10" fill="#b71c1c">• RegexSet (no_std)</text>
   <text x="565" y="315" font-family="Arial, sans-serif" font-size="10" fill="#b71c1c">• FFI / C API</text>
-  <text x="565" y="335" font-family="Arial, sans-serif" font-size="10" fill="#b71c1c">• SIMD optimized</text>
+  <text x="565" y="335" font-family="Arial, sans-serif" font-size="10" fill="#b71c1c">• SIMD enabled</text>
 </svg>
