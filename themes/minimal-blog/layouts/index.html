@@ -9,13 +9,13 @@
         {{ end }}
         <br/>
         {{ if .Site.Params.github }}
-            [<a href="{{ .Site.Params.github }}" rel="noopener me" aria-label="GitHub Profile" itemprop="sameAs">github</a>]
-        {{ end }}
+            <a href="{{ .Site.Params.github }}" rel="noopener me" aria-label="GitHub Profile" itemprop="sameAs">github</a>
+        {{ end }}/
         {{ if .Site.Params.linkedin }}
-            [<a href="{{ .Site.Params.linkedin }}" rel="noopener me" aria-label="LinkedIn Profile" itemprop="sameAs">linkedin</a>]
-        {{ end }}
+            <a href="{{ .Site.Params.linkedin }}" rel="noopener me" aria-label="LinkedIn Profile" itemprop="sameAs">linkedin</a>
+        {{ end }}/
         {{ if .Site.Params.resume }}
-            [<a href="{{ .Site.Params.resume }}" rel="noopener me" aria-label="Resume" itemprop="sameAs">resume</a>]
+            <a href="{{ .Site.Params.resume }}" rel="noopener me" aria-label="Resume" itemprop="sameAs">resume</a>
         {{ end }}
         </div>
     </div>
@@ -34,10 +34,6 @@
             <p>
                 Hope you find something useful here.
                 Feel free to reach out via email or connect on LinkedIn.
-            </p>
-            <p style="text-align: right;">
-                Cheers,<br/>
-                Dawid
             </p>
         </div>
     </div>

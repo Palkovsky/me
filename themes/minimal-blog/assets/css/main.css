@@ -328,8 +328,7 @@ article * + h6 {
 /* About Page Styles */
 .about-page {
   max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  margin: 1.5rem auto;
   min-height: calc(100vh - 240px); /* Adjust based on header/footer height */
   display: flex;
   flex-direction: column;
@@ -338,7 +337,7 @@ article * + h6 {
 .about-content {
   text-align: justify;
   line-height: 1.8;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   margin-bottom: 2rem;
 }
 
@@ -359,9 +358,6 @@ article * + h6 {
   border: 2px solid #222;
 }
 
-.about-content p {
-  margin-bottom: 1rem;
-}
 
 .about-content::after {
   content: "";
@@ -370,18 +366,14 @@ article * + h6 {
 }
 
 .about-links {
-  background-color: #f0f0f0;
-  padding: 1rem;
   width: fit-content;
   align-self: center;
-  border-radius: 5px;
 }
 
 .about-links .contact-links {
   text-align: center;
   font-weight: bold;
   width: fit-content;
-  gap: 2rem;
   font-size: 1.4rem;
 }
 
