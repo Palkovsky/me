@@ -330,6 +330,7 @@ article * + h6 {
 .about-page {
   max-width: 500px;
   margin: 1.5rem auto;
+  padding-top: 3rem;
   min-height: calc(100dvh - 240px); /* Adjust based on header/footer height */
   display: flex;
   flex-direction: column;
