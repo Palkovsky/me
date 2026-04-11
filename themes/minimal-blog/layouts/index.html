@@ -5,15 +5,14 @@
     <div class="about-links">
         <div class="contact-links">
         {{ if .Site.Params.email }}
-            <a class="no-underline" href="mailto:{{ .Site.Params.email }}" itemprop="email">{{ .Site.Params.email }}</a> 
+            <a href="mailto:{{ .Site.Params.email }}" aria-label="Email" title="{{ .Site.Params.email }}" itemprop="email">email</a> /
         {{ end }}
-        <br/>
         {{ if .Site.Params.github }}
-            <a href="{{ .Site.Params.github }}" rel="noopener me" aria-label="GitHub Profile" itemprop="sameAs">github</a>
-        {{ end }}/
+            <a href="{{ .Site.Params.github }}" rel="noopener me" aria-label="GitHub Profile" itemprop="sameAs">github</a>/
+        {{ end }}
         {{ if .Site.Params.linkedin }}
-            <a href="{{ .Site.Params.linkedin }}" rel="noopener me" aria-label="LinkedIn Profile" itemprop="sameAs">linkedin</a>
-        {{ end }}/
+            <a href="{{ .Site.Params.linkedin }}" rel="noopener me" aria-label="LinkedIn Profile" itemprop="sameAs">linkedin</a> /
+        {{ end }}
         {{ if .Site.Params.resume }}
             <a href="{{ .Site.Params.resume }}" rel="noopener me" aria-label="Resume" itemprop="sameAs">resume</a>
         {{ end }}
@@ -27,12 +26,11 @@
         {{ end }}
         <div itemprop="description">
             <p>
-                I'm an engineer who enjoys researching weird topics and hacking stuff up.
+                I'm an engineer who enjoys researching obscure topics.
                 This blog was created to have my findings accumulated and archived in a single place, as I tend to forget what I worked on in the past.
                 My primary interests lie in low-level programming, operating systems, and networking.
             </p>
             <p>
-                Hope you find something useful here.
                 Feel free to reach out via email or connect on LinkedIn.
             </p>
         </div>
