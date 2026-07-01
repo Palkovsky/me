@@ -1,0 +1,12 @@
+{{- with resources.Get "js/main.js" }}
+  {{- $options := dict "minify" (not hugo.IsDevelopment) "targetPath" "js/engineering-magazine.js" -}}
+  {{- with . | js.Build $options }}
+    {{- if hugo.IsDevelopment }}
+      <script defer src="{{ .RelPermalink }}"></script>
+    {{- else }}
+      {{- with . | fingerprint }}
+        <script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

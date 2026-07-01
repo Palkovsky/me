@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <section class="not-found">
+    <div class="layout-shell not-found__grid">
+      <div class="not-found__code">404</div>
+      <div>
+        <p class="eyebrow"><span>Dead end</span> Address not mapped</p>
+        <h1>This page fell below the abstraction line.</h1>
+        <p>The requested address does not exist. Return to the publication or continue with the latest technical writing.</p>
+        <div class="not-found__actions">
+          <a class="button button--primary" href="{{ "/" | relURL }}">Go home</a>
+          <a class="button button--quiet" href="{{ "/posts/" | relURL }}">Browse writing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{{ end }}

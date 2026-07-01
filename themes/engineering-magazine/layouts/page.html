@@ -1,0 +1,75 @@
+{{ define "main" }}
+  {{- $cover := "" -}}
+  {{- with .Params.og_image -}}
+    {{- with $.Resources.GetMatch . -}}
+      {{- $cover = .RelPermalink -}}
+    {{- end -}}
+  {{- end -}}
+
+  <header class="article-hero">
+    <div class="layout-shell article-hero__inner{{ if $cover }} article-hero__inner--with-cover{{ end }}">
+      <div class="article-hero__copy">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="{{ "/" | relURL }}">Home</a><span>/</span><a href="{{ "/posts/" | relURL }}">Writing</a><span>/</span><span>Deep dive</span>
+        </nav>
+        <p class="eyebrow"><span>Technical investigation</span> {{ .Date.Format "2006" }}</p>
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.seo }}<p class="article-hero__dek">{{ . }}</p>{{ end }}
+        <div class="article-hero__meta">
+          <div><span>Published</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></div>
+          <div><span>Reading time</span><strong>{{ .ReadingTime }} minutes</strong></div>
+          <div><span>By</span><strong>{{ .Site.Params.author }}</strong></div>
+        </div>
+        {{ partial "topic-list.html" (dict "page" . "limit" 0) }}
+      </div>
+      {{ if $cover }}
+        <figure class="article-hero__cover" aria-hidden="true">
+          <img src="{{ $cover }}" alt="" decoding="async">
+          <figcaption><span>Figure 01</span> Article overview</figcaption>
+        </figure>
+      {{ end }}
+    </div>
+  </header>
+
+  <div class="article-stage">
+    <div class="layout-shell article-layout">
+      <aside class="article-rail" aria-hidden="true">
+        <span class="article-rail__label">Deep dive</span>
+        <div class="article-progress"><span data-reading-progress></span></div>
+        <span class="article-rail__percent" data-reading-percent>0%</span>
+      </aside>
+
+      <article class="article-content" id="article-content">
+        {{ .Content }}
+      </article>
+
+      {{- $toc := .TableOfContents | replaceRE `(?s)<li>\s*<a href="#table-of-contents">.*?</a>\s*</li>` "" -}}
+      {{ if in $toc "<li>" }}
+        <aside class="article-toc" aria-label="Table of contents">
+          <div class="article-toc__inner">
+            <p>On this page</p>
+            {{ $toc | safeHTML }}
+            <a class="article-toc__top" href="#main-content">Back to top ↑</a>
+          </div>
+        </aside>
+      {{ end }}
+    </div>
+  </div>
+
+  <footer class="article-footer">
+    <div class="layout-shell">
+      <div class="article-footer__topics">
+        <span>Filed under</span>
+        {{ partial "topic-list.html" (dict "page" . "limit" 0) }}
+      </div>
+      <nav class="article-footer__nav" aria-label="More articles">
+        {{ with .PrevInSection }}
+          <a href="{{ .RelPermalink }}"><small>Previous article</small><strong>← {{ .Title }}</strong></a>
+        {{ else }}<span></span>{{ end }}
+        {{ with .NextInSection }}
+          <a href="{{ .RelPermalink }}"><small>Next article</small><strong>{{ .Title }} →</strong></a>
+        {{ else }}<span></span>{{ end }}
+      </nav>
+    </div>
+  </footer>
+{{ end }}

@@ -1,0 +1,19 @@
+{{ define "main" }}
+  <header class="archive-hero archive-hero--compact">
+    <div class="layout-shell archive-hero__grid">
+      <div>
+        <p class="eyebrow"><span>Topic</span> Article collection</p>
+        <h1>{{ .Title }}</h1>
+      </div>
+      <p>{{ len .Pages }} {{ if eq (len .Pages) 1 }}article{{ else }}articles{{ end }} filed under this topic.</p>
+    </div>
+  </header>
+  <section class="archive-section">
+    <div class="layout-shell term-layout">
+      {{ range $index, $page := .Paginator.Pages }}
+        {{ partial "story-card.html" (dict "page" $page "index" (add $index 1)) }}
+      {{ end }}
+    </div>
+    {{ partial "pagination.html" . }}
+  </section>
+{{ end }}

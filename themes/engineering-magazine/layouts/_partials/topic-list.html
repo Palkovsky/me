@@ -1,0 +1,11 @@
+{{- $page := .page -}}
+{{- $limit := .limit | default 0 -}}
+{{- with $page.GetTerms "tags" -}}
+  <ul class="topic-list" aria-label="Topics">
+    {{- range $index, $term := . -}}
+      {{- if or (eq $limit 0) (lt $index $limit) -}}
+        <li><a href="{{ $term.RelPermalink }}">{{ $term.LinkTitle }}</a></li>
+      {{- end -}}
+    {{- end -}}
+  </ul>
+{{- end -}}

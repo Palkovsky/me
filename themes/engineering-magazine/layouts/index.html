@@ -1,0 +1,95 @@
+{{ define "main" }}
+  {{- $posts := where .Site.RegularPages "Section" "posts" -}}
+  {{- $posts = $posts.ByDate.Reverse -}}
+
+  <section class="home-hero">
+    <div class="layout-shell home-hero__grid">
+      <div class="home-hero__copy">
+        <p class="eyebrow"><span>Independent publication</span> Linux · eBPF · Rust</p>
+        <h1>Notes from below the abstraction line.</h1>
+        <p class="home-hero__dek">{{ .Site.Params.description }}</p>
+        <div class="home-hero__actions">
+          <a class="button button--primary" href="{{ "/posts/" | relURL }}">Explore the writing <span aria-hidden="true">↗</span></a>
+          {{ with .Site.Params.resume }}<a class="button button--quiet" href="{{ . }}">View résumé</a>{{ end }}
+        </div>
+      </div>
+      <div class="home-hero__edition" aria-hidden="true">
+        <span class="home-hero__edition-label">FIELD<br>NOTES</span>
+        <span class="home-hero__edition-number">01</span>
+        <div class="home-hero__edition-lines"></div>
+        <small>Systems engineering<br>from first principles</small>
+      </div>
+    </div>
+  </section>
+
+  {{ with index $posts 0 }}
+    {{- $featured := . -}}
+    {{- $image := "" -}}
+    {{- with .Params.og_image -}}
+      {{- with $featured.Resources.GetMatch . -}}
+        {{- $image = .RelPermalink -}}
+      {{- end -}}
+    {{- end -}}
+    <section class="home-section home-feature">
+      <div class="layout-shell">
+        <div class="section-heading">
+          <p class="section-kicker">Featured deep dive</p>
+          <span>Latest issue</span>
+        </div>
+        <article class="feature-story">
+          <a class="feature-story__visual{{ if not $image }} feature-story__visual--fallback{{ end }}" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
+            {{ if $image }}
+              <img src="{{ $image }}" alt="" decoding="async">
+            {{ else }}
+              <span>Systems<br>Field Notes</span>
+            {{ end }}
+          </a>
+          <div class="feature-story__body">
+            <div class="feature-story__meta">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+              <span>{{ .ReadingTime }} minute read</span>
+            </div>
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            <div class="feature-story__summary">{{ .Summary }}</div>
+            {{ partial "topic-list.html" (dict "page" . "limit" 4) }}
+            <a class="text-link" href="{{ .RelPermalink }}">Read the full investigation <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      </div>
+    </section>
+  {{ end }}
+
+  {{ if gt (len $posts) 1 }}
+    <section class="home-section home-latest">
+      <div class="layout-shell">
+        <div class="section-heading">
+          <p class="section-kicker">Recent writing</p>
+          <a href="{{ "/posts/" | relURL }}">View complete archive →</a>
+        </div>
+        <div class="story-grid">
+          {{ range $index, $page := after 1 $posts }}
+            {{ partial "story-card.html" (dict "page" $page "index" (add $index 2)) }}
+          {{ end }}
+        </div>
+      </div>
+    </section>
+  {{ end }}
+
+  <section class="home-about">
+    <div class="layout-shell home-about__grid">
+      <div class="home-about__index" aria-hidden="true">DM<span>/</span>SYS</div>
+      <div>
+        <p class="section-kicker">About the author</p>
+        <h2>Building and explaining software close to the metal.</h2>
+      </div>
+      <div class="home-about__copy">
+        <p>I write practical, source-driven explorations of kernel security, eBPF, Rust, and low-level programming techniques.</p>
+        <div class="home-about__links">
+          {{ with .Site.Params.email }}<a href="mailto:{{ . }}">Email</a>{{ end }}
+          {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">LinkedIn</a>{{ end }}
+          {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+        </div>
+      </div>
+    </div>
+  </section>
+{{ end }}

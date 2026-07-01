@@ -1,0 +1,27 @@
+{{- $page := .page -}}
+{{- $index := .index | default 1 -}}
+{{- $image := "" -}}
+{{- with $page.Params.og_image -}}
+  {{- with $page.Resources.GetMatch . -}}
+    {{- $image = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+
+<article class="story-card">
+  <a class="story-card__visual{{ if not $image }} story-card__visual--fallback{{ end }}" href="{{ $page.RelPermalink }}" tabindex="-1" aria-hidden="true">
+    {{- if $image -}}
+      <img src="{{ $image }}" alt="" loading="lazy" decoding="async">
+    {{- else -}}
+      <span>{{ printf "%02d" $index }}</span>
+    {{- end -}}
+  </a>
+  <div class="story-card__body">
+    <div class="story-card__meta">
+      <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date.Format "02 Jan 2006" }}</time>
+      <span>{{ $page.ReadingTime }} min read</span>
+    </div>
+    <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+    <div class="story-card__summary">{{ $page.Summary }}</div>
+    {{ partial "topic-list.html" (dict "page" $page "limit" 3) }}
+  </div>
+</article>

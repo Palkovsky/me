@@ -1,0 +1,52 @@
+{{ define "main" }}
+  {{- $pages := where .Pages "Section" "posts" -}}
+  {{- $paginator := .Paginate $pages -}}
+  <header class="archive-hero">
+    <div class="layout-shell archive-hero__grid">
+      <div>
+        <p class="eyebrow"><span>Archive</span> Long-form investigations</p>
+        <h1>Writing</h1>
+      </div>
+      <p>Technical field notes about Linux internals, eBPF policy enforcement, Rust, and experiments that cross abstraction boundaries.</p>
+      <div class="archive-hero__count"><strong>{{ len $pages }}</strong><span>published<br>articles</span></div>
+    </div>
+  </header>
+
+  <section class="archive-section">
+    <div class="layout-shell archive-layout">
+      <aside class="archive-sidebar">
+        <span>Browse by topic</span>
+        <div class="archive-sidebar__topics">
+          {{ range first 8 .Site.Taxonomies.tags.ByCount }}
+            <a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <sup>{{ .Count }}</sup></a>
+          {{ end }}
+        </div>
+      </aside>
+
+      <div class="archive-list">
+        {{ range $group := $paginator.Pages.GroupByDate "2006" }}
+          <section class="archive-year" aria-labelledby="year-{{ $group.Key }}">
+            <h2 id="year-{{ $group.Key }}">{{ $group.Key }}</h2>
+            <div class="archive-year__stories">
+              {{ range $index, $page := $group.Pages }}
+                <article class="archive-story">
+                  <div class="archive-story__date">
+                    <time datetime="{{ $page.Date.Format "2006-01-02" }}"><strong>{{ $page.Date.Format "02" }}</strong>{{ $page.Date.Format "Jan" }}</time>
+                    <span>{{ $page.ReadingTime }} min</span>
+                  </div>
+                  <div class="archive-story__body">
+                    <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+                    <div class="archive-story__summary">{{ $page.Summary }}</div>
+                    {{ partial "topic-list.html" (dict "page" $page "limit" 4) }}
+                  </div>
+                  <a class="archive-story__arrow" href="{{ $page.RelPermalink }}" aria-label="Read {{ $page.Title }}">↗</a>
+                </article>
+              {{ end }}
+            </div>
+          </section>
+        {{ end }}
+        {{ partial "pagination.html" . }}
+      </div>
+    </div>
+  </section>
+{{ end }}
