@@ -1,0 +1,15 @@
+{{ define "main" }}
+  <header class="notes-hero notes-hero--compact">
+    <div class="page-shell notes-hero__grid">
+      <div><p class="journal-kicker">Subject index</p><h1>{{ .Title }}</h1></div>
+      <p>Browse the journal by technology, technique, and area of investigation.</p>
+    </div>
+  </header>
+  <section class="subject-index">
+    <div class="page-shell subject-index__grid">
+      {{ range .Data.Terms.ByCount }}
+        <a href="{{ .Page.RelPermalink }}"><span>{{ .Page.LinkTitle }}</span><strong>{{ .Count }}</strong><small>{{ if eq .Count 1 }}note{{ else }}notes{{ end }}</small></a>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

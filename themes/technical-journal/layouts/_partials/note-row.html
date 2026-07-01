@@ -1,0 +1,15 @@
+{{- $page := .page -}}
+{{- $number := .number | default 1 -}}
+<article class="note-row">
+  <div class="note-row__number">{{ printf "%02d" $number }}</div>
+  <div class="note-row__body">
+    <div class="note-row__meta">
+      <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date.Format "January 2, 2006" }}</time>
+      <span>{{ $page.ReadingTime }} min read</span>
+    </div>
+    <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+    <div class="note-row__summary">{{ $page.Summary }}</div>
+    {{ partial "topic-list.html" (dict "page" $page "limit" 4) }}
+  </div>
+  <a class="note-row__link" href="{{ $page.RelPermalink }}" aria-label="Read {{ $page.Title }}">Read <span aria-hidden="true">→</span></a>
+</article>

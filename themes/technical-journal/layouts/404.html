@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <section class="journal-not-found">
+    <div class="page-shell journal-not-found__grid">
+      <div class="journal-not-found__number">404</div>
+      <div>
+        <p class="journal-kicker">Missing leaf</p>
+        <h1>This page is not in the notebook.</h1>
+        <p>The address may have changed, or the note may never have existed.</p>
+        <div><a class="journal-button" href="{{ "/" | relURL }}">Return home</a><a href="{{ "/posts/" | relURL }}">Browse notes →</a></div>
+      </div>
+    </div>
+  </section>
+{{ end }}

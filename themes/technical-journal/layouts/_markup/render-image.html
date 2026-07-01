@@ -1,0 +1,4 @@
+<span class="journal-figure">
+  <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
+  {{ with .Title }}<span class="journal-figure__caption">{{ . }}</span>{{ end }}
+</span>

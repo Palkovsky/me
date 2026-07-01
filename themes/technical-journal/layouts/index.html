@@ -1,0 +1,78 @@
+{{ define "main" }}
+  {{- $posts := where .Site.RegularPages "Section" "posts" -}}
+  {{- $posts = $posts.ByDate.Reverse -}}
+
+  <section class="journal-intro">
+    <div class="page-shell journal-intro__grid">
+      <div class="journal-intro__copy">
+        <h1>Personal blog by Dawid Macek</h1>
+        <p class="journal-intro__dek">Long-form technical articles.</p>
+      </div>
+    </div>
+  </section>
+
+  {{ with index $posts 0 }}
+    {{- $featured := . -}}
+    {{- $image := "" -}}
+    {{- with .Params.og_image -}}
+      {{- with $featured.Resources.GetMatch . -}}
+        {{- $image = .RelPermalink -}}
+      {{- end -}}
+    {{- end -}}
+    <section class="latest-note">
+      <div class="page-shell">
+        <div class="journal-section-heading">
+          <p>Latest note</p>
+          <span>No. 01</span>
+        </div>
+        <article class="latest-note__paper">
+          <div class="latest-note__body">
+            <div class="latest-note__meta">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+              <span>{{ .ReadingTime }} minute read</span>
+            </div>
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            <div class="latest-note__summary">{{ .Summary }}</div>
+            {{ partial "topic-list.html" (dict "page" . "limit" 4) }}
+            <a class="journal-text-link" href="{{ .RelPermalink }}">Continue reading <span aria-hidden="true">→</span></a>
+          </div>
+          {{ if $image }}
+            <a class="latest-note__figure" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
+              <img src="{{ $image }}" alt="" decoding="async">
+              <small>Illustration / system overview</small>
+            </a>
+          {{ end }}
+        </article>
+      </div>
+    </section>
+  {{ end }}
+
+  {{ if gt (len $posts) 1 }}
+    <section class="notes-index">
+      <div class="page-shell notes-index__grid">
+        <div class="notes-index__heading">
+          <h2>Recent notes</h2>
+          <a href="{{ "/posts/" | relURL }}">Complete archive →</a>
+        </div>
+        <div class="notes-index__list">
+          {{ range $index, $page := after 1 $posts }}
+            {{ partial "note-row.html" (dict "page" $page "number" (add $index 2)) }}
+          {{ end }}
+        </div>
+      </div>
+    </section>
+  {{ end }}
+
+  <section class="journal-contact">
+    <div class="page-shell journal-contact__grid">
+      <h2>Questions, corrections, or an interesting problem?</h2>
+      <div>
+        <p>I welcome thoughtful technical conversation and new problems worth investigating.</p>
+        <div class="journal-contact__links">
+          {{ with .Site.Params.email }}<a href="mailto:{{ . }}">Write by email</a>{{ end }}
+          {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">Connect on LinkedIn</a>{{ end }}
+        </div>
+      </div>
+    </div>
+  </section>
+{{ end }}

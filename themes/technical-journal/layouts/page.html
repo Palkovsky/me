@@ -1,0 +1,53 @@
+{{ define "main" }}
+  <header class="entry-header">
+    <div class="page-shell entry-header__inner">
+      <nav class="journal-breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ "/" | relURL }}">Journal</a><span>›</span><a href="{{ "/posts/" | relURL }}">Notes</a><span>›</span><span>{{ .Date.Format "2006" }}</span>
+      </nav>
+      <p class="journal-kicker">Technical note · {{ .Date.Format "January 2006" }}</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.seo }}<p class="entry-header__dek">{{ . }}</p>{{ end }}
+      <div class="entry-header__meta">
+        <div><span>Published</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></div>
+        <div><span>Length</span><strong>{{ .ReadingTime }} minute read</strong></div>
+        <div><span>Written by</span><strong>{{ .Site.Params.author }}</strong></div>
+      </div>
+      {{ partial "topic-list.html" (dict "page" . "limit" 0) }}
+    </div>
+  </header>
+
+  <div class="entry-stage">
+    <div class="page-shell entry-layout">
+      <aside class="reading-rail" aria-hidden="true">
+        <span class="reading-rail__label">Reading</span>
+        <div class="reading-rail__track"><span data-reading-progress></span></div>
+        <span class="reading-rail__percent" data-reading-percent>0%</span>
+      </aside>
+
+      <article class="entry-content" id="article-content">
+        {{ .Content }}
+      </article>
+
+      {{- $toc := .TableOfContents | replaceRE `(?s)<li>\s*<a href="#table-of-contents">.*?</a>\s*</li>` "" -}}
+      {{ if in $toc "<li>" }}
+        <aside class="entry-toc" aria-label="Table of contents">
+          <div class="entry-toc__inner">
+            <p>In this note</p>
+            {{ $toc | safeHTML }}
+            <a class="entry-toc__top" href="#main-content">Return to the top ↑</a>
+          </div>
+        </aside>
+      {{ end }}
+    </div>
+  </div>
+
+  <footer class="entry-footer">
+    <div class="page-shell">
+      <div class="entry-footer__topics"><span>Filed in</span>{{ partial "topic-list.html" (dict "page" . "limit" 0) }}</div>
+      <nav class="entry-footer__nav" aria-label="More notes">
+        {{ with .PrevInSection }}<a href="{{ .RelPermalink }}"><small>Previous note</small><strong>← {{ .Title }}</strong></a>{{ else }}<span></span>{{ end }}
+        {{ with .NextInSection }}<a href="{{ .RelPermalink }}"><small>Next note</small><strong>{{ .Title }} →</strong></a>{{ else }}<span></span>{{ end }}
+      </nav>
+    </div>
+  </footer>
+{{ end }}

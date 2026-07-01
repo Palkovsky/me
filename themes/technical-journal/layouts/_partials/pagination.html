@@ -1,0 +1,8 @@
+{{- $paginator := .Paginator -}}
+{{- if gt $paginator.TotalPages 1 -}}
+  <nav class="journal-pagination" aria-label="Pagination">
+    {{ with $paginator.Prev }}<a href="{{ .URL }}">← Newer notes</a>{{ else }}<span></span>{{ end }}
+    <span>Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+    {{ with $paginator.Next }}<a href="{{ .URL }}">Older notes →</a>{{ else }}<span></span>{{ end }}
+  </nav>
+{{- end -}}

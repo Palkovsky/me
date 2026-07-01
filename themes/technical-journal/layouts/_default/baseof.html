@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="{{ .Site.Language.Locale | default "en" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>{{ if .IsHome }}{{ .Site.Title }} - Personal blog{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+  <link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | absURL }}" title="{{ .Site.Title }}">
+  <link rel="icon" href="{{ "/favicon.ico" | relURL }}" sizes="48x48">
+  <link rel="icon" href="{{ "/favicon.svg" | relURL }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ "/apple-touch-icon.png" | relURL }}">
+  {{ partial "head/seo.html" . }}
+  {{ partial "head/css.html" . }}
+  {{ partial "head/js.html" . }}
+</head>
+<body class="page-kind-{{ .Kind }}{{ if eq .Section "posts" }} section-posts{{ end }}">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="journal-header">
+    <div class="page-shell journal-header__inner">
+      <a class="journal-brand" href="{{ "/" | relURL }}" aria-label="{{ .Site.Title }} home">
+        <span class="journal-brand__copy">
+          <strong>{{ .Site.Title }}</strong>
+          <small>Personal blog</small>
+        </span>
+      </a>
+
+      <nav class="journal-nav" aria-label="Main navigation">
+        {{ range .Site.Menus.main }}
+          {{- $active := false -}}
+          {{- if and (eq .URL "/") $.IsHome -}}
+            {{- $active = true -}}
+          {{- else if and (ne .URL "/") (hasPrefix $.RelPermalink .URL) -}}
+            {{- $active = true -}}
+          {{- end -}}
+          <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+        {{ end }}
+        {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+        <a class="journal-nav__rss" href="{{ "/index.xml" | relURL }}">RSS</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer class="journal-footer">
+    <div class="page-shell journal-footer__grid">
+      <div>
+        <p class="journal-footer__title">{{ .Site.Title }}</p>
+        <p>Independent notes on eBPF, Linux, Rust, and low-level systems programming.</p>
+      </div>
+      <div class="journal-footer__links" aria-label="Contact links">
+        {{ with .Site.Params.email }}<a href="mailto:{{ . }}">Email</a>{{ end }}
+        {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">LinkedIn</a>{{ end }}
+        {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+      </div>
+      <p class="journal-footer__copyright">© {{ now.Format "2006" }} {{ .Site.Params.author }} · Made for careful reading.</p>
+    </div>
+  </footer>
+</body>
+</html>
