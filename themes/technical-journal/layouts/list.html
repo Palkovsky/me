@@ -1,6 +1,6 @@
 {{ define "main" }}
-  {{- $pages := where .Pages "Section" "posts" -}}
-  {{- $paginator := .Paginate $pages -}}
+  {{- $pages := where .Site.RegularPages "Section" "posts" -}}
+  {{- $paginator := partial "pagination/paginator.html" . -}}
   <header class="notes-hero">
     <div class="page-shell notes-hero__grid">
       <div>
@@ -15,8 +15,10 @@
   <section class="notes-archive">
     <div class="page-shell notes-archive__layout">
       <aside class="notes-archive__topics">
-        <p>Tags</p>
+        <p>Browse</p>
         <div>
+          <a href="{{ "/tags/" | relURL }}">All topics</a>
+          <a href="{{ "/years/" | relURL }}">By year</a>
           {{ range first 10 .Site.Taxonomies.tags.ByCount }}
             <a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <sup>{{ .Count }}</sup></a>
           {{ end }}
@@ -33,7 +35,7 @@
             </div>
           </section>
         {{ end }}
-        {{ partial "pagination.html" . }}
+        {{ partial "pagination.html" $paginator }}
       </div>
     </div>
   </section>

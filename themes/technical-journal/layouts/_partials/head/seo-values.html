@@ -1,0 +1,51 @@
+{{- $shortTitle := .Title -}}
+{{- $browserTitle := printf "%s - %s" .Title .Site.Title -}}
+{{- $description := .Site.Params.description -}}
+
+{{- if .IsHome -}}
+  {{- $shortTitle = .Site.Title -}}
+  {{- $browserTitle = printf "%s - Personal blog" .Site.Title -}}
+{{- else if and (eq .Kind "section") (eq .Section "posts") -}}
+  {{- $shortTitle = "Systems Programming Articles" -}}
+  {{- $browserTitle = printf "%s - %s" $shortTitle .Site.Title -}}
+  {{- $description = printf "Browse all long-form articles on eBPF, Linux, Rust, and low-level systems programming by %s." .Site.Params.author -}}
+{{- else if and (eq .Kind "term") (eq .Data.Plural "tags") -}}
+  {{- $shortTitle = printf "%s Articles" .Title -}}
+  {{- $browserTitle = printf "%s - %s" $shortTitle .Site.Title -}}
+  {{- $articleLabel := cond (eq (len .Pages) 1) "article" "articles" -}}
+  {{- $description = printf "Read %d long-form %s about %s by %s, with practical examples and implementation details." (len .Pages) $articleLabel .Title .Site.Params.author -}}
+{{- else if and (eq .Kind "term") (eq .Data.Plural "years") -}}
+  {{- $shortTitle = printf "Articles from %s" .Title -}}
+  {{- $browserTitle = printf "%s - %s" $shortTitle .Site.Title -}}
+  {{- $articleLabel := cond (eq (len .Pages) 1) "article" "articles" -}}
+  {{- $description = printf "Browse %d long-form systems programming %s published in %s by %s." (len .Pages) $articleLabel .Title .Site.Params.author -}}
+{{- else if and (eq .Kind "taxonomy") (eq .Data.Plural "tags") -}}
+  {{- $shortTitle = "Systems Programming Topics" -}}
+  {{- $browserTitle = printf "%s - %s" $shortTitle .Site.Title -}}
+  {{- $description = "Browse articles by topic, including eBPF, Linux, Rust, kernel security, and low-level systems programming." -}}
+{{- else if and (eq .Kind "taxonomy") (eq .Data.Plural "years") -}}
+  {{- $shortTitle = "Article Archive by Year" -}}
+  {{- $browserTitle = printf "%s - %s" $shortTitle .Site.Title -}}
+  {{- $description = printf "Browse %s's long-form systems programming articles by publication year." .Site.Params.author -}}
+{{- else if and .IsPage .Summary -}}
+  {{- $description = .Summary | plainify | truncate 160 -}}
+{{- end -}}
+
+{{- with .Description -}}
+  {{- $description = . | plainify -}}
+{{- end -}}
+{{- with .Params.seo -}}
+  {{- $description = . | plainify -}}
+{{- end -}}
+
+{{- $canonical := .Permalink -}}
+{{- with partial "pagination/paginator.html" . -}}
+  {{- $canonical = .URL | absURL -}}
+{{- end -}}
+
+{{- return (dict
+  "browserTitle" $browserTitle
+  "canonical" $canonical
+  "description" $description
+  "shortTitle" $shortTitle
+) -}}

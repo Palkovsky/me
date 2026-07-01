@@ -1,7 +1,8 @@
 baseURL = 'https://www.dawidmacek.com/'
-languageCode = 'en-us'
+locale = 'en-US'
 title = "Dawid Macek"
 theme = 'technical-journal'
+enableGitInfo = true
 
 # Taxonomies
 [taxonomies]
@@ -28,6 +29,9 @@ theme = 'technical-journal'
   disableAliases = false
   pagerSize = 50
   path = 'page'
+
+[frontmatter]
+  lastmod = [':git', 'date']
 
 # Menu configuration
 [menu]

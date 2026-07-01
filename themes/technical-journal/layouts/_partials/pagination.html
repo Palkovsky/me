@@ -1,4 +1,4 @@
-{{- $paginator := .Paginator -}}
+{{- $paginator := . -}}
 {{- if gt $paginator.TotalPages 1 -}}
   <nav class="journal-pagination" aria-label="Pagination">
     {{ with $paginator.Prev }}<a href="{{ .URL }}">← Newer articles</a>{{ else }}<span></span>{{ end }}

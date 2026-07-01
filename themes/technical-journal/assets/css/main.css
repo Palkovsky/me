@@ -178,6 +178,7 @@ a {
 
 main {
   min-height: calc(100vh - var(--header-height));
+  background: var(--paper);
 }
 
 .journal-kicker {
@@ -700,7 +701,6 @@ main {
   font-size: 12px;
   font-weight: 650;
   text-decoration: none;
-  text-transform: capitalize;
 }
 
 .notes-archive__topics a:hover {
@@ -787,7 +787,6 @@ main {
   font-family: var(--serif);
   font-size: 23px;
   font-weight: 600;
-  text-transform: capitalize;
 }
 
 .subject-index__grid > a strong {

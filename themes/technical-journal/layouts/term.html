@@ -1,4 +1,5 @@
 {{ define "main" }}
+  {{- $paginator := partial "pagination/paginator.html" . -}}
   <header class="notes-hero">
     <div class="page-shell notes-hero__grid">
       <div><p class="journal-kicker">Articles filed under</p><h1>{{ .Title }}</h1></div>
@@ -7,10 +8,10 @@
   </header>
   <section class="term-notes">
     <div class="page-shell term-notes__list">
-      {{ range $page := .Paginator.Pages }}
+      {{ range $page := $paginator.Pages }}
         {{ partial "note-row.html" (dict "page" $page) }}
       {{ end }}
-      {{ partial "pagination.html" . }}
+      {{ partial "pagination.html" $paginator }}
     </div>
   </section>
 {{ end }}
