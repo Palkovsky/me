@@ -5,17 +5,17 @@
     <div class="page-shell notes-hero__grid">
       <div>
         <p class="journal-kicker">Complete archive</p>
-        <h1>Notes</h1>
+        <h1>Articles</h1>
       </div>
-      <p>Careful notes on systems software and low-level engineering.</p>
-      <div class="notes-hero__count"><strong>{{ len $pages }}</strong><span>notes<br>published</span></div>
+      <p>Articles on systems software and low-level engineering.</p>
+      <div class="notes-hero__count"><strong>{{ len $pages }}</strong><span>articles<br>published</span></div>
     </div>
   </header>
 
   <section class="notes-archive">
     <div class="page-shell notes-archive__layout">
       <aside class="notes-archive__topics">
-        <p>Index by subject</p>
+        <p>Tags</p>
         <div>
           {{ range first 10 .Site.Taxonomies.tags.ByCount }}
             <a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <sup>{{ .Count }}</sup></a>
@@ -27,8 +27,8 @@
           <section class="notes-year" aria-labelledby="year-{{ $group.Key }}">
             <div class="notes-year__label"><h2 id="year-{{ $group.Key }}">{{ $group.Key }}</h2></div>
             <div class="notes-year__list">
-              {{ range $index, $page := $group.Pages }}
-                {{ partial "note-row.html" (dict "page" $page "number" (add $index 1)) }}
+              {{ range $page := $group.Pages }}
+                {{ partial "note-row.html" (dict "page" $page) }}
               {{ end }}
             </div>
           </section>

@@ -1,7 +1,7 @@
 baseURL = 'https://www.dawidmacek.com/'
 languageCode = 'en-us'
 title = "Dawid Macek"
-theme = 'minimal-blog'
+theme = 'technical-journal'
 
 # Taxonomies
 [taxonomies]

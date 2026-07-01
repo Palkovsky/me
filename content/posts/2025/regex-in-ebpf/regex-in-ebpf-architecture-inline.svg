@@ -1,14 +1,10 @@
-<svg viewBox="0 0 1200 630" width="1200" height="630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<svg viewBox="0 0 800 400" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">eBPF policy enforcement with Rust, kfuncs, and regexes</title>
   <desc id="desc">An architecture diagram with a user process above an eBPF probe, a C kernel module, and a Rust regex library in kernel space.</desc>
 
-  <rect width="1200" height="630" fill="#fffdf8"/>
-  <rect x="28" y="28" width="1144" height="574" fill="none" stroke="#d9cdbb"/>
-  <rect x="28" y="28" width="8" height="574" fill="#aa4d2b"/>
-  <text x="78" y="58" fill="#aa4d2b" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" font-weight="700" letter-spacing="1.6">2025</text>
-  <line x1="78" y1="73" x2="1122" y2="73" stroke="#d9cdbb"/>
+  <rect width="800" height="400" fill="#fffdf8"/>
 
-  <g transform="translate(40 50) scale(1.4)">
+  <g>
   <!-- User Space -->
   <defs>
     <linearGradient id="userGrad" x1="0%" y1="0%" x2="0%" y2="100%">

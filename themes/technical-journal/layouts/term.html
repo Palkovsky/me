@@ -1,14 +1,14 @@
 {{ define "main" }}
-  <header class="notes-hero notes-hero--compact">
+  <header class="notes-hero">
     <div class="page-shell notes-hero__grid">
-      <div><p class="journal-kicker">Notes filed under</p><h1>{{ .Title }}</h1></div>
-      <p>{{ len .Pages }} {{ if eq (len .Pages) 1 }}carefully documented investigation{{ else }}carefully documented investigations{{ end }}.</p>
+      <div><p class="journal-kicker">Articles filed under</p><h1>{{ .Title }}</h1></div>
+      <p>{{ len .Pages }} {{ if eq (len .Pages) 1 }} documented investigation{{ else }} documented investigations{{ end }}.</p>
     </div>
   </header>
   <section class="term-notes">
     <div class="page-shell term-notes__list">
-      {{ range $index, $page := .Paginator.Pages }}
-        {{ partial "note-row.html" (dict "page" $page "number" (add $index 1)) }}
+      {{ range $page := .Paginator.Pages }}
+        {{ partial "note-row.html" (dict "page" $page) }}
       {{ end }}
       {{ partial "pagination.html" . }}
     </div>

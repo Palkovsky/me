@@ -1,6 +1,6 @@
 name = "Technical Journal"
 license = "MIT"
-description = "A warm, bookish Hugo theme for long-form systems engineering notes."
+description = "A warm, bookish Hugo theme for long-form systems engineering articles."
 homepage = "https://www.dawidmacek.com/"
 min_version = "0.146.0"
 

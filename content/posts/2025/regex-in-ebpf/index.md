@@ -69,7 +69,7 @@ The probe will determine if the commands the user is trying to execute are malic
 If the input is recognized as something malicious, the probe will block the execution attempt.
 General methodology of setting up such probes with the [libbpf-rs](https://github.com/libbpf/libbpf-rs) was discussed in my previous post [eBPF + LSM: Synchronous execution prevention](/posts/2025/ebpf-lsm-synchronous-execution-prevention).
 
-![Regex in eBPF Architecture](regex-in-ebpf-architecture.svg)
+![Regex in eBPF Architecture](regex-in-ebpf-architecture-inline.svg)
 
 ## Kernel-enabled `regex` library
 

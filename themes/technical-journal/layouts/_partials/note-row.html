@@ -1,9 +1,9 @@
 {{- $page := .page -}}
-{{- $number := .number | default 1 -}}
+{{- $latest := .latest | default false -}}
 <article class="note-row">
-  <div class="note-row__number">{{ printf "%02d" $number }}</div>
   <div class="note-row__body">
     <div class="note-row__meta">
+      {{ if $latest }}<span class="note-row__latest">Latest</span>{{ end }}
       <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date.Format "January 2, 2006" }}</time>
       <span>{{ $page.ReadingTime }} min read</span>
     </div>

@@ -1,4 +1,0 @@
-<span class="article-figure">
-  <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
-  {{ with .Title }}<span class="article-figure__caption">{{ . }}</span>{{ end }}
-</span>

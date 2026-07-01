@@ -2,15 +2,14 @@
   <header class="entry-header">
     <div class="page-shell entry-header__inner">
       <nav class="journal-breadcrumbs" aria-label="Breadcrumb">
-        <a href="{{ "/" | relURL }}">Journal</a><span>›</span><a href="{{ "/posts/" | relURL }}">Notes</a><span>›</span><span>{{ .Date.Format "2006" }}</span>
+        <a href="{{ "/" | relURL }}">Journal</a><span>›</span><a href="{{ "/posts/" | relURL }}">Articles</a><span>›</span><span>{{ .Date.Format "2006" }}</span>
       </nav>
-      <p class="journal-kicker">Technical note · {{ .Date.Format "January 2006" }}</p>
+      <p class="journal-kicker">Article · {{ .Date.Format "January 2006" }}</p>
       <h1>{{ .Title }}</h1>
       {{ with .Params.seo }}<p class="entry-header__dek">{{ . }}</p>{{ end }}
       <div class="entry-header__meta">
         <div><span>Published</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></div>
         <div><span>Length</span><strong>{{ .ReadingTime }} minute read</strong></div>
-        <div><span>Written by</span><strong>{{ .Site.Params.author }}</strong></div>
       </div>
       {{ partial "topic-list.html" (dict "page" . "limit" 0) }}
     </div>
@@ -32,7 +31,7 @@
       {{ if in $toc "<li>" }}
         <aside class="entry-toc" aria-label="Table of contents">
           <div class="entry-toc__inner">
-            <p>In this note</p>
+            <p>In this article</p>
             {{ $toc | safeHTML }}
             <a class="entry-toc__top" href="#main-content">Return to the top ↑</a>
           </div>
@@ -44,9 +43,9 @@
   <footer class="entry-footer">
     <div class="page-shell">
       <div class="entry-footer__topics"><span>Filed in</span>{{ partial "topic-list.html" (dict "page" . "limit" 0) }}</div>
-      <nav class="entry-footer__nav" aria-label="More notes">
-        {{ with .PrevInSection }}<a href="{{ .RelPermalink }}"><small>Previous note</small><strong>← {{ .Title }}</strong></a>{{ else }}<span></span>{{ end }}
-        {{ with .NextInSection }}<a href="{{ .RelPermalink }}"><small>Next note</small><strong>{{ .Title }} →</strong></a>{{ else }}<span></span>{{ end }}
+      <nav class="entry-footer__nav" aria-label="More articles">
+        {{ with .PrevInSection }}<a href="{{ .RelPermalink }}"><small>Previous article</small><strong>← {{ .Title }}</strong></a>{{ else }}<span></span>{{ end }}
+        {{ with .NextInSection }}<a href="{{ .RelPermalink }}"><small>Next article</small><strong>{{ .Title }} →</strong></a>{{ else }}<span></span>{{ end }}
       </nav>
     </div>
   </footer>
