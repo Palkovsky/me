@@ -693,6 +693,7 @@ main {
 
 .notes-archive__topics a {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
   padding: 11px 0;
@@ -711,6 +712,7 @@ main {
   color: var(--rust);
   font-family: var(--mono);
   font-size: 7px;
+  line-height: 1;
 }
 
 .notes-year + .notes-year {
