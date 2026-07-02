@@ -2,7 +2,7 @@
   <header class="entry-header">
     <div class="page-shell entry-header__inner">
       <nav class="journal-breadcrumbs" aria-label="Breadcrumb">
-        <a href="{{ "/" | relURL }}">Journal</a><span>›</span><a href="{{ "/posts/" | relURL }}">Articles</a><span>›</span>{{ range first 1 (.GetTerms "years") }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ else }}<span>{{ $.Date.Format "2006" }}</span>{{ end }}
+        <a href="{{ "/" | relURL }}">Blog</a><span>›</span><a href="{{ "/posts/" | relURL }}">Articles</a><span>›</span>{{ range first 1 (.GetTerms "years") }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ else }}<span>{{ $.Date.Format "2006" }}</span>{{ end }}
       </nav>
       <p class="journal-kicker">Article · {{ .Date.Format "January 2006" }}</p>
       <h1>{{ .Title }}</h1>
