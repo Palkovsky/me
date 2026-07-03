@@ -4,12 +4,10 @@
       <nav class="journal-breadcrumbs" aria-label="Breadcrumb">
         <a href="{{ "/" | relURL }}">Blog</a><span>›</span><a href="{{ "/posts/" | relURL }}">Articles</a><span>›</span>{{ range first 1 (.GetTerms "years") }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ else }}<span>{{ $.Date.Format "2006" }}</span>{{ end }}
       </nav>
-      <p class="journal-kicker">Article · {{ .Date.Format "January 2006" }}</p>
       <h1>{{ .Title }}</h1>
       {{ with .Params.seo }}<p class="entry-header__dek">{{ . }}</p>{{ end }}
       <div class="entry-header__meta">
         <div><span>Published</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></div>
-        {{ if gt .Lastmod.Unix .Date.Unix }}<div><span>Updated</span><time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "January 2, 2006" }}</time></div>{{ end }}
         <div><span>Length</span><strong>{{ .ReadingTime }} minute read</strong></div>
       </div>
       {{ partial "topic-list.html" (dict "page" . "limit" 0) }}

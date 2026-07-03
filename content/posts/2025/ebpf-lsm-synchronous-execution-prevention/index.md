@@ -5,7 +5,7 @@ draft = false
 title = 'eBPF + LSM: Synchronous execution prevention'
 tags = ['ebpf', 'lsm', 'linux', 'rust']
 seo = 'Learn how to use eBPF LSM hooks to block executable files on Linux. Step-by-step tutorial with Rust and bpftrace examples for kernel security enforcement.'
-og_image = 'og_image.svg'
+og_image = 'og_image.png'
 +++
 
 LSM (Linux Security Modules) hooks offer a way to synchronously hook certain actions taking place in a Linux kernel.

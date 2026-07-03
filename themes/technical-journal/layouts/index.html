@@ -2,14 +2,21 @@
   {{- $posts := where .Site.RegularPages "Section" "posts" -}}
   {{- $posts = $posts.ByDate.Reverse -}}
 
-  <section class="journal-intro">
-    <div class="page-shell journal-intro__grid">
-      <div class="journal-intro__copy">
-        <h1>Personal blog by Dawid Macek</h1>
-        <p class="journal-intro__dek">Long-form technical articles.</p>
+  {{ with .Content }}
+  <section class="home-about" aria-labelledby="home-about-title">
+    <div class="page-shell home-about__grid home-about__grid--text-only">
+      <div class="home-about__body">
+        <h1 id="home-about-title">About me</h1>
+        <div class="home-about__copy">{{ . }}</div>
       </div>
+      {{/* Photo temporarily disabled.
+      <figure class="home-about__media">
+        <img src="{{ $.Site.Params.photo | relURL }}{{ with $.Site.Params.photo_version }}?v={{ . }}{{ end }}" alt="Dawid Macek" width="1086" height="1448" decoding="async">
+      </figure>
+      */}}
     </div>
   </section>
+  {{ end }}
 
   <section class="home-notes">
     <div class="page-shell">

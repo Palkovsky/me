@@ -1,12 +1,29 @@
 {{- $page := .page -}}
 {{- $values := .values -}}
 
-{{- $image := $page.Site.Params.og_image | absURL -}}
+{{- $defaultImagePath := $page.Site.Params.og_image -}}
+{{- $image := $defaultImagePath | absURL -}}
+{{- $imageWidth := 0 -}}
+{{- $imageHeight := 0 -}}
+{{- $imageType := "" -}}
+{{- with resources.Get $defaultImagePath -}}
+  {{- $image = .Permalink -}}
+  {{- $imageWidth = .Width -}}
+  {{- $imageHeight = .Height -}}
+  {{- $imageType = .MediaType.Type -}}
+{{- end -}}
 {{- with $page.Params.og_image -}}
-  {{- with $page.Resources.GetMatch . -}}
+  {{- $pageImagePath := . -}}
+  {{- with $page.Resources.GetMatch $pageImagePath -}}
     {{- $image = .Permalink -}}
+    {{- $imageWidth = .Width -}}
+    {{- $imageHeight = .Height -}}
+    {{- $imageType = .MediaType.Type -}}
   {{- else -}}
-    {{- $image = printf "%s%s" $page.Permalink . -}}
+    {{- $image = printf "%s%s" $page.Permalink $pageImagePath -}}
+    {{- $imageWidth = 0 -}}
+    {{- $imageHeight = 0 -}}
+    {{- $imageType = "" -}}
   {{- end -}}
 {{- end -}}
 
@@ -18,6 +35,7 @@
   {{- $sameAs = $sameAs | append . -}}
 {{- end -}}
 {{- $person := dict
+    "@id" (printf "%s#person" $page.Site.BaseURL)
     "@type" "Person"
     "name" $page.Site.Params.author
     "url" $page.Site.BaseURL
@@ -25,6 +43,17 @@
 {{- if $sameAs -}}
   {{- $person = merge $person (dict "sameAs" $sameAs) -}}
 {{- end -}}
+{{- with $page.Site.Params.author_bio -}}
+  {{- $person = merge $person (dict "description" .) -}}
+{{- end -}}
+{{- with $page.Site.Params.expertise -}}
+  {{- $person = merge $person (dict "knowsAbout" .) -}}
+{{- end -}}
+{{/* Photo temporarily disabled.
+{{- with $page.Site.Params.photo -}}
+  {{- $person = merge $person (dict "image" (. | absURL)) -}}
+{{- end -}}
+*/}}
 {{- $language := $page.Site.Language.Locale | default "en" -}}
 
 <meta name="author" content="{{ $page.Site.Params.author }}">
@@ -37,6 +66,9 @@
 <meta property="og:description" content="{{ $values.description }}">
 <meta property="og:url" content="{{ $values.canonical }}">
 <meta property="og:image" content="{{ $image }}">
+{{ with $imageWidth }}<meta property="og:image:width" content="{{ . }}">{{ end }}
+{{ with $imageHeight }}<meta property="og:image:height" content="{{ . }}">{{ end }}
+{{ with $imageType }}<meta property="og:image:type" content="{{ . }}">{{ end }}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $values.shortTitle }}">
 <meta name="twitter:description" content="{{ $values.description }}">
@@ -80,14 +112,30 @@
   -}}
   <script type="application/ld+json">{{ $breadcrumbSchema | jsonify | safeJS }}</script>
 {{ else if $page.IsHome }}
-  {{- $schema := dict
-      "@context" "https://schema.org"
+  {{- $personRef := dict "@id" (printf "%s#person" $page.Site.BaseURL) -}}
+  {{- $websiteID := printf "%s#website" $page.Site.BaseURL -}}
+  {{- $website := dict
+      "@id" $websiteID
       "@type" "WebSite"
       "name" $page.Site.Title
       "description" $values.description
       "url" $page.Site.BaseURL
-      "publisher" $person
+      "publisher" $personRef
       "inLanguage" $language
+  -}}
+  {{- $profile := dict
+      "@id" (printf "%s#profile" $values.canonical)
+      "@type" "ProfilePage"
+      "name" $page.Site.Params.author
+      "description" $values.description
+      "url" $values.canonical
+      "mainEntity" $personRef
+      "isPartOf" (dict "@id" $websiteID)
+      "inLanguage" $language
+  -}}
+  {{- $schema := dict
+      "@context" "https://schema.org"
+      "@graph" (slice $website $profile $person)
   -}}
   <script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
 {{ end }}

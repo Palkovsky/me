@@ -16,13 +16,14 @@ enableGitInfo = true
 # Site parameters
 [params]
   author = "Dawid Macek"
+  author_bio = "Focused on detection engines, system-level agents, low-level systems programming, and security research."
+  expertise = ["Detection engines", "Systems programming", "Linux internals", "Windows internals", "eBPF", "Rust", "Security research", "Networking"]
   description = "Deep dives into eBPF, Linux kernel, Rust, and low-level systems programming by Dawid Macek."
   email = "dawidmacek42@gmail.com"
 #  github = "https://github.com/Palkovsky"
   linkedin = "https://www.linkedin.com/in/dawid-macek-8a1143205/"
   resume = "/resume.pdf"
-#  photo = "/photo.png"
-  og_image = "/og_image.svg"
+  og_image = "og_image.png"
   twitter = "@damacek"
 
 [pagination]

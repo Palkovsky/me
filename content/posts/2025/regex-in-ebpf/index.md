@@ -5,7 +5,7 @@ draft = false
 title = 'eBPF Policy Enforcement: Marrying Rust, kfuncs and regexes'
 tags = ['ebpf', 'linux', 'lsm', 'kernel', 'c', 'rust']
 seo = 'Build a kernel-level regex policy engine using eBPF kfuncs and Rust. Tutorial on implementing AMSI-like malicious script detection in Linux kernel.'
-og_image = 'regex-in-ebpf-architecture.svg'
+og_image = 'regex-in-ebpf-architecture.png'
 +++
 
 eBPF offers unparalleled observability into the Linux kernel.
