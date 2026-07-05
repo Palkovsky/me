@@ -393,13 +393,6 @@ main {
   text-transform: uppercase;
 }
 
-.latest-note__meta span::before,
-.note-row__meta > * + *::before {
-  margin-right: 18px;
-  color: var(--rust);
-  content: "·";
-}
-
 .note-row__latest {
   color: var(--rust);
 }
@@ -1737,10 +1730,6 @@ main {
     white-space: nowrap;
   }
 
-  .note-row__meta > * + *::before {
-    margin-right: 8px;
-  }
-
   .journal-contact__grid {
     grid-template-columns: 1fr;
     gap: 25px;
@@ -1873,10 +1862,6 @@ main {
     align-items: flex-start;
     flex-direction: column;
     gap: 5px;
-  }
-
-  .latest-note__meta span::before {
-    display: none;
   }
 
 }

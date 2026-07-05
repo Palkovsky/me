@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     width="94mm"
+     height="54mm"
+     viewBox="0 0 94 54"
+     role="img"
+     aria-labelledby="title description">
+  <title id="title">Dawid Macek — wizytówka</title>
+  <desc id="description">Pozioma wizytówka 90 × 50 mm ze spadem 2 mm z każdej strony.</desc>
+
+  <metadata>
+    Format brutto: 94 × 54 mm. Format netto: 90 × 50 mm.
+    Linia cięcia: x=2 mm, y=2 mm, szerokość=90 mm, wysokość=50 mm.
+    Tło: transparentne.
+    Krój: Eurostile Bold Extended #2. Widoczny napis został zamieniony na krzywe.
+    W pliku zachowano również osadzony podzbiór WOFF2 dla tekstu źródłowego.
+  </metadata>
+
+  <defs>
+    <style type="text/css"><![CDATA[
+      @font-face {
+        font-family: "Eurostile Card Subset";
+        src: url("data:font/woff2;base64,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") format("woff2");
+        font-style: normal;
+        font-weight: 700;
+      }
+    ]]></style>
+  </defs>
+
+  <!--
+    Tekst źródłowy pozostaje w pliku razem z osadzonym podzbiorem fontu.
+    Nie jest drukowany, ponieważ widoczna wersja poniżej jest zapisana jako krzywe.
+  -->
+  <text id="editable-source"
+        x="47"
+        y="29.145"
+        fill="#050505"
+        font-family="Eurostile Card Subset"
+        font-size="6"
+        font-weight="700"
+        letter-spacing="0.24"
+        text-anchor="middle"
+        display="none">Dawid Macek</text>
+
+  <!-- Eurostile Bold Extended #2, 6 mm, tracking 0.24 mm. -->
+  <g id="name-outlines"
+     aria-label="Dawid Macek"
+     fill="#050505"
+     transform="translate(18.755 29.145) scale(0.006 -0.006)">
+    <path transform="translate(0 0)" d="M83 0H753C975 0 1053 73 1053 252V472C1053 651 975 724 753 724H83ZM305 544H699C794 544 831 517 831 414V316C831 213 794 186 699 186H305Z"/>
+    <path transform="translate(1152 0)" d="M34 137C34 17 109 -9 226 -8H357C453 -8 473 3 526 58V0H708V335C708 455 638 518 506 518H283C121 518 53 495 53 357H239C241 393 257 398 313 398H426C501 398 516 380 516 330V285C479 323 421 326 316 326C130 326 34 318 34 179ZM321 112C246 112 220 125 220 158C220 200 237 218 318 218H403C509 218 520 204 520 166C520 132 508 112 376 112Z"/>
+    <path transform="translate(1957 0)" d="M202 0H458L555 276H557L654 0H910L1106 510H896L780 138H778L644 510H468L334 138H332L216 510H6Z"/>
+    <path transform="translate(3109 0)" d="M269 510H77V0H269ZM269 724H77V574H269Z"/>
+    <path transform="translate(3495 0)" d="M239 285C239 342 248 374 340 374H453C529 374 569 357 569 280V230C569 153 529 136 453 136H340C248 136 239 168 239 225ZM53 209C53 79 83 -8 326 -8H382C498 -8 546 31 567 94H569V0H749V724H557V416H555C543 496 462 518 383 518H326C83 518 53 431 53 301Z"/>
+    <path transform="translate(4884 0)" d="M75 0H291V520H293L584 0H750L1041 520H1043V0H1259V724H918L667 258L416 724H75Z"/>
+    <path transform="translate(6258 0)" d="M34 137C34 17 109 -9 226 -8H357C453 -8 473 3 526 58V0H708V335C708 455 638 518 506 518H283C121 518 53 495 53 357H239C241 393 257 398 313 398H426C501 398 516 380 516 330V285C479 323 421 326 316 326C130 326 34 318 34 179ZM321 112C246 112 220 125 220 158C220 200 237 218 318 218H403C509 218 520 204 520 166C520 132 508 112 376 112Z"/>
+    <path transform="translate(7063 0)" d="M42 234C42 16 176 -8 303 -8H499C609 -8 723 31 723 168V213H537V201C537 154 488 142 434 142H336C276 142 234 162 234 228V296C234 352 272 374 352 374H426C510 374 537 355 537 303H723V349C723 466 636 518 494 518H278C138 518 42 476 42 283Z"/>
+    <path transform="translate(7868 0)" d="M42 234C42 16 176 -8 303 -8H447C586 -8 700 20 700 148V170H520C520 140 515 112 411 112H352C272 112 234 127 234 181V212H700V298C700 475 616 518 412 518H278C138 518 42 476 42 283ZM234 326C234 387 249 398 374 398C486 398 514 387 514 326Z"/>
+    <path transform="translate(8650 0)" d="M66 0H258V204H296L501 0H746L459 271L715 510H463L294 342H258V724H66Z"/>
+  </g>
+</svg>
