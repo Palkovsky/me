@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="title desc">
+  <title id="title">Moving ownership from C to Rust without cloning</title>
+  <desc id="desc">An editorial diagram showing a C allocation crossing the FFI boundary with its pointer, length, and destructor before becoming a Rust-owned ForeignString.</desc>
+
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#315e73"/>
+    </marker>
+    <marker id="arrow-rust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aa4d2b"/>
+    </marker>
+  </defs>
+
+  <!-- Technical Journal paper field -->
+  <rect width="1200" height="630" fill="#fffdf8"/>
+  <rect x="28" y="28" width="1144" height="574" fill="none" stroke="#d9cdbb"/>
+  <rect x="28" y="28" width="8" height="574" fill="#aa4d2b"/>
+
+  <!-- Editorial header -->
+  <text x="78" y="70" fill="#aa4d2b" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" font-weight="700" letter-spacing="1.6">2026</text>
+  <line x1="78" y1="89" x2="1122" y2="89" stroke="#d9cdbb"/>
+
+  <text x="78" y="153" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="52" font-weight="700">Moving ownership from C to Rust</text>
+  <text x="78" y="196" fill="#5d5148" font-family="Avenir Next, Avenir, 'Segoe UI', sans-serif" font-size="27" letter-spacing="0.2">Without cloning the allocation</text>
+
+  <!-- Flow labels -->
+  <text x="78" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">01  C</text>
+  <text x="430" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">02  HANDOFF</text>
+  <text x="832" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">03  RUST</text>
+
+  <!-- C allocation -->
+  <rect x="78" y="282" width="288" height="194" fill="#faf3e3" stroke="#b7a895"/>
+  <rect x="78" y="282" width="288" height="5" fill="#315e73"/>
+  <text x="96" y="321" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="22" font-weight="700">C buffer</text>
+  <line x1="96" y1="338" x2="348" y2="338" stroke="#d9cdbb"/>
+
+  <text x="222" y="392" fill="#315e73" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="middle">char *buf = malloc(128);</text>
+  <text x="222" y="416" fill="#315e73" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="middle">strcpy(buf, "hello from C");</text>
+
+  <!-- Allocation to FFI -->
+  <line x1="382" y1="404" x2="414" y2="404" stroke="#315e73" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- FFI handoff -->
+  <rect x="430" y="282" width="336" height="194" fill="#faf3e3" stroke="#aa4d2b" stroke-width="2"/>
+  <rect x="430" y="282" width="336" height="42" fill="#aa4d2b"/>
+  <text x="450" y="309" fill="#fffdf8" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="15" font-weight="700">move()</text>
+
+  <text x="598" y="392" fill="#29231f" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">move(buf, 12, free);</text>
+  <text x="598" y="416" fill="#29231f" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">buf = NULL;</text>
+
+  <!-- FFI to Rust owner -->
+  <line x1="782" y1="404" x2="814" y2="404" stroke="#aa4d2b" stroke-width="2" marker-end="url(#arrow-rust)"/>
+
+  <!-- Rust owner -->
+  <rect x="832" y="282" width="290" height="194" fill="#faf3e3" stroke="#63715e" stroke-width="2"/>
+  <rect x="832" y="282" width="290" height="5" fill="#63715e"/>
+  <text x="850" y="321" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="22" font-weight="700">Rust-owned string</text>
+  <line x1="850" y1="338" x2="1104" y2="338" stroke="#d9cdbb"/>
+
+  <text x="977" y="392" fill="#63715e" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="20" font-weight="700" text-anchor="middle" dominant-baseline="middle">ForeignString</text>
+  <text x="977" y="416" fill="#5d5148" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="middle">owns buf</text>
+
+  <!-- Footer note -->
+  <line x1="78" y1="522" x2="1122" y2="522" stroke="#d9cdbb"/>
+  <text x="78" y="557" fill="#5d5148" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="18">The allocation and its destructor cross the FFI boundary together</text>
+  <text x="1122" y="557" fill="#315e73" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" text-anchor="end">dawidmacek.com</text>
+</svg>

@@ -4,14 +4,16 @@ years = ['2026']
 draft = false
 title = 'Moving ownership from C to Rust without cloning'
 tags = ['rust', 'c', 'ffi']
-seo = 'Move C-owned allocations into Rust without cloning by carrying their original destructor across FFI, using UTF-8 strings as a practical example.'
+seo = 'Move ownership of C-allocated UTF-8 strings into Rust without copying. Build a zero-copy FFI owner that carries the pointer, length, and C deallocator.'
+og_image = 'og_image.png'
+og_image_alt = 'A C buffer moves through a handoff into a Rust-owned string.'
 +++
 
-The real-time event processing engine I'm building is written in Rust and integrates with an existing C codebase.
+The real-time, performance-critical event processing engine I'm building is written in Rust and integrates with an existing C codebase.
 It retains events for future correlation, so borrowing their data for a single FFI call is not enough: Rust must take ownership.
 
-In this article, I'm exploring how to move ownership of UTF-8 strings from C to Rust without reallocating or copying their contents.
-The same pattern is not specific to strings: any C allocation can cross the FFI boundary together with the destructor that will eventually release it.
+In this article, I'm exploring a zero-copy FFI handoff for C-allocated UTF-8 strings: moving the allocation and its destructor into Rust without copying the contents.
+The same technique works for other C allocations.
 
 <!--more-->
 
@@ -23,7 +25,7 @@ The same pattern is not specific to strings: any C allocation can cross the FFI 
   - [Foreign strings](#foreign-strings)
   - [The FFI adapter](#the-ffi-adapter)
   - [The `Text` wrapper](#the-text-wrapper)
-- [Performance](#performance)
+- [Copy vs. move performance](#copy-vs-move-performance)
 - [The price of avoiding the copy](#the-price-of-avoiding-the-copy)
 
 ## The conventional copy
@@ -44,10 +46,10 @@ It exposes two API variants: checked and unchecked.
 `event_new` performs UTF-8 validation and returns `NULL` upon failure.
 `event_new_unchecked` skips that validation, making the caller responsible for providing valid UTF-8; violating this requirement is undefined behavior.
 
-In this post, I'll stick with the `_unchecked` variants to maximize the throughput.
+In this post, I'll stick with the `_unchecked` variants to maximize throughput.
 When designing APIs, I like to provide checked variants for callers that cannot guarantee the same invariants.
 
-This implementation will use Rust's `std::string::String`, converting borrowed FFI byte span into an ordinary `String`.
+The conventional implementation uses Rust's `std::string::String`, converting a borrowed FFI byte span into an owned `String`.
 
 ```rust
 unsafe fn string_from_ffi<const CHECK_UTF8: bool>(
@@ -72,9 +74,12 @@ unsafe fn string_from_ffi<const CHECK_UTF8: bool>(
 }
 ```
 
+`CHECK_UTF8` is a const generic: `true` validates the bytes, while `false` trusts the caller, so each exported entry point is specialized without a runtime policy branch.
+The `isize::MAX` guard comes from [`slice::from_raw_parts`](https://doc.rust-lang.org/stable/std/slice/fn.from_raw_parts.html): a Rust slice's total byte size cannot exceed `isize::MAX`.
+
 `text.to_owned()` is the important part.
 It allocates a `String` and copies all `len` bytes.
-This must happen at some point, if the Rust side must retain the string ownership. 
+Because this API only borrows the C buffer, Rust must allocate and copy before the call returns if it needs to retain the text in a `String`.
 The exported constructor calls this utility directly and boxes the otherwise uninteresting event object:
 
 ```rust
@@ -97,7 +102,7 @@ pub unsafe extern "C" fn event_new_unchecked(
 ```
 
 This implementation is simple, safe under a small FFI contract, and usually fast enough.
-But the question remains - if C is finished with the buffer anyway, can we improve it and avoid the clone altogether?
+But the question remains - if C is finished with the buffer anyway, can we avoid the allocation and copy altogether?
 
 ## Moving the allocation
 
@@ -127,6 +132,10 @@ The function contract is what makes the allocation consumed.
 
 For `malloc`, the deallocator will simply be `free`.
 A custom allocator needs a matching release function.
+
+Why not adopt the buffer with [`String::from_raw_parts`](https://doc.rust-lang.org/stable/std/string/struct.String.html#method.from_raw_parts)?
+It requires the correct capacity and an allocation compatible with Rust's allocator.
+An arbitrary `malloc` or pool allocation must instead be returned through its matching deallocator.
 
 A complete C-side flow looks like this:
 
@@ -177,18 +186,21 @@ In a production API, I would also expose a status - through an out-parameter or 
 On the Rust side, those three values travel together in a small owner.
 
 ```rust
+type FreeFn = unsafe extern "C" fn(*mut c_void);
+
 pub struct ForeignBytes {
     ptr: NonNull<u8>,
     len: usize,
-    free_fn: unsafe extern "C" fn(*mut c_void),
+    free_fn: FreeFn,
 }
 
 impl ForeignBytes {
     pub unsafe fn from_raw_parts(
         ptr: NonNull<u8>,
         len: usize,
-        free_fn: unsafe extern "C" fn(*mut c_void),
+        free_fn: FreeFn,
     ) -> Self {
+        debug_assert!(len <= isize::MAX as usize);
         Self { ptr, len, free_fn }
     }
 
@@ -224,7 +236,8 @@ The type records no capacity and never grows or reallocates the storage.
 `Deref`, `AsRef`, and `Borrow` let it participate in APIs built around ordinary byte slices.
 
 `from_raw_parts` is unsafe because the caller must uphold the ownership contract.
-The pointer must refer to `len` readable bytes that remain immutable until `Drop`, and `free_fn` must remain callable and release that exact allocation.
+The pointer must refer to `len` readable bytes in one allocation, `len` must not exceed `isize::MAX`, and the bytes must remain immutable until `Drop`.
+The `free_fn` callback must remain callable and release that exact allocation.
 
 ### Foreign strings
 
@@ -238,7 +251,7 @@ impl ForeignString {
     pub unsafe fn from_raw_parts(
         ptr: NonNull<u8>,
         len: usize,
-        free_fn: unsafe extern "C" fn(*mut c_void),
+        free_fn: FreeFn,
     ) -> Result<Self, Utf8Error> {
         let bytes = unsafe { ForeignBytes::from_raw_parts(ptr, len, free_fn) };
         str::from_utf8(bytes.as_slice())?;
@@ -248,7 +261,7 @@ impl ForeignString {
     pub unsafe fn from_raw_parts_unchecked(
         ptr: NonNull<u8>,
         len: usize,
-        free_fn: unsafe extern "C" fn(*mut c_void),
+        free_fn: FreeFn,
     ) -> Self {
         Self(unsafe { ForeignBytes::from_raw_parts(ptr, len, free_fn) })
     }
@@ -313,7 +326,7 @@ unsafe fn foreign_string_from_ffi<const CHECK_UTF8: bool>(
 
 The null checks happen before the ownership boundary.
 The length check happens after it, so an oversized allocation is released without ever being dereferenced.
-At this point the ownership move is complete.
+At this point, Rust has zero-copy ownership of the original C allocation.
 
 ### The `Text` wrapper
 
@@ -397,9 +410,9 @@ I am intentionally not going into the rest of the `Event` API - that is business
 Normal Rust unwinding will drop the `ForeignString`, directly or through `Text`, by calling the foreign deallocator.
 The returned `Event*` remains an opaque Rust allocation and must eventually go through `event_free` exactly once.
 
-## Performance
+## Copy vs. move performance
 
-I benchmarked the APIs an AMD Ryzen Threadripper PRO 7955WX.
+I benchmarked the APIs on an AMD Ryzen Threadripper PRO 7955WX.
 Each result below is the construction-time point estimate from a release build, with 64 events per batch.
 
 The setup deliberately creates the input allocation outside the timed region.
@@ -437,7 +450,7 @@ It still avoids the second allocation and byte copy, remaining about 1.5-1.9x fa
 
 This does not shift the cost to cleanup.
 In a separate benchmark, destroying both Rust-owned and foreign-owned values took roughly 18-35 ns across these sizes.
-The callback used to free foreign-owned values added no overhead.
+The callback used to free foreign-owned values added no measurable overhead in this benchmark.
 
 ## The price of avoiding the copy
 
