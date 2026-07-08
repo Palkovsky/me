@@ -497,10 +497,6 @@ main {
   border-top: 1px solid var(--line);
 }
 
-.note-row:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
 .note-row__body {
   min-width: 0;
 }
@@ -760,7 +756,7 @@ main {
 }
 
 .notes-year + .notes-year {
-  margin-top: 72px;
+  margin-top: 0;
 }
 
 .notes-year__label {
@@ -1028,7 +1024,6 @@ main {
   position: relative;
   color: var(--ink);
   font-family: var(--sans);
-  scroll-margin-top: calc(var(--header-height) + 28px);
   text-wrap: balance;
 }
 
@@ -1267,8 +1262,8 @@ main {
 
 .entry-content table {
   display: block;
-  width: 100%;
-  max-width: var(--wide);
+  width: fit-content;
+  max-width: 100%;
   margin: 2.5rem auto;
   overflow-x: auto;
   border-collapse: collapse;
@@ -1805,9 +1800,12 @@ main {
 
   .entry-content .highlight,
   .entry-content > pre,
-  .journal-figure,
-  .entry-content table {
+  .journal-figure {
     width: 100%;
+    margin-block: 1.8rem 2.2rem;
+  }
+
+  .entry-content table {
     margin-block: 1.8rem 2.2rem;
   }
 
