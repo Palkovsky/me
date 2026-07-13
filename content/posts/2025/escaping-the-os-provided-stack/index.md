@@ -16,16 +16,6 @@ This post explores a last-resort technique to bypass such a limitation.
 
 <!--more-->
 
-## Table of Contents
-- [Act 1: `regex` in Linux kernel](#act-1-regex-in-linux-kernel)
-- [Act 2: Proof of Concept](#act-2-proof-of-concept)
-- [Act 3: Rock & Roll](#act-3-rock--roll)
-  - [Without the stack swap](#without-the-stack-swap)
-- [Limitations](#limitations)
-- [Finale: Stackaroo](#finale-stackaroo)
-- [Conclusion](#conclusion)
-- [Bonus: Recursive variant](#bonus-recursive-variant)
-
 ## Act 1: [`regex`](https://github.com/rust-lang/regex) in Linux kernel
 
 The inspiration to write this post came from doing research on adapting common Rust crates such as [regex](https://github.com/rust-lang/regex) to run as part of a Linux kernel module.

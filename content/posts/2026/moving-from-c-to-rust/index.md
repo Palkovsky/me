@@ -15,17 +15,6 @@ The same technique works for other C allocations.
 
 <!--more-->
 
-## Table of Contents
-
-- [The conventional copy](#the-conventional-copy)
-- [Moving the allocation](#moving-the-allocation)
-  - [Owning foreign bytes](#owning-foreign-bytes)
-  - [Foreign strings](#foreign-strings)
-  - [The FFI adapter](#the-ffi-adapter)
-  - [The `Text` wrapper](#the-text-wrapper)
-- [Copy vs. move performance](#copy-vs-move-performance)
-- [The price of avoiding the copy](#the-price-of-avoiding-the-copy)
-
 ## The conventional copy
 
 We'll start with the unsurprising C API.

@@ -15,29 +15,6 @@ In this post, I'll explore a generic approach to bridging that gap by bringing t
 
 <!--more-->
 
-## Table of Contents
-
-- [General idea](#general-idea)
-- [Architecture](#architecture)
-- [Kernel-enabled regex library](#kernel-enabled-regex-library)
-  - [Heart of the library](#heart-of-the-library)
-  - [FFI layer](#ffi-layer)
-  - [Kernel allocator](#kernel-allocator)
-  - [Building the library](#building-the-library)
-- [SIMD in the kernel](#simd-in-the-kernel)
-- [Kernel module](#kernel-module)
-  - [switch_stack](#switch_stack)
-  - [Per-CPU stacks](#per-cpu-stacks)
-  - [init_regex_set](#init_regex_set)
-  - [kfunc definition](#kfunc-definition)
-  - [Thread-safety of the REGEX_SET](#thread-safety-of-the-regex_set)
-  - [Module init](#module-init)
-- [Linking the static library](#linking-the-static-library)
-- [Calling a kfunc from eBPF](#calling-a-kfunc-from-ebpf)
-- [Blocking malicious scripts from eBPF](#blocking-malicious-scripts-from-ebpf)
-- [Putting it together](#putting-it-together)
-- [Conclusion](#conclusion)
-
 ## General idea
 
 Typical eBPF-native security/observability products offer some form of in-kernel (in eBPF) filtering capabilities, but they are limited when it comes to the expressivity of the available policies.

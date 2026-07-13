@@ -1,4 +1,8 @@
 {{ define "main" }}
+  {{- $toc := .TableOfContents -}}
+  {{- $hasTOC := in $toc "<li>" -}}
+  {{- $desktopTOC := replace $toc `id="TableOfContents"` `id="TableOfContents" aria-label="Table of contents"` -}}
+  {{- $mobileTOC := replace $toc `id="TableOfContents"` `id="TableOfContentsMobile" aria-label="Table of contents"` -}}
   <header class="entry-header">
     <div class="page-shell entry-header__inner">
       <nav class="journal-breadcrumbs" aria-label="Breadcrumb">
@@ -22,17 +26,25 @@
         <span class="reading-rail__percent" data-reading-percent>0%</span>
       </aside>
 
-      <article class="entry-content" id="article-content">
-        {{ .Content }}
-      </article>
+      <div class="entry-article-column">
+        {{ if $hasTOC }}
+          <details class="entry-toc-inline" data-entry-toc>
+            <summary>Table of contents</summary>
+            <div class="entry-toc-inline__body">
+              {{ $mobileTOC | safeHTML }}
+            </div>
+          </details>
+        {{ end }}
+        <article class="entry-content" id="article-content">
+          {{ .Content }}
+        </article>
+      </div>
 
-      {{- $toc := .TableOfContents | replaceRE `(?s)<li>\s*<a href="#table-of-contents">.*?</a>\s*</li>` "" -}}
-      {{ if in $toc "<li>" }}
-        <aside class="entry-toc" aria-label="Table of contents">
+      {{ if $hasTOC }}
+        <aside class="entry-toc" aria-label="Table of contents" data-entry-toc data-entry-toc-sidebar>
           <div class="entry-toc__inner">
             <p>In this article</p>
-            {{ $toc | safeHTML }}
-            <a class="entry-toc__top" href="#main-content">Return to the top ↑</a>
+            {{ $desktopTOC | safeHTML }}
           </div>
         </aside>
       {{ end }}

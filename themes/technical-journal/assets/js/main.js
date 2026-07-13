@@ -109,13 +109,30 @@
   }
 
   function setupActiveTableOfContents() {
-    const toc = document.querySelector(".entry-toc");
-    const tocLinks = Array.from(document.querySelectorAll(".entry-toc a[href^='#']"));
-    if (!toc || !tocLinks.length) return;
+    const tocContainers = Array.from(document.querySelectorAll("[data-entry-toc]"));
+    const toc = document.querySelector("[data-entry-toc-sidebar]");
+    const tocLinks = [];
+
+    tocContainers.forEach(function (container) {
+      container.querySelectorAll("nav a[href^='#']").forEach(function (link) {
+        tocLinks.push(link);
+      });
+    });
+
+    if (!tocLinks.length) return;
 
     const linksById = new Map();
     tocLinks.forEach(function (link) {
-      linksById.set(decodeURIComponent(link.hash.slice(1)), link);
+      let id = link.hash.slice(1);
+
+      try {
+        id = decodeURIComponent(id);
+      } catch (error) {
+        // Keep the literal hash when it contains malformed escape sequences.
+      }
+
+      if (!linksById.has(id)) linksById.set(id, []);
+      linksById.get(id).push(link);
     });
 
     const headings = Array.from(document.querySelectorAll(".entry-content h2[id], .entry-content h3[id]"))
@@ -135,12 +152,21 @@
         link.removeAttribute("aria-current");
       });
 
-      const activeLink = linksById.get(heading.id);
-      if (!activeLink) return;
+      const activeLinks = linksById.get(heading.id);
+      if (!activeLinks || !activeLinks.length) return;
 
       activeId = heading.id;
-      activeLink.classList.add("is-active");
-      activeLink.setAttribute("aria-current", "location");
+      activeLinks.forEach(function (link) {
+        link.classList.add("is-active");
+        link.setAttribute("aria-current", "location");
+      });
+
+      if (!toc || toc.offsetParent === null) return;
+
+      const activeLink = activeLinks.find(function (link) {
+        return toc.contains(link);
+      });
+      if (!activeLink) return;
 
       const tocRect = toc.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
@@ -177,7 +203,10 @@
 
     updateActiveHeading();
     window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
+    window.addEventListener("resize", function () {
+      activeId = "";
+      requestUpdate();
+    });
     window.addEventListener("hashchange", requestUpdate);
   }
 
