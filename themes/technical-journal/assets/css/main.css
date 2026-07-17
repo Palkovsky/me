@@ -393,10 +393,6 @@ main {
   text-transform: uppercase;
 }
 
-.note-row__latest {
-  color: var(--rust);
-}
-
 .latest-note h2 {
   margin: 25px 0 20px;
   font-family: var(--serif);

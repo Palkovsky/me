@@ -24,8 +24,8 @@
         <h2>Recent articles</h2>
       </div>
       <div class="home-notes__list">
-        {{ range $index, $page := $posts }}
-          {{ partial "note-row.html" (dict "page" $page "latest" (eq $index 0)) }}
+        {{ range $posts }}
+          {{ partial "note-row.html" (dict "page" .) }}
         {{ end }}
       </div>
       <div class="home-notes__archive"><a href="{{ "/posts/" | relURL }}">Complete archive <span aria-hidden="true">→</span></a></div>
