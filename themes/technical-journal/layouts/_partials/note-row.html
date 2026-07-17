@@ -9,7 +9,6 @@
     <div class="note-row__summary">{{ $page.Summary }}</div>
     <footer class="note-row__footer">
       {{ partial "topic-list.html" (dict "page" $page "limit" 4) }}
-      <a class="note-row__link" href="{{ $page.RelPermalink }}" aria-label="Read {{ $page.Title }}">Read <span aria-hidden="true">→</span></a>
     </footer>
   </div>
 </article>

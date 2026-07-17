@@ -3,13 +3,13 @@ date = '2026-07-07T12:13:26+02:00'
 years = ['2026']
 draft = false
 title = 'Moving ownership from C to Rust without cloning'
-tags = ['rust', 'c', 'ffi']
+tags = ['rust', 'c', 'ffi', 'performance']
 seo = 'Move ownership of C-allocated UTF-8 strings into Rust without copying. Build a zero-copy FFI owner that carries the pointer, length, and C deallocator.'
 og_image = 'og_image.png'
 og_image_alt = 'A C buffer moves through a handoff into a Rust-owned string.'
 +++
 
-The real-time, performance-critical event processing engine I'm building is written in Rust and integrates with an existing C codebase.
+The event processing engine I'm building is written in Rust and integrates with an existing C codebase.
 It retains events for future correlation, so borrowing their data for a single FFI call is not enough: Rust must take ownership. In this article, I'm exploring a zero-copy FFI handoff for C-allocated UTF-8 strings: moving the allocation and its destructor into Rust without copying the contents.
 The same technique works for other C allocations.
 

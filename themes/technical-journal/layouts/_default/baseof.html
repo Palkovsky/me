@@ -48,16 +48,12 @@
 
   <footer class="journal-footer">
     <div class="page-shell journal-footer__grid">
-      <div>
-        <p class="journal-footer__title">{{ .Site.Title }}</p>
-        <p>Independent articles on eBPF, Linux, Rust, and low-level systems programming.</p>
-      </div>
+      <p class="journal-footer__copyright">© {{ now.Format "2006" }} {{ .Site.Params.author }}</p>
       <div class="journal-footer__links" aria-label="Contact links">
         {{ with .Site.Params.email }}<a href="mailto:{{ . }}">Email</a>{{ end }}
         {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">LinkedIn</a>{{ end }}
         {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
       </div>
-      <p class="journal-footer__copyright">© {{ now.Format "2006" }} {{ .Site.Params.author }} · Made for careful reading.</p>
     </div>
   </footer>
 </body>

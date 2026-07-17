@@ -8,6 +8,10 @@
       <div class="home-about__body">
         <h1 id="home-about-title">About me</h1>
         <div class="home-about__copy">{{ . }}</div>
+        <div class="home-about__links">
+          {{ with $.Site.Params.email }}<a href="mailto:{{ . }}">Write by email</a>{{ end }}
+          {{ with $.Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">Connect on LinkedIn</a>{{ end }}
+        </div>
       </div>
       {{/* Photo temporarily disabled.
       <figure class="home-about__media">
@@ -27,20 +31,6 @@
         {{ range $posts }}
           {{ partial "note-row.html" (dict "page" .) }}
         {{ end }}
-      </div>
-      <div class="home-notes__archive"><a href="{{ "/posts/" | relURL }}">Complete archive <span aria-hidden="true">→</span></a></div>
-    </div>
-  </section>
-
-  <section class="journal-contact">
-    <div class="page-shell journal-contact__grid">
-      <h2>Questions, corrections, or an interesting problem?</h2>
-      <div>
-        <p>I welcome thoughtful technical conversation and new problems worth investigating.</p>
-        <div class="journal-contact__links">
-          {{ with .Site.Params.email }}<a href="mailto:{{ . }}">Write by email</a>{{ end }}
-          {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">Connect on LinkedIn</a>{{ end }}
-        </div>
       </div>
     </div>
   </section>
