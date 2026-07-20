@@ -168,8 +168,8 @@ a {
   transform: scaleX(1);
 }
 
-.journal-nav__rss {
-  margin-left: 10px;
+.journal-nav a.journal-nav__rss {
+  padding-left: 17px;
   border-left: 1px solid var(--line);
   font-family: var(--mono);
   font-size: 9px !important;
