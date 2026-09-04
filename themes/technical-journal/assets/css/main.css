@@ -1299,7 +1299,8 @@ main {
 
 .entry-toc-inline a.is-active {
   background: var(--paper-deep);
-  font-weight: 750;
+  /* Thicken the glyphs without changing their metrics and reflowing the label. */
+  text-shadow: -0.3px 0 currentColor, 0.3px 0 currentColor;
 }
 
 .entry-toc {
@@ -1365,7 +1366,8 @@ main {
   border-left-color: var(--rust);
   color: var(--rust-dark);
   background: var(--paper-warm);
-  font-weight: 750;
+  /* Thicken the glyphs without changing their metrics and reflowing the label. */
+  text-shadow: -0.3px 0 currentColor, 0.3px 0 currentColor;
 }
 
 .entry-footer {

@@ -145,6 +145,18 @@
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     function setActiveHeading(heading) {
+      const sidebarIsVisible = toc && toc.offsetParent !== null;
+      if (!sidebarIsVisible) {
+        if (activeId) {
+          tocLinks.forEach(function (link) {
+            link.classList.remove("is-active");
+            link.removeAttribute("aria-current");
+          });
+          activeId = "";
+        }
+        return;
+      }
+
       if (!heading || heading.id === activeId) return;
 
       tocLinks.forEach(function (link) {
@@ -155,18 +167,14 @@
       const activeLinks = linksById.get(heading.id);
       if (!activeLinks || !activeLinks.length) return;
 
-      activeId = heading.id;
-      activeLinks.forEach(function (link) {
-        link.classList.add("is-active");
-        link.setAttribute("aria-current", "location");
-      });
-
-      if (!toc || toc.offsetParent === null) return;
-
       const activeLink = activeLinks.find(function (link) {
         return toc.contains(link);
       });
       if (!activeLink) return;
+
+      activeId = heading.id;
+      activeLink.classList.add("is-active");
+      activeLink.setAttribute("aria-current", "location");
 
       const tocRect = toc.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
@@ -203,10 +211,7 @@
 
     updateActiveHeading();
     window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", function () {
-      activeId = "";
-      requestUpdate();
-    });
+    window.addEventListener("resize", requestUpdate);
     window.addEventListener("hashchange", requestUpdate);
   }
 
