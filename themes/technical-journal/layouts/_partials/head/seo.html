@@ -29,8 +29,10 @@
 {{- end -}}
 
 {{- $sameAs := slice -}}
-{{- with $page.Site.Params.linkedin -}}
-  {{- $sameAs = $sameAs | append . -}}
+{{- if not $page.Site.Params.stealth -}}
+  {{- with $page.Site.Params.linkedin -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
 {{- end -}}
 {{- with $page.Site.Params.github -}}
   {{- $sameAs = $sameAs | append . -}}

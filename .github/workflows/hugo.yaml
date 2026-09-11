@@ -77,7 +77,17 @@ jobs:
           key: hugo-${{ github.run_id }}
           restore-keys:
             hugo-
+      - name: Read feature flags
+        id: features
+        run: |
+          hugo config --format json |
+            node -e '
+              const config = JSON.parse(require("fs").readFileSync(0, "utf8"));
+              const stealth = config.params?.stealth === true;
+              process.stdout.write(`stealth=${stealth}\n`);
+            ' >> "${GITHUB_OUTPUT}"
       - name: Download resume files
+        if: steps.features.outputs.stealth == 'false'
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |

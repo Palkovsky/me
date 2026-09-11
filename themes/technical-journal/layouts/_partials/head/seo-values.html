@@ -4,7 +4,7 @@
 
 {{- if .IsHome -}}
   {{- $shortTitle = .Site.Title -}}
-  {{- $browserTitle = printf "%s - Personal blog" .Site.Title -}}
+  {{- $browserTitle = printf "%s - Systems Programming & Security" .Site.Title -}}
 {{- else if and (eq .Kind "section") (eq .Section "posts") -}}
   {{- $shortTitle = "Systems Programming Articles" -}}
   {{- $browserTitle = printf "%s - %s" $shortTitle .Site.Title -}}

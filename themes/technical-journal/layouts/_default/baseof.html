@@ -22,7 +22,7 @@
       <a class="journal-brand" href="{{ "/" | relURL }}" aria-label="{{ .Site.Title }} home">
         <span class="journal-brand__copy">
           <strong>{{ .Site.Title }}</strong>
-          <small>Personal blog</small>
+          <small>Systems Programming &amp; Security</small>
         </span>
       </a>
 
@@ -36,7 +36,9 @@
           {{- end -}}
           <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
         {{ end }}
-        {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+        {{ if not .Site.Params.stealth }}
+          {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+        {{ end }}
         <a class="journal-nav__rss" href="{{ "/index.xml" | relURL }}">RSS</a>
       </nav>
     </div>
@@ -51,8 +53,10 @@
       <p class="journal-footer__copyright">© {{ now.Format "2006" }} {{ .Site.Params.author }}</p>
       <div class="journal-footer__links" aria-label="Contact links">
         {{ with .Site.Params.email }}<a href="mailto:{{ . }}">Email</a>{{ end }}
-        {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">LinkedIn</a>{{ end }}
-        {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+        {{ if not .Site.Params.stealth }}
+          {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">LinkedIn</a>{{ end }}
+          {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+        {{ end }}
       </div>
     </div>
   </footer>
