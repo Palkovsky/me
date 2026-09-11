@@ -55,8 +55,8 @@
     <div class="page-shell">
       <div class="entry-footer__topics"><span>Filed in</span>{{ partial "topic-list.html" (dict "page" . "limit" 0) }}</div>
       <nav class="entry-footer__nav" aria-label="More articles">
-        {{ with .PrevInSection }}<a href="{{ .RelPermalink }}"><small>Previous article</small><strong>← {{ .Title }}</strong></a>{{ else }}<span></span>{{ end }}
-        {{ with .NextInSection }}<a href="{{ .RelPermalink }}"><small>Next article</small><strong>{{ .Title }} →</strong></a>{{ else }}<span></span>{{ end }}
+        {{ with .PrevInSection }}<a href="{{ .RelPermalink }}"><small>Previous article</small></a>{{ else }}<span></span>{{ end }}
+        {{ with .NextInSection }}<a href="{{ .RelPermalink }}"><small>Next article</small></a>{{ else }}<span></span>{{ end }}
       </nav>
     </div>
   </footer>
