@@ -6,7 +6,7 @@
   <section class="home-about" aria-labelledby="home-about-title">
     <div class="page-shell home-about__grid home-about__grid--text-only">
       <div class="home-about__body">
-        <h1 id="home-about-title">About me</h1>
+        <h1 id="home-about-title">About</h1>
         <div class="home-about__copy">{{ . }}</div>
         <div class="home-about__links">
           {{ with $.Site.Params.email }}<a href="mailto:{{ . }}">Write by email</a>{{ end }}
@@ -26,9 +26,6 @@
 
   <section class="home-notes">
     <div class="page-shell">
-      <div class="home-notes__heading">
-        <h2>Recent articles</h2>
-      </div>
       <div class="home-notes__list">
         {{ range $posts }}
           {{ partial "note-row.html" (dict "page" .) }}
