@@ -9,7 +9,7 @@
         <h1 id="home-about-title">About</h1>
         <div class="home-about__copy">{{ . }}</div>
         <div class="home-about__links">
-          {{ with $.Site.Params.email }}<a href="mailto:{{ . }}">Write by email</a>{{ end }}
+          {{ with $.Site.Params.email }}<a href="mailto:{{ . }}">Email</a>{{ end }}
           {{ if not $.Site.Params.stealth }}
             {{ with $.Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">Connect on LinkedIn</a>{{ end }}
           {{ end }}

@@ -865,7 +865,7 @@ main {
   grid-template-columns: 48px minmax(0, var(--wide)) 220px;
   justify-content: space-between;
   gap: 34px;
-  padding-block: 50px 110px;
+  padding-block: 50px 50px;
 }
 
 .reading-rail {
