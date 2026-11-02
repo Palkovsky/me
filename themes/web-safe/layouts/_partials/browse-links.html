@@ -1,0 +1,7 @@
+<ul class="browse__list">
+  <li><a href="{{ "/tags/" | relURL }}">All topics</a></li>
+  <li><a href="{{ "/years/" | relURL }}">By year</a></li>
+  {{ range first 10 .Site.Taxonomies.tags.ByCount }}
+    <li class="browse__term"><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <sup>{{ .Count }}</sup></a></li>
+  {{ end }}
+</ul>

@@ -1,0 +1,55 @@
+{{- /*
+  The navigation column's page tools. "column" renders them for the wide
+  layout's navy column; "bar" renders the same tools as a collapsible bar at
+  the top of the reading cell for narrow screens.
+*/ -}}
+{{- $page := .page -}}
+{{- $mode := .mode -}}
+{{- if and $page.IsPage (eq $page.Section "posts") -}}
+  {{- $toc := $page.TableOfContents -}}
+  {{- $hasTOC := in $toc "<li>" -}}
+  {{- if eq $mode "column" -}}
+    <div class="tools tools--column">
+      {{ if $hasTOC }}
+        <div class="tool toc" data-toc data-toc-column>
+          <p class="tool__title">In this article</p>
+          {{ replace $toc `id="TableOfContents"` `id="TableOfContents" aria-label="Table of contents"` | safeHTML }}
+        </div>
+      {{ end }}
+      <div class="tool tool--progress" aria-hidden="true" data-progress hidden>
+        <p class="tool__title">Progress <span data-reading-percent>0%</span></p>
+        <div class="meter"><span data-reading-progress></span></div>
+      </div>
+    </div>
+  {{- else -}}
+    <div class="tools tools--bar tools--sticky">
+      {{ if $hasTOC }}
+        <details class="bar-menu toc" data-toc>
+          <summary>Table of contents</summary>
+          <div class="bar-menu__panel">
+            {{ replace $toc `id="TableOfContents"` `id="TableOfContentsMobile" aria-label="Table of contents"` | safeHTML }}
+          </div>
+        </details>
+      {{ end }}
+      <span class="bar-percent" aria-hidden="true" data-reading-percent hidden>0%</span>
+      <div class="bar-meter" aria-hidden="true" data-progress hidden><span data-reading-progress></span></div>
+    </div>
+  {{- end -}}
+{{- else if or (eq $page.Kind "section") (eq $page.Kind "taxonomy") (eq $page.Kind "term") (eq $page.Kind "home") (eq $page.Kind "404") -}}
+  {{- $links := partial "browse-links.html" $page -}}
+  {{- if eq $mode "column" -}}
+    <div class="tools tools--column">
+      <div class="tool browse">
+        <p class="tool__title">Browse</p>
+        {{ $links }}
+      </div>
+    </div>
+  {{- else if not $page.IsHome -}}
+    <div class="tools tools--bar">
+      <details class="bar-menu browse">
+        <summary>Browse</summary>
+        <div class="bar-menu__panel">{{ $links }}</div>
+      </details>
+    </div>
+  {{- end -}}
+{{- end -}}

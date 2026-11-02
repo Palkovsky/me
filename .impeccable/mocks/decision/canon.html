@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>The familiar retro standard</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1440px;height:900px;overflow:hidden}
+body{background:#008080;font:11px Tahoma,"Microsoft Sans Serif",sans-serif;color:#000;padding:28px 60px 0}
+.win{height:850px;background:#c0c0c0;border:2px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #808080;padding:3px;display:flex;flex-direction:column}
+.title{height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 3px 0 6px;background:linear-gradient(90deg,#000080,#1084d0);color:#fff;font-weight:bold}
+.ctl{display:flex;gap:2px}
+.ctl span{width:16px;height:14px;background:#c0c0c0;border:1px solid;border-color:#fff #000 #000 #fff;color:#000;font-size:9px;line-height:11px;text-align:center}
+.menu{display:flex;gap:2px;padding:3px 2px;border-bottom:1px solid #808080;box-shadow:0 1px 0 #fff}
+.menu span{padding:2px 7px}
+.menu u{text-decoration:underline}
+.addr{display:flex;align-items:center;gap:6px;padding:4px 4px}
+.addr div{flex:1;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;padding:2px 4px}
+.pane{flex:1;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 1px 1px 0 #000;overflow:hidden;padding:26px 0 0;display:grid;grid-template-columns:1fr 720px 1fr}
+.pane>div{grid-column:2}
+h1{font:bold 30px/1.15 Georgia,serif;margin:0 0 10px}
+.meta{color:#444;margin-bottom:16px}
+p{font:17px/1.6 Georgia,serif;margin:0 0 15px}
+h2{font:bold 20px Tahoma,sans-serif;margin:22px 0 8px}
+.fs{border:2px groove #fff;padding:10px 12px 12px;margin:14px 0;background:#c0c0c0}
+.fs legend{padding:0 4px}
+pre{margin:0;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;padding:8px 10px;font:14px/1.45 "Courier New",monospace}
+.status{display:flex;gap:3px;padding-top:3px}
+.status>div{border:1px solid;border-color:#808080 #fff #fff #808080;padding:2px 6px}
+.prog{flex:1;display:flex;align-items:center;gap:8px}
+.blocks{flex:1;height:14px;display:flex;gap:2px;padding:1px}
+.blocks i{width:9px;background:#000080}
+</style></head>
+<body>
+<div class="win">
+  <div class="title"><span>Moving ownership from C to Rust without cloning - Dawid Macek</span><span class="ctl"><span>_</span><span>□</span><span>×</span></span></div>
+  <div class="menu"><span><u>A</u>bout</span><span><u>B</u>log</span><span><u>R</u>SS</span></div>
+  <div class="addr"><span>Blog › Articles › 2026</span><div>/posts/2026/moving-from-c-to-rust/</div></div>
+  <div class="pane"><div>
+    <h1>Moving ownership from C to Rust without cloning</h1>
+    <div class="meta">Published July 7, 2026 · 11 minute read · rust · c · ffi · performance</div>
+    <p>The event processing engine I'm building is written in Rust and integrates with an existing C codebase. It retains events for future correlation, so borrowing their data for a single FFI call is not enough: Rust must take ownership.</p>
+    <h2>The conventional copy</h2>
+    <p>We'll start with the unsurprising C API. It accepts a pointer and an exact byte length, so a NUL terminator is not required and embedded NUL bytes are allowed.</p>
+    <fieldset class="fs"><legend>C</legend>
+<pre>typedef struct Event Event;
+
+Event* event_new(const char* ptr, size_t len);
+Event* event_new_unchecked(const char* ptr, size_t len);
+void event_print(const Event* event);
+void event_free(Event* event);</pre></fieldset>
+  </div></div>
+  <div class="status"><div class="prog">Progress<div class="blocks"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div>12%</div></div>
+</div>
+</body></html>

@@ -1,86 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="title desc">
   <title id="title">Escaping the OS-provided stack</title>
-  <desc id="desc">An editorial diagram showing a constrained operating-system stack, a stack-pointer swap, and a larger caller-owned auxiliary stack.</desc>
+  <desc id="desc">A constrained operating-system stack, a stack-pointer swap, and a larger caller-owned auxiliary stack, drawn as three code panels in the site's web-safe style.</desc>
 
-  <defs>
-    <marker id="arrow-rust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aa4d2b"/>
-    </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#315e73"/>
-    </marker>
-  </defs>
+  <!-- Steel ground and the table's outer bevel -->
+  <rect width="1200" height="630" fill="#336699"/>
+  <path fill="#6699cc" d="M24 24H1176l-4 4H28V602l-4 4Z"/><path fill="#000033" d="M1176 24V606H24l4 -4H1172V28Z"/>
+  <rect x="28" y="28" width="1144" height="574" fill="#ffffff"/>
 
-  <!-- Technical Journal paper field -->
-  <rect width="1200" height="630" fill="#fffdf8"/>
-  <rect x="28" y="28" width="1144" height="574" fill="none" stroke="#d9cdbb"/>
-  <rect x="28" y="28" width="8" height="574" fill="#aa4d2b"/>
+  <!-- Banner row: the name embossed in gold, the tagline in sky -->
+  <rect x="28" y="28" width="1144" height="88" fill="#000033"/>
+  <rect x="28" y="116" width="1144" height="6" fill="#ffcc00"/>
+  <text x="78" y="76" fill="#ffff99" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text><text x="82" y="80" fill="#996600" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text><text x="80" y="78" fill="#ffcc00" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text>
+  <text x="80" y="102" fill="#99ccff" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" letter-spacing="4.2">SYSTEMS PROGRAMMING</text>
 
-  <!-- Editorial header -->
-  <text x="78" y="70" fill="#aa4d2b" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" font-weight="700" letter-spacing="1.6">2025</text>
-  <line x1="78" y1="89" x2="1122" y2="89" stroke="#d9cdbb"/>
+  <!-- Footer row -->
+  <rect x="28" y="550" width="1144" height="6" fill="#ffcc00"/>
+  <rect x="28" y="556" width="1144" height="46" fill="#000033"/>
+  <text x="80" y="585" fill="#99ccff" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="16">Running complex code outside a constrained kernel stack</text>
+  <text x="1120" y="585" fill="#ffcc00" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="16" text-anchor="end">dawidmacek.com</text>
 
-  <text x="78" y="153" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="52" font-weight="700">Escaping the OS-provided stack</text>
-  <text x="78" y="196" fill="#5d5148" font-family="Avenir Next, Avenir, 'Segoe UI', sans-serif" font-size="27" letter-spacing="0.2">Moving stack-heavy work onto caller-owned memory</text>
+  <!-- Article header: title, dek, meta -->
+  <text x="80" y="190" fill="#000033" font-family="Georgia, Gelasio, serif" font-size="52" font-weight="700">Escaping the OS-provided stack</text>
+  <text x="80" y="230" fill="#333333" font-family="Georgia, Gelasio, serif" font-size="26" font-style="italic">Moving stack-heavy work onto caller-owned memory</text>
+  <text x="80" y="262" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="15"><tspan fill="#666666">Published </tspan><tspan fill="#000000" font-weight="700">November 10, 2025</tspan></text>
+  <rect x="80" y="280" width="1040" height="2" fill="#999999"/><rect x="80" y="282" width="1040" height="2" fill="#cccccc"/>
 
-  <!-- Flow labels -->
-  <text x="78" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">01  CONSTRAINED STACK</text>
-  <text x="448" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">02  POINTER SWAP</text>
-  <text x="832" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">03  AUXILIARY STACK</text>
+  <!-- Constrained stack -->
+  <rect x="80" y="304" width="304" height="224" fill="#cccccc"/><path fill="#ffffff" d="M80 304H384l-3 3H83V525l-3 3Z"/><path fill="#666666" d="M384 304V528H80l3 -3H381V307Z"/><text x="95" y="332" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" font-weight="700" letter-spacing="0.84">CONSTRAINED STACK</text><rect x="87" y="347" width="290" height="174" fill="#ffffff"/><path fill="#666666" d="M87 347H377l-2 2H89V519l-2 2Z"/><path fill="#ffffff" d="M377 347V521H87l2 -2H375V349Z"/>
+  <text x="103" y="383" fill="#003366" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="19" font-weight="700">OS-provided stack</text>
+  <text x="103" y="429" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="34" xml:space="preserve"><tspan fill="#000000">16 KB</tspan></text>
+  <text x="239" y="411" fill="#666666" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="12">fixed OS limit</text>
+  <text x="239" y="429" fill="#333333" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="12" font-weight="700">constrained</text>
+  <text x="103" y="463" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve"><tspan fill="#000000">main()</tspan></text>
+  <text x="103" y="482" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve"><tspan fill="#000000">init()</tspan></text>
+  <rect x="89" y="487" width="286" height="19" fill="#ffff99"/>
+  <text x="103" y="501" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve"><tspan fill="#000000">switch_stack()</tspan></text>
 
-  <!-- OS-provided stack -->
-  <rect x="78" y="282" width="288" height="194" fill="#faf3e3" stroke="#b7a895"/>
-  <rect x="78" y="282" width="288" height="5" fill="#315e73"/>
-  <text x="96" y="321" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="22" font-weight="700">OS-provided stack</text>
-  <line x1="96" y1="338" x2="348" y2="338" stroke="#d9cdbb"/>
-
-  <text x="96" y="380" fill="#7e351f" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="36" font-weight="700">16 KB</text>
-  <text x="220" y="363" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="12">fixed OS limit</text>
-  <text x="220" y="383" fill="#7e351f" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" font-weight="700">constrained</text>
-  <line x1="96" y1="396" x2="348" y2="396" stroke="#d9cdbb"/>
-
-  <rect x="96" y="406" width="252" height="16" fill="#f1e5ce"/>
-  <text x="108" y="418" fill="#5d5148" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="11">main()</text>
-  <rect x="96" y="425" width="252" height="16" fill="#f1e5ce"/>
-  <text x="108" y="437" fill="#5d5148" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="11">init()</text>
-  <rect x="96" y="444" width="252" height="16" fill="#f1e5ce"/>
-  <text x="108" y="456" fill="#315e73" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" font-weight="700">switch_stack()</text>
-  <line x1="96" y1="466" x2="348" y2="466" stroke="#aa4d2b" stroke-width="2" stroke-dasharray="5 4"/>
-
-  <!-- OS stack to pointer swap -->
-  <line x1="382" y1="379" x2="430" y2="379" stroke="#315e73" stroke-width="2" marker-end="url(#arrow-blue)"/>
-
-  <!-- Stack-pointer operation -->
-  <rect x="448" y="282" width="300" height="194" fill="#fffdf8" stroke="#aa4d2b" stroke-width="2"/>
-  <rect x="448" y="282" width="300" height="42" fill="#aa4d2b"/>
-  <text x="468" y="309" fill="#fffdf8" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="15" font-weight="700">switch_stack(callback)</text>
-  <text x="598" y="371" fill="#7e351f" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="28" font-weight="700" text-anchor="middle">rsp ← aux_top</text>
-  <line x1="470" y1="394" x2="726" y2="394" stroke="#d9cdbb"/>
-  <text x="470" y="424" fill="#5d5148" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13">call callback on new stack</text>
-  <text x="470" y="451" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13">restore rsp when it returns</text>
-
-  <!-- Pointer swap to auxiliary stack -->
-  <line x1="766" y1="379" x2="814" y2="379" stroke="#aa4d2b" stroke-width="2" marker-end="url(#arrow-rust)"/>
+  <!-- Pointer swap -->
+  <rect x="440" y="304" width="316" height="224" fill="#cccccc"/><path fill="#ffffff" d="M440 304H756l-3 3H443V525l-3 3Z"/><path fill="#666666" d="M756 304V528H440l3 -3H753V307Z"/><text x="455" y="332" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" font-weight="700" letter-spacing="0.84">POINTER SWAP</text><rect x="447" y="347" width="302" height="174" fill="#ffffff"/><path fill="#666666" d="M447 347H749l-2 2H449V519l-2 2Z"/><path fill="#ffffff" d="M749 347V521H447l2 -2H747V349Z"/>
+  <text x="463" y="381" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="16" xml:space="preserve"><tspan fill="#000000">switch_stack(callback)</tspan></text>
+  <rect x="449" y="401" width="298" height="50" fill="#ffff99"/>
+  <text x="598.0" y="436" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="28" xml:space="preserve" text-anchor="middle"><tspan fill="#000000">rsp ← aux_top</tspan></text>
+  <text x="463" y="477" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve"><tspan fill="#000000">call callback on new stack</tspan></text>
+  <text x="463" y="499" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve"><tspan fill="#666666">restore rsp when it returns</tspan></text>
 
   <!-- Auxiliary stack -->
-  <rect x="832" y="282" width="290" height="194" fill="#faf3e3" stroke="#63715e" stroke-width="2"/>
-  <rect x="832" y="282" width="290" height="5" fill="#63715e"/>
-  <text x="850" y="321" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="22" font-weight="700">Auxiliary stack</text>
-  <line x1="850" y1="338" x2="1104" y2="338" stroke="#d9cdbb"/>
+  <rect x="812" y="304" width="308" height="224" fill="#cccccc"/><path fill="#ffffff" d="M812 304H1120l-3 3H815V525l-3 3Z"/><path fill="#666666" d="M1120 304V528H812l3 -3H1117V307Z"/><text x="827" y="332" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" font-weight="700" letter-spacing="0.84">AUXILIARY STACK</text><rect x="819" y="347" width="294" height="174" fill="#ffffff"/><path fill="#666666" d="M819 347H1113l-2 2H821V519l-2 2Z"/><path fill="#ffffff" d="M1113 347V521H819l2 -2H1111V349Z"/>
+  <text x="835" y="383" fill="#003366" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="19" font-weight="700">Auxiliary stack</text>
+  <text x="835" y="429" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="34" xml:space="preserve"><tspan fill="#000000">1 MB</tspan></text>
+  <text x="971" y="411" fill="#666666" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="12">caller-owned</text>
+  <text x="971" y="429" fill="#333333" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="12" font-weight="700">64× larger</text>
+  <text x="835" y="463" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve"><tspan fill="#000000">heavy_work()</tspan></text>
+  <text x="835" y="482" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve"><tspan fill="#000000">deep_recursion()</tspan></text>
 
-  <text x="850" y="380" fill="#63715e" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="36" font-weight="700">1 MB</text>
-  <text x="966" y="363" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="12">caller-owned</text>
-  <text x="966" y="383" fill="#63715e" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" font-weight="700">64× larger</text>
-  <line x1="850" y1="396" x2="1104" y2="396" stroke="#d9cdbb"/>
-
-  <rect x="850" y="411" width="254" height="22" fill="#edf0e9"/>
-  <text x="862" y="426" fill="#5d5148" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="11">heavy_work()</text>
-  <rect x="850" y="438" width="254" height="22" fill="#edf0e9"/>
-  <text x="862" y="453" fill="#5d5148" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="11">deep_recursion()</text>
-  <line x1="850" y1="466" x2="1104" y2="466" stroke="#63715e" stroke-width="2"/>
-
-  <!-- Footer note -->
-  <line x1="78" y1="522" x2="1122" y2="522" stroke="#d9cdbb"/>
-  <text x="78" y="557" fill="#5d5148" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="18">Running complex code outside a constrained kernel stack</text>
-  <text x="1122" y="557" fill="#315e73" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" text-anchor="end">dawidmacek.com</text>
+  <!-- Flow -->
+  <rect x="394" y="432.5" width="21" height="3" fill="#003366"/><polygon points="430,434 414,425 414,443" fill="#003366"/><rect x="766" y="432.5" width="21" height="3" fill="#003366"/><polygon points="802,434 786,425 786,443" fill="#003366"/>
 </svg>

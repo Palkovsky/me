@@ -1,0 +1,57 @@
+{
+  "title": "Choose the visual world",
+  "question": "The familiar end: three grounded 90s directions and the retro standard. Pick one, or re-roll.",
+  "options": [
+    {
+      "id": "grounded-table-homepage",
+      "kind": "grounded",
+      "label": "Table-layout homepage, 1998",
+      "lineage": "Late-90s designed homepages built in FrontPage and Dreamweaver: a centred table, a banner row, a coloured navigation column",
+      "thesis": "The site as a carefully built 1998 homepage: a centred table with a banner row, a navy navigation column and a white reading cell, all in the 216 web-safe colours.",
+      "palette": ["#336699", "#000033", "#003366", "#FFCC00", "#FFFFFF", "#0000CC"],
+      "materials": ["216-colour web-safe palette", "beveled table borders", "Verdana and Georgia core web fonts"],
+      "viewport": "Steel-blue page; a centred table: banner row with the name in embossed type, a navy column holding About, Blog, RSS and the article's contents, and a white cell with the title, meta row and Georgia text.",
+      "risk": "The most generic 90s look: without exact craft it reads as any 1998 small-business site.",
+      "html": ".impeccable/mocks/decision/grounded-table-homepage.html"
+    },
+    {
+      "id": "grounded-portal",
+      "kind": "grounded",
+      "label": "Nerd news portal, 1998",
+      "lineage": "Late-90s engineer news portals (the Slashdot and Freshmeat era): story blocks under coloured title bars, boxed side columns",
+      "thesis": "Every article opens as a story block under a red title bar, flanked by boxed side columns for topics and contents.",
+      "palette": ["#FFFFFF", "#993333", "#CCCCCC", "#000000", "#0000CC"],
+      "materials": ["rounded title-bar caps", "boxed side columns", "Verdana throughout, Georgia for reading"],
+      "viewport": "Red nav strip and masthead; left column boxes for topics and years; centre: the article as a story block under its title bar; right column box with the table of contents and progress.",
+      "risk": "Busy by nature: three columns of boxes crowd the reading column unless the boxes stay in the margins.",
+      "html": ".impeccable/mocks/decision/grounded-portal.html"
+    },
+    {
+      "id": "grounded-reference",
+      "kind": "grounded",
+      "label": "Generated reference docs, 1998",
+      "lineage": "Late-90s generated documentation (the javadoc era): frames, cell navigation bars, periwinkle summary tables",
+      "thesis": "The site as generated reference documentation: a cell navigation bar, periwinkle header rows opening each section, and a frame listing every article.",
+      "palette": ["#FFFFFF", "#EEEEFF", "#CCCCFF", "#00008B", "#000000"],
+      "materials": ["frame panes", "border=1 summary tables", "Times body as generated", "preformatted code"],
+      "viewport": "A navigation bar of cells with the current one reversed navy; a left frame listing articles by year; the article under a periwinkle title row, its contents as a summary table.",
+      "risk": "Reads as API documentation and Java-flavoured; a post can feel like a class page.",
+      "html": ".impeccable/mocks/decision/grounded-reference.html"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": false },
+  "canon": true,
+  "canonCard": {
+    "kind": "canon",
+    "label": "The familiar retro standard",
+    "lineage": "Measured against 98.css-styled personal sites, Neocities homepages and windows93.net",
+    "thesis": "What retro sites usually ship: every page is a Windows 98-style window on a teal desktop.",
+    "palette": ["#008080", "#C0C0C0", "#000080", "#1084D0", "#FFFFFF"],
+    "materials": ["beveled grey window chrome", "navy gradient title bars", "bitmap-style UI type"],
+    "viewport": "Teal desktop with a maximised window: title bar, menu row, the article in a white sunken pane, a blocky progress bar in the status bar.",
+    "risk": "Indistinguishable from those sites by design; the window chrome costs width on phones and dresses reading up as an operating system.",
+    "html": ".impeccable/mocks/decision/canon.html"
+  },
+  "steer": true
+}

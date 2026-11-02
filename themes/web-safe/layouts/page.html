@@ -1,0 +1,45 @@
+{{ define "main" }}
+  {{- /* Pages.Next steps toward the start of the collection, so on a
+         date-ascending list it returns the older article. */ -}}
+  {{- $posts := (where .Site.RegularPages "Section" "posts").ByDate -}}
+  {{- $newer := $posts.Prev . -}}
+  {{- $older := $posts.Next . -}}
+  <article class="entry">
+    <header class="entry__header">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="{{ "/" | relURL }}">Blog</a><span aria-hidden="true">›</span><a href="{{ "/posts/" | relURL }}">Articles</a><span aria-hidden="true">›</span>{{ range first 1 (.GetTerms "years") }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ else }}<span>{{ $.Date.Format "2006" }}</span>{{ end }}
+      </nav>
+      <h1 class="entry__title">{{ .Title }}</h1>
+      {{ with .Params.seo }}<p class="entry__dek">{{ . }}</p>{{ end }}
+      <p class="entry__meta">
+        <span>Published <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></span>
+        <span class="sep" aria-hidden="true">|</span>
+        <span>Length <strong>{{ .ReadingTime }} minute read</strong></span>
+      </p>
+      {{ partial "topic-list.html" (dict "page" . "limit" 0) }}
+    </header>
+
+    <div class="entry__content" id="article-content">
+      {{ .Content }}
+    </div>
+
+    {{ if or $newer $older }}
+      <nav class="entry__pager" aria-label="Articles">
+        {{ with $newer }}
+          <a class="entry__pager-link entry__pager-link--newer" href="{{ .RelPermalink }}">
+            <span class="entry__pager-arrow" aria-hidden="true"></span>
+            <strong>{{ .Title }}</strong>
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+          </a>
+        {{ end }}
+        {{ with $older }}
+          <a class="entry__pager-link entry__pager-link--older" href="{{ .RelPermalink }}">
+            <span class="entry__pager-arrow" aria-hidden="true"></span>
+            <strong>{{ .Title }}</strong>
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+          </a>
+        {{ end }}
+      </nav>
+    {{ end }}
+  </article>
+{{ end }}

@@ -1,0 +1,16 @@
+{{- $page := .page -}}
+{{- $level := .level | default 3 -}}
+<article class="note">
+  {{ if eq $level 2 }}
+    <h2 class="note__title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
+  {{ else }}
+    <h3 class="note__title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+  {{ end }}
+  <p class="note__meta">
+    <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date.Format "January 2, 2006" }}</time>
+    <span class="sep" aria-hidden="true">|</span>
+    <span>{{ $page.ReadingTime }} min read</span>
+  </p>
+  <div class="note__summary">{{ $page.Summary }}</div>
+  {{ partial "topic-list.html" (dict "page" $page "limit" 4) }}
+</article>

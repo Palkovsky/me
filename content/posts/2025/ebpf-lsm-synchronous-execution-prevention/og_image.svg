@@ -1,68 +1,54 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="title desc">
   <title id="title">eBPF and LSM synchronous execution prevention</title>
-  <desc id="desc">An editorial diagram showing an execution request passing through an LSM hook and eBPF policy before the kernel returns EPERM.</desc>
+  <desc id="desc">An execution request passes through an LSM hook and eBPF policy before the kernel returns EPERM, drawn as three code panels in the site's web-safe style.</desc>
 
-  <defs>
-    <marker id="arrow-rust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aa4d2b"/>
-    </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#315e73"/>
-    </marker>
-  </defs>
+  <!-- Steel ground and the table's outer bevel -->
+  <rect width="1200" height="630" fill="#336699"/>
+  <path fill="#6699cc" d="M24 24H1176l-4 4H28V602l-4 4Z"/><path fill="#000033" d="M1176 24V606H24l4 -4H1172V28Z"/>
+  <rect x="28" y="28" width="1144" height="574" fill="#ffffff"/>
 
-  <!-- Technical Journal paper field -->
-  <rect width="1200" height="630" fill="#fffdf8"/>
-  <rect x="28" y="28" width="1144" height="574" fill="none" stroke="#d9cdbb"/>
-  <rect x="28" y="28" width="8" height="574" fill="#aa4d2b"/>
+  <!-- Banner row: the name embossed in gold, the tagline in sky -->
+  <rect x="28" y="28" width="1144" height="88" fill="#000033"/>
+  <rect x="28" y="116" width="1144" height="6" fill="#ffcc00"/>
+  <text x="78" y="76" fill="#ffff99" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text><text x="82" y="80" fill="#996600" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text><text x="80" y="78" fill="#ffcc00" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text>
+  <text x="80" y="102" fill="#99ccff" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" letter-spacing="4.2">SYSTEMS PROGRAMMING</text>
 
-  <!-- Editorial header -->
-  <text x="78" y="70" fill="#aa4d2b" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" font-weight="700" letter-spacing="1.6">2025</text>
-  <line x1="78" y1="89" x2="1122" y2="89" stroke="#d9cdbb"/>
+  <!-- Footer row -->
+  <rect x="28" y="550" width="1144" height="6" fill="#ffcc00"/>
+  <rect x="28" y="556" width="1144" height="46" fill="#000033"/>
+  <text x="80" y="585" fill="#99ccff" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="16">Kernel-level policy enforcement with Linux Security Modules</text>
+  <text x="1120" y="585" fill="#ffcc00" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="16" text-anchor="end">dawidmacek.com</text>
 
-  <text x="78" y="153" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="58" font-weight="700">eBPF + LSM</text>
-  <text x="78" y="196" fill="#5d5148" font-family="Avenir Next, Avenir, 'Segoe UI', sans-serif" font-size="27" letter-spacing="0.2">Synchronous execution prevention</text>
+  <!-- Article header: title, dek, meta -->
+  <text x="80" y="190" fill="#000033" font-family="Georgia, Gelasio, serif" font-size="52" font-weight="700">eBPF + LSM</text>
+  <text x="80" y="230" fill="#333333" font-family="Georgia, Gelasio, serif" font-size="26" font-style="italic">Synchronous execution prevention</text>
+  <text x="80" y="262" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="15"><tspan fill="#666666">Published </tspan><tspan fill="#000000" font-weight="700">October 11, 2025</tspan></text>
+  <rect x="80" y="280" width="1040" height="2" fill="#999999"/><rect x="80" y="282" width="1040" height="2" fill="#cccccc"/>
 
-  <!-- Flow labels -->
-  <text x="78" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">01  EXECUTION REQUEST</text>
-  <text x="452" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">02  KERNEL DECISION</text>
-  <text x="904" y="263" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="1.2">03  OUTCOME</text>
+  <!-- Execution request -->
+  <rect x="80" y="304" width="318" height="224" fill="#cccccc"/><path fill="#ffffff" d="M80 304H398l-3 3H83V525l-3 3Z"/><path fill="#666666" d="M398 304V528H80l3 -3H395V307Z"/><text x="95" y="332" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" font-weight="700" letter-spacing="0.84">EXECUTION REQUEST</text><rect x="87" y="347" width="304" height="174" fill="#ffffff"/><path fill="#666666" d="M87 347H391l-2 2H89V519l-2 2Z"/><path fill="#ffffff" d="M391 347V521H87l2 -2H389V349Z"/>
+  <text x="103" y="387" fill="#003366" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="19" font-weight="700">Process calls execve</text>
+  <rect x="103" y="403" width="272" height="2" fill="#999999"/><rect x="103" y="405" width="272" height="2" fill="#cccccc"/>
+  <text x="103" y="443" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="15" xml:space="preserve"><tspan fill="#000000">execve(path, argv, envp)</tspan></text>
+  <text x="103" y="473" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="14" xml:space="preserve"><tspan fill="#666666">path = /usr/bin/netcat</tspan></text>
 
-  <!-- Request -->
-  <rect x="78" y="306" width="288" height="146" fill="#faf3e3" stroke="#b7a895"/>
-  <rect x="78" y="306" width="288" height="5" fill="#315e73"/>
-  <text x="96" y="350" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="25" font-weight="700">Process calls execve</text>
-  <line x1="96" y1="370" x2="348" y2="370" stroke="#d9cdbb"/>
-  <text x="96" y="403" fill="#315e73" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="16">execve(path, argv, envp)</text>
-  <text x="96" y="429" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14">path = /usr/bin/netcat</text>
+  <!-- Kernel decision -->
+  <rect x="454" y="304" width="360" height="224" fill="#cccccc"/><path fill="#ffffff" d="M454 304H814l-3 3H457V525l-3 3Z"/><path fill="#666666" d="M814 304V528H454l3 -3H811V307Z"/><text x="469" y="332" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" font-weight="700" letter-spacing="0.84">KERNEL DECISION</text><rect x="461" y="347" width="346" height="174" fill="#ffffff"/><path fill="#666666" d="M461 347H807l-2 2H463V519l-2 2Z"/><path fill="#ffffff" d="M807 347V521H461l2 -2H805V349Z"/>
+  <text x="477" y="387" fill="#003366" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="19" font-weight="700">eBPF policy</text>
+  <rect x="477" y="403" width="314" height="2" fill="#999999"/><rect x="477" y="405" width="314" height="2" fill="#cccccc"/>
+  <text x="477" y="435" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="15" xml:space="preserve"><tspan fill="#333333">LSM  bprm_check_security</tspan></text>
+  <text x="477" y="463" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="15" xml:space="preserve"><tspan fill="#000000">hash(path) → map lookup</tspan></text>
+  <rect x="463" y="479" width="342" height="30" fill="#ffff99"/>
+  <text x="477" y="500" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="15" xml:space="preserve"><tspan fill="#000000">blacklisted = </tspan><tspan fill="#006666">true</tspan></text>
+  <text x="791" y="499" fill="#666666" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="12" text-anchor="end">synchronous</text>
 
-  <!-- Request to policy -->
-  <line x1="382" y1="379" x2="430" y2="379" stroke="#315e73" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <!-- Outcome -->
+  <rect x="870" y="304" width="250" height="224" fill="#cccccc"/><path fill="#ffffff" d="M870 304H1120l-3 3H873V525l-3 3Z"/><path fill="#666666" d="M1120 304V528H870l3 -3H1117V307Z"/><text x="885" y="332" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" font-weight="700" letter-spacing="0.84">OUTCOME</text><rect x="877" y="347" width="236" height="174" fill="#ffffff"/><path fill="#666666" d="M877 347H1113l-2 2H879V519l-2 2Z"/><path fill="#ffffff" d="M1113 347V521H877l2 -2H1111V349Z"/>
+  <text x="995.0" y="411" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="40" xml:space="preserve" text-anchor="middle"><tspan fill="#000000">-EPERM</tspan></text>
+  <rect x="901" y="433" width="188" height="2" fill="#999999"/><rect x="901" y="435" width="188" height="2" fill="#cccccc"/>
+  <text x="995.0" y="469" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="18" font-weight="700" text-anchor="middle">Execution denied</text>
+  <text x="995.0" y="495" fill="#666666" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="13" text-anchor="middle">before the binary runs</text>
 
-  <!-- LSM and eBPF decision -->
-  <rect x="448" y="282" width="376" height="194" fill="#fffdf8" stroke="#aa4d2b" stroke-width="2"/>
-  <rect x="448" y="282" width="376" height="42" fill="#aa4d2b"/>
-  <text x="468" y="309" fill="#fffdf8" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="15" font-weight="700">LSM  bprm_check_security</text>
-
-  <text x="470" y="359" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="23" font-weight="700">eBPF policy</text>
-  <text x="470" y="389" fill="#5d5148" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="15">hash(path)  →  map lookup</text>
-  <line x1="470" y1="408" x2="802" y2="408" stroke="#d9cdbb"/>
-  <circle cx="482" cy="439" r="5" fill="#aa4d2b"/>
-  <text x="500" y="445" fill="#7e351f" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="16" font-weight="700">blacklisted = true</text>
-  <text x="802" y="445" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" text-anchor="end">synchronous</text>
-
-  <!-- Policy to outcome -->
-  <line x1="842" y1="379" x2="890" y2="379" stroke="#aa4d2b" stroke-width="2" marker-end="url(#arrow-rust)"/>
-
-  <!-- Denied outcome -->
-  <rect x="904" y="282" width="218" height="194" fill="#f1e5ce" stroke="#aa4d2b" stroke-width="2"/>
-  <text x="1013" y="343" fill="#7e351f" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="42" font-weight="700" text-anchor="middle">-EPERM</text>
-  <line x1="930" y1="363" x2="1096" y2="363" stroke="#b7a895"/>
-  <text x="1013" y="401" fill="#29231f" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="20" font-weight="700" text-anchor="middle">Execution denied</text>
-  <text x="1013" y="431" fill="#807167" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" text-anchor="middle">before the binary runs</text>
-
-  <!-- Footer note -->
-  <line x1="78" y1="522" x2="1122" y2="522" stroke="#d9cdbb"/>
-  <text x="78" y="557" fill="#5d5148" font-family="Charter, 'Iowan Old Style', Georgia, serif" font-size="18">Kernel-level policy enforcement with Linux Security Modules</text>
-  <text x="1122" y="557" fill="#315e73" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" text-anchor="end">dawidmacek.com</text>
+  <!-- Flow -->
+  <rect x="408" y="432.5" width="21" height="3" fill="#003366"/><polygon points="444,434 428,425 428,443" fill="#003366"/><rect x="824" y="432.5" width="21" height="3" fill="#003366"/><polygon points="860,434 844,425 844,443" fill="#003366"/>
 </svg>

@@ -1,0 +1,260 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-02T11:37:41.208Z",
+        "reason": "Claude: throwaway decision-page sketch, not shipped; the build sets chrome text at 12px or more"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-02T11:37:41.326Z",
+        "reason": "Claude: throwaway decision-page sketch of the canon card, not shipped"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-02T11:37:41.441Z",
+        "reason": "Claude: throwaway decision-page sketch of the canon card, not shipped"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-portal.html"
+        ],
+        "createdAt": "2026-11-02T11:40:38.220Z",
+        "reason": "Claude: throwaway decision-page sketch, not shipped"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-02T12:03:54.649Z",
+        "reason": "Claude: throwaway decision-page sketch kept only as the round's spent hand and critique reference; never shipped"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-portal.html"
+        ],
+        "createdAt": "2026-11-02T12:03:54.743Z",
+        "reason": "Claude: throwaway decision-page sketch kept only as the round's spent hand and critique reference; never shipped"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-02T12:03:54.838Z",
+        "reason": "Claude: throwaway decision-page sketch kept only as the round's spent hand and critique reference; never shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-reference.html"
+        ],
+        "createdAt": "2026-11-02T12:03:54.936Z",
+        "reason": "Claude: throwaway decision-page sketch kept only as the round's spent hand and critique reference; never shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-02T12:03:55.045Z",
+        "reason": "Claude: throwaway decision-page sketch kept only as the round's spent hand and critique reference; never shipped"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-02T12:03:55.140Z",
+        "reason": "Claude: throwaway decision-page sketch kept only as the round's spent hand and critique reference; never shipped"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.303Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.402Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.500Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.610Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.705Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.801Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-portal.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.894Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-portal.html"
+        ],
+        "createdAt": "2026-11-02T12:15:42.990Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-portal.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.088Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-reference.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.184Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-reference.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.280Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-reference.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.379Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-table-homepage.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.481Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-table-homepage.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.577Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/grounded-table-homepage.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.674Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.771Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.877Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-02T12:15:43.989Z",
+        "reason": "Claude: throwaway decision-page sketch of an alternative direction (or the chosen critique reference); never shipped, so the shipped DESIGN.md does not govern it"
+      }
+    ]
+  }
+}

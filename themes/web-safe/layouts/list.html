@@ -1,0 +1,18 @@
+{{ define "main" }}
+  {{- $pages := where .Site.RegularPages "Section" "posts" -}}
+  {{- $paginator := partial "pagination/paginator.html" . -}}
+  <header class="page-head">
+    <h1>Articles</h1>
+    <p class="page-head__sub">Complete archive <span class="sep" aria-hidden="true">|</span> <strong>{{ len $pages }}</strong> articles published</p>
+  </header>
+
+  {{ range $group := $paginator.Pages.GroupByDate "2006" }}
+    <section class="year" aria-labelledby="year-{{ $group.Key }}">
+      <h2 class="year__title" id="year-{{ $group.Key }}">{{ $group.Key }}</h2>
+      {{ range $page := $group.Pages }}
+        {{ partial "note-row.html" (dict "page" $page "level" 3) }}
+      {{ end }}
+    </section>
+  {{ end }}
+  {{ partial "pagination.html" $paginator }}
+{{ end }}

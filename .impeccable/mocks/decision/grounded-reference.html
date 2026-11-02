@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Generated reference docs, 1998</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1440px;height:900px;overflow:hidden}
+body{background:#fff;color:#000;font:16px/1.45 "Times New Roman",Times,serif;display:grid;grid-template-columns:270px 1fr}
+a{color:#0000ee}
+.frame{border-right:3px ridge #ddd;padding:10px 12px;font-size:14px;height:900px;overflow:hidden}
+.frame b{display:block;font:bold 16px Arial,Helvetica,sans-serif;margin:6px 0}
+.frame p{margin:0 0 4px}
+.frame .y{font:bold 13px Arial,sans-serif;margin:12px 0 4px}
+.doc{padding:8px 26px 0;overflow:hidden}
+.nb{display:flex;align-items:stretch;background:#eeeeff;border:1px solid #fff;font:bold 13px Arial,Helvetica,sans-serif}
+.nb a{color:#000;text-decoration:none;padding:4px 10px}
+.nb a.on{background:#00008b;color:#fff}
+.nb i{margin-left:auto;padding:4px 10px;font-weight:normal}
+.sub{display:flex;justify-content:space-between;font:11px Arial,sans-serif;padding:3px 2px}
+hr{margin:6px 0}
+.pkg{font:13px Arial,sans-serif;margin-top:10px}
+h1{font:bold 30px Arial,Helvetica,sans-serif;margin:4px 0 6px}
+.meta{font-size:14px}
+table.s{width:100%;border-collapse:collapse;margin:12px 0 14px;border:2px outset #ccc}
+table.s th{background:#ccccff;text-align:left;font:bold 19px Arial,sans-serif;padding:5px 8px;border:1px inset #ccc}
+table.s td{padding:4px 8px;border:1px inset #ccc;font-size:15px}
+table.s td.k{width:44px;text-align:right;font:13px "Courier New",monospace;background:#eeeeff}
+.read{max-width:760px}
+.read p{margin:0 0 12px}
+pre{margin:8px 0 12px;padding:0 0 0 20px;font:14px/1.4 "Courier New",monospace}
+.prog{font:11px Arial,sans-serif;display:flex;gap:8px;align-items:center}
+.prog span{display:inline-block;width:160px;height:9px;border:1px solid #00008b;background:linear-gradient(90deg,#00008b 12%,#fff 12%)}
+</style></head>
+<body>
+<nav class="frame">
+  <b>Articles</b>
+  <div class="y">2026</div>
+  <p><a href="#"><strong>Moving ownership from C to Rust without cloning</strong></a></p>
+  <div class="y">2025</div>
+  <p><a href="#">eBPF Policy Enforcement: Marrying Rust, kfuncs and regexes</a></p>
+  <p><a href="#">Escaping the OS-provided stack</a></p>
+  <p><a href="#">eBPF + LSM: Synchronous execution prevention</a></p>
+  <div class="y">Browse</div>
+  <p><a href="#">All topics</a></p><p><a href="#">By year</a></p>
+</nav>
+<div class="doc">
+  <div class="nb"><a href="#">About</a><a href="#" class="on">Blog</a><a href="#">RSS</a><i><b>Dawid Macek</b> · Systems Programming</i></div>
+  <div class="sub"><span><a href="#">← Newer articles</a> &nbsp; <a href="#">Older articles</a></span><span class="prog">Progress <span></span> 12%</span></div>
+  <hr>
+  <div class="pkg"><a href="#">Blog</a> › <a href="#">Articles</a> › <a href="#">2026</a></div>
+  <h1>Moving ownership from C to Rust without cloning</h1>
+  <div class="meta">Published July 7, 2026 · 11 minute read · <a href="#">rust</a>, <a href="#">c</a>, <a href="#">ffi</a>, <a href="#">performance</a></div>
+  <hr>
+  <div class="read">
+    <p>The event processing engine I'm building is written in Rust and integrates with an existing C codebase. It retains events for future correlation, so borrowing their data for a single FFI call is not enough: Rust must take ownership.</p>
+    <table class="s"><tr><th colspan="2">In this article</th></tr>
+      <tr><td class="k">1</td><td><a href="#"><b>The conventional copy</b></a></td></tr>
+      <tr><td class="k">2</td><td><a href="#"><b>Moving the allocation</b></a> — Owning foreign bytes · Foreign strings · The FFI adapter · The Text wrapper</td></tr>
+      <tr><td class="k">3</td><td><a href="#"><b>Copy vs. move performance</b></a></td></tr>
+      <tr><td class="k">4</td><td><a href="#"><b>The price of avoiding the copy</b></a></td></tr></table>
+    <table class="s"><tr><th>The conventional copy</th></tr></table>
+    <p>We'll start with the unsurprising C API. It accepts a pointer and an exact byte length, so a NUL terminator is not required and embedded NUL bytes are allowed.</p>
+<pre>typedef struct Event Event;
+
+Event* event_new(const char* ptr, size_t len);
+Event* event_new_unchecked(const char* ptr, size_t len);</pre>
+  </div>
+</div>
+</body></html>

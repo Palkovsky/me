@@ -1,7 +1,7 @@
 baseURL = 'https://www.dawidmacek.com/'
 locale = 'en-US'
 title = "Dawid Macek"
-theme = 'technical-journal'
+theme = 'web-safe'
 enableGitInfo = true
 
 # Taxonomies
@@ -52,7 +52,7 @@ enableGitInfo = true
     guessSyntax = false
     lineNos = false
     lineNumbersInTable = true
-    noClasses = true
+    noClasses = false  # the web-safe theme colours code in its stylesheet; technical-journal needs true
     style = "modus-operandi"  # https://gohugo.io/quick-reference/syntax-highlighting-styles
     tabWidth = 4
 

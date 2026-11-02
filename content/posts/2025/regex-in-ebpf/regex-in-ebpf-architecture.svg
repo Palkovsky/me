@@ -1,99 +1,56 @@
-<svg viewBox="0 0 1200 630" width="1200" height="630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="title desc">
   <title id="title">eBPF policy enforcement with Rust, kfuncs, and regexes</title>
-  <desc id="desc">An architecture diagram with a user process above an eBPF probe, a C kernel module, and a Rust regex library in kernel space.</desc>
+  <desc id="desc">A user process above an eBPF probe, a C kernel module, and a Rust regex library in kernel space, drawn in the site's web-safe style.</desc>
 
-  <rect width="1200" height="630" fill="#fffdf8"/>
-  <rect x="28" y="28" width="1144" height="574" fill="none" stroke="#d9cdbb"/>
-  <rect x="28" y="28" width="8" height="574" fill="#aa4d2b"/>
-  <text x="78" y="58" fill="#aa4d2b" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="14" font-weight="700" letter-spacing="1.6">2025</text>
-  <line x1="78" y1="73" x2="1122" y2="73" stroke="#d9cdbb"/>
+  <!-- Steel ground and the table's outer bevel -->
+  <rect width="1200" height="630" fill="#336699"/>
+  <path fill="#6699cc" d="M24 24H1176l-4 4H28V602l-4 4Z"/><path fill="#000033" d="M1176 24V606H24l4 -4H1172V28Z"/>
+  <rect x="28" y="28" width="1144" height="574" fill="#ffffff"/>
 
-  <g transform="translate(40 50) scale(1.4)">
-  <!-- User Space -->
-  <defs>
-    <linearGradient id="userGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#faf3e3;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#faf3e3;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="kernelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#fffdf8;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#fffdf8;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="ebpfGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#faf3e3;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#faf3e3;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="rustGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#faf3e3;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#faf3e3;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <!-- User Space Container -->
-  <rect x="50" y="30" width="700" height="100" fill="url(#userGrad)" stroke="#315e73" stroke-width="2" rx="2"/>
-  <text x="70" y="55" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" font-weight="bold" fill="#315e73">USER SPACE</text>
-  
-  <!-- User Process Box -->
-  <rect x="275" y="55" width="250" height="50" fill="#fffdf8" stroke="#315e73" stroke-width="2" rx="2"/>
-  <text x="400" y="85" font-family="Avenir Next, Avenir, 'Segoe UI', sans-serif" font-size="14" fill="#29231f" text-anchor="middle">User Process (e.g. bash)</text>
-  
-  <!-- Kernel Space Container -->
-  <rect x="50" y="180" width="700" height="200" fill="url(#kernelGrad)" stroke="#aa4d2b" stroke-width="2" rx="2"/>
-  <text x="640" y="205" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" font-weight="bold" fill="#aa4d2b">KERNEL SPACE</text>
+  <!-- Banner row: the name embossed in gold, the tagline in sky -->
+  <rect x="28" y="28" width="1144" height="88" fill="#000033"/>
+  <rect x="28" y="116" width="1144" height="6" fill="#ffcc00"/>
+  <text x="78" y="76" fill="#ffff99" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text><text x="82" y="80" fill="#996600" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text><text x="80" y="78" fill="#ffcc00" font-family="Georgia, Gelasio, serif" font-size="44" font-weight="700" letter-spacing="0.44">Dawid Macek</text>
+  <text x="80" y="102" fill="#99ccff" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="14" letter-spacing="4.2">SYSTEMS PROGRAMMING</text>
 
-  <!-- S-shaped Arrow from User Process to eBPF -->
-  <path d="M 400 115 L 400 145 Q 400 155, 390 155 L 160 155 Q 150 155, 150 165 L 150 215" 
-        fill="none" stroke="#315e73" stroke-width="2"/>
-  <polygon points="400,110 395,120 405,120" fill="#315e73"/>
-  <polygon points="150,220 145,210 155,210" fill="#315e73"/>
-  <text x="270" y="150" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#315e73"> </text>
-  
-  <!-- eBPF Program Box -->
-  <rect x="70" y="225" width="180" height="130" fill="url(#ebpfGrad)" stroke="#315e73" stroke-width="2" rx="2"/>
-  <text x="160" y="245" font-family="Avenir Next, Avenir, 'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#29231f" text-anchor="middle">eBPF AMSI</text>
-  <text x="160" y="265" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#315e73" text-anchor="middle">LSM Probe / kprobe</text>
-  <line x1="80" y1="275" x2="240" y2="275" stroke="#d9cdbb" stroke-width="1"/>
-  <text x="85" y="295" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#5d5148">• Collects cmdline</text>
-  <text x="85" y="315" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#5d5148">• Calls kfunc</text>
-  <text x="85" y="335" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#315e73">• Enforces decision</text>
-  
-  <!-- Arrow between eBPF and Kernel Module -->
-  <text x="275" y="260" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#315e73" text-anchor="middle">kfunc</text>
-  <path d="M 260 270 L 300 270" stroke="#315e73" stroke-width="2" marker-end="url(#arrowGreen)"/>
-  <path d="M 300 300 L 260 300" stroke="#aa4d2b" stroke-width="2" marker-end="url(#arrowOrange)"/>
-  
-  <defs>
-    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M2,0 L2,6 L11,3 z" fill="#315e73" />
-    </marker>
-    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M2,0 L2,6 L11,3 z" fill="#aa4d2b" />
-    </marker>
-    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M2,0 L2,6 L11,3 z" fill="#63715e" />
-    </marker>
-  </defs>
-  
-  <!-- Kernel Module Box -->
-  <rect x="310" y="225" width="180" height="110" fill="#fffdf8" stroke="#aa4d2b" stroke-width="2" rx="2"/>
-  <text x="400" y="245" font-family="Avenir Next, Avenir, 'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#29231f" text-anchor="middle">Kernel Module (C)</text>
-  <text x="400" y="262" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#aa4d2b" text-anchor="middle">(regex_set.ko)</text>
-  <line x1="320" y1="272" x2="480" y2="272" stroke="#d9cdbb" stroke-width="1"/>
-  <text x="325" y="295" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#5d5148">• Registers kfunc</text>
-  <text x="325" y="315" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#5d5148">• Allocator (kmalloc)</text>
-  
-  <!-- Arrow between Kernel Module and Rust Library -->
-  <text x="515" y="270" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#aa4d2b" text-anchor="middle">calls</text>
-  <path d="M 500 280 L 540 280" stroke="#aa4d2b" stroke-width="2" marker-end="url(#arrowOrange)"/>
-  <path d="M 540 310 L 500 310" stroke="#63715e" stroke-width="2" marker-end="url(#arrowRed)"/>
-  
-  <!-- Rust Regex Library Box -->
-  <rect x="550" y="225" width="180" height="130" fill="url(#rustGrad)" stroke="#63715e" stroke-width="2" rx="2"/>
-  <text x="640" y="245" font-family="Avenir Next, Avenir, 'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#29231f" text-anchor="middle">Rust Regex Library</text>
-  <text x="640" y="262" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#63715e" text-anchor="middle">(libregex_c.a)</text>
-  <line x1="560" y1="272" x2="720" y2="272" stroke="#d9cdbb" stroke-width="1"/>
-  <text x="565" y="295" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#5d5148">• RegexSet (no_std)</text>
-  <text x="565" y="315" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#5d5148">• FFI / C API</text>
-  <text x="565" y="335" font-family="Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#63715e">• SIMD enabled</text>
-  </g>
+  <!-- Footer row -->
+  <rect x="28" y="550" width="1144" height="6" fill="#ffcc00"/>
+  <rect x="28" y="556" width="1144" height="46" fill="#000033"/>
+  <text x="1120" y="585" fill="#ffcc00" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="16" text-anchor="end">dawidmacek.com</text>
+
+  <!-- Article header: title, dek, meta -->
+  <text x="80" y="190" fill="#000033" font-family="Georgia, Gelasio, serif" font-size="52" font-weight="700">eBPF Policy Enforcement</text>
+  <text x="80" y="230" fill="#333333" font-family="Georgia, Gelasio, serif" font-size="26" font-style="italic">Marrying Rust, kfuncs and regexes</text>
+  <text x="80" y="262" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="15"><tspan fill="#666666">Published </tspan><tspan fill="#000000" font-weight="700">December 14, 2025</tspan></text>
+  <rect x="80" y="280" width="1040" height="2" fill="#999999"/><rect x="80" y="282" width="1040" height="2" fill="#cccccc"/>
+
+  <!-- User space -->
+  <rect x="80" y="304" width="1040" height="78" fill="#cccccc"/><path fill="#ffffff" d="M80 304H1120l-3 3H83V379l-3 3Z"/><path fill="#666666" d="M1120 304V382H80l3 -3H1117V307Z"/>
+  <text x="95" y="325" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="13" font-weight="700" letter-spacing="0.78">USER SPACE</text>
+  <rect x="454" y="333" width="292" height="36" fill="#ffffff"/><path fill="#666666" d="M454 333H746l-2 2H456V367l-2 2Z"/><path fill="#ffffff" d="M746 333V369H454l2 -2H744V335Z"/>
+  <text x="600.0" y="356.4" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="15" text-anchor="middle">User Process (e.g. bash)</text>
+  <!-- Kernel space -->
+  <rect x="80" y="410" width="1040" height="118" fill="#cccccc"/><path fill="#ffffff" d="M80 410H1120l-3 3H83V525l-3 3Z"/><path fill="#666666" d="M1120 410V528H80l3 -3H1117V413Z"/>
+  <text x="1105" y="431" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="13" font-weight="700" letter-spacing="0.78" text-anchor="end">KERNEL SPACE</text>
+  <!-- eBPF AMSI -->
+  <rect x="93" y="439" width="282" height="76" fill="#ffffff"/><path fill="#666666" d="M93 439H375l-2 2H95V513l-2 2Z"/><path fill="#ffffff" d="M375 439V515H93l2 -2H373V441Z"/>
+  <text x="234.0" y="467" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="17" font-weight="700" text-anchor="middle">eBPF AMSI</text>
+  <text x="234.0" y="488" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve" text-anchor="middle"><tspan fill="#003366">LSM Probe / kprobe</tspan></text>
+  <!-- Kernel Module (C) -->
+  <rect x="459" y="439" width="282" height="76" fill="#ffffff"/><path fill="#666666" d="M459 439H741l-2 2H461V513l-2 2Z"/><path fill="#ffffff" d="M741 439V515H459l2 -2H739V441Z"/>
+  <text x="600.0" y="467" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="17" font-weight="700" text-anchor="middle">Kernel Module (C)</text>
+  <text x="600.0" y="488" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve" text-anchor="middle"><tspan fill="#003366">(regex_set.ko)</tspan></text>
+  <!-- Rust Regex Library -->
+  <rect x="825" y="439" width="282" height="76" fill="#ffffff"/><path fill="#666666" d="M825 439H1107l-2 2H827V513l-2 2Z"/><path fill="#ffffff" d="M1107 439V515H825l2 -2H1105V441Z"/>
+  <text x="966.0" y="467" fill="#000000" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="17" font-weight="700" text-anchor="middle">Rust Regex Library</text>
+  <text x="966.0" y="488" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" xml:space="preserve" text-anchor="middle"><tspan fill="#003366">(libregex_c.a)</tspan></text>
+  <text x="417.0" y="461" fill="#003366" font-family="'Lucida Console', Monaco, 'Courier New', monospace" font-size="13" text-anchor="middle">kfunc</text>
+  <rect x="385" y="469.5" width="53" height="3" fill="#003366"/><polygon points="449,471 437,464 437,478" fill="#003366"/>
+  <rect x="396" y="493.5" width="53" height="3" fill="#003366"/><polygon points="385,495 397,488 397,502" fill="#003366"/>
+  <text x="783.0" y="461" fill="#003366" font-family="Verdana, 'DejaVu Sans', sans-serif" font-size="13" text-anchor="middle">calls</text>
+  <rect x="751" y="469.5" width="53" height="3" fill="#003366"/><polygon points="815,471 803,464 803,478" fill="#003366"/>
+  <rect x="762" y="493.5" width="53" height="3" fill="#003366"/><polygon points="751,495 763,488 763,502" fill="#003366"/>
+  <!-- User process to eBPF probe -->
+  <path d="M600 380V396H234V428" fill="none" stroke="#003366" stroke-width="3" stroke-linejoin="miter"/>
+  <polygon points="600,369 593,381 607,381" fill="#003366"/><polygon points="234,439 227,427 241,427" fill="#003366"/>
 </svg>

@@ -1,0 +1,14 @@
+{{ define "main" }}
+  {{- $paginator := partial "pagination/paginator.html" . -}}
+  <header class="page-head">
+    <div class="page-head__line">
+      <p class="page-head__lead">Articles filed under</p>
+      <h1>{{ .Title }}</h1>
+    </div>
+    <p class="page-head__sub">{{ len .Pages }} {{ if eq (len .Pages) 1 }} documented investigation{{ else }} documented investigations{{ end }}.</p>
+  </header>
+  {{ range $page := $paginator.Pages }}
+    {{ partial "note-row.html" (dict "page" $page "level" 2) }}
+  {{ end }}
+  {{ partial "pagination.html" $paginator }}
+{{ end }}

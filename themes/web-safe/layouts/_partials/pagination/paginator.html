@@ -1,0 +1,8 @@
+{{- $paginator := false -}}
+{{- if and (eq .Kind "section") (eq .Section "posts") -}}
+  {{- $pages := where .Site.RegularPages "Section" "posts" -}}
+  {{- $paginator = .Paginate $pages -}}
+{{- else if eq .Kind "term" -}}
+  {{- $paginator = .Paginator -}}
+{{- end -}}
+{{- return $paginator -}}

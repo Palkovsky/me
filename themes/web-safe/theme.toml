@@ -1,0 +1,9 @@
+name = "Web Safe"
+license = "MIT"
+description = "A 1998 table-layout homepage for long-form systems engineering articles, in the 216 web-safe colours."
+homepage = "https://www.dawidmacek.com/"
+min_version = "0.146.0"
+
+[author]
+  name = "Dawid Macek"
+  homepage = "https://www.dawidmacek.com/"

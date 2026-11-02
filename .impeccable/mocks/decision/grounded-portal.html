@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Nerd news portal, 1998</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1440px;height:900px;overflow:hidden}
+body{background:#fff;font:13px Verdana,"DejaVu Sans",sans-serif;color:#000}
+a{color:#0000cc}
+.strip{background:#993333;color:#fff;font-weight:bold;font-size:12px;padding:5px 20px;display:flex;gap:16px;justify-content:flex-end}
+.strip a{color:#fff;text-decoration:none}
+.mast{display:flex;align-items:flex-end;gap:16px;padding:14px 20px 10px;border-bottom:2px solid #993333}
+.mast b{font:bold 38px/1 Verdana,sans-serif;letter-spacing:-.02em}
+.mast small{font-size:12px;color:#666;padding-bottom:5px;letter-spacing:.12em}
+.cols{display:grid;grid-template-columns:200px minmax(0,1fr) 250px;gap:18px;padding:16px 20px}
+.box{border:1px solid #999;margin-bottom:14px}
+.box h3{margin:0;background:#cccccc;font-size:12px;padding:4px 8px;border-bottom:1px solid #999}
+.box div{padding:7px 9px;font-size:12px;line-height:1.7}
+.box sup{color:#993333;font-weight:bold}
+.tbar{display:flex;align-items:center;background:#993333;color:#fff;border-radius:11px 11px 0 0;padding:6px 14px;font:bold 17px Verdana,sans-serif}
+.under{background:#eeeeee;border:1px solid #993333;border-top:0;padding:5px 14px;font-size:11px;color:#333;display:flex;gap:14px;align-items:center}
+.ic{display:inline-block;padding:1px 6px;border:1px solid #666;background:#fff;font-size:10px;font-weight:bold}
+.story{padding:16px 6px 0 14px;max-width:740px;font:17px/1.62 Georgia,"Gelasio",serif;color:#111}
+.story p{margin:0 0 15px}
+.story h2{font:bold 18px Verdana,sans-serif;margin:20px 0 9px;padding-bottom:4px;border-bottom:1px solid #993333;color:#993333}
+pre{margin:12px 0 14px;padding:10px 12px;background:#f2f2f2;border:1px solid #999;border-left:6px solid #993333;font:14px/1.5 "Courier New",monospace}
+.toc{list-style:none;margin:0;padding:0}
+.toc li{padding:2px 0}
+.toc .on{font-weight:bold;color:#993333}
+.toc ul{list-style:none;padding-left:12px;margin:0}
+.pb{height:12px;border:1px solid #666;background:#fff;margin-top:4px}
+.pb i{display:block;height:100%;width:12%;background:#993333}
+</style></head>
+<body>
+<div class="strip"><a href="#">About</a><a href="#">Blog</a><a href="#">RSS</a></div>
+<div class="mast"><b>Dawid Macek</b><small>SYSTEMS PROGRAMMING</small></div>
+<div class="cols">
+  <aside>
+    <div class="box"><h3>Browse</h3><div><a href="#">All topics</a><br><a href="#">By year</a><br><a href="#">rust</a> <sup>4</sup><br><a href="#">c</a> <sup>3</sup><br><a href="#">ebpf</a> <sup>2</sup><br><a href="#">linux</a> <sup>2</sup><br><a href="#">lsm</a> <sup>2</sup></div></div>
+  </aside>
+  <main>
+    <div class="tbar">Moving ownership from C to Rust without cloning</div>
+    <div class="under">Published July 7, 2026 · 11 minute read <span class="ic">rust</span><span class="ic">c</span><span class="ic">ffi</span><span class="ic">performance</span></div>
+    <div class="story">
+      <p>The event processing engine I'm building is written in Rust and integrates with an existing C codebase. It retains events for future correlation, so borrowing their data for a single FFI call is not enough: Rust must take ownership. In this article, I'm exploring a zero-copy FFI handoff for C-allocated UTF-8 strings: moving the allocation and its destructor into Rust without copying the contents.</p>
+      <h2>The conventional copy</h2>
+      <p>We'll start with the unsurprising C API. It accepts a pointer and an exact byte length, so a NUL terminator is not required and embedded NUL bytes are allowed.</p>
+<pre>typedef struct Event Event;
+
+Event* event_new(const char* ptr, size_t len);
+Event* event_new_unchecked(const char* ptr, size_t len);
+void event_print(const Event* event);
+void event_free(Event* event);</pre>
+      <p>It exposes two API variants: checked and unchecked.</p>
+    </div>
+  </main>
+  <aside>
+    <div class="box"><h3>In this article</h3><div><ul class="toc"><li class="on">The conventional copy</li><li>Moving the allocation<ul><li>Owning foreign bytes</li><li>Foreign strings</li><li>The FFI adapter</li><li>The Text wrapper</li></ul></li><li>Copy vs. move performance</li><li>The price of avoiding the copy</li></ul></div></div>
+    <div class="box"><h3>Progress</h3><div>12%<div class="pb"><i></i></div></div></div>
+  </aside>
+</div>
+</body></html>

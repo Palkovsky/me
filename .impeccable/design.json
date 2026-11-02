@@ -1,0 +1,639 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-02T13:30:00Z",
+  "title": "Design System: Dawid Macek",
+  "extensions": {
+    "colorMeta": {
+      "steel-ground": {
+        "role": "primary",
+        "displayName": "Steel Ground",
+        "canonical": "#336699",
+        "cssVar": "--ground",
+        "tonalRamp": [
+          "#000033",
+          "#003366",
+          "#003399",
+          "#336699",
+          "#6699cc",
+          "#99ccff",
+          "#ccccff",
+          "#ffffff"
+        ]
+      },
+      "steel-light": {
+        "role": "primary",
+        "displayName": "Steel Light",
+        "canonical": "#6699cc",
+        "cssVar": "--ground-light",
+        "tonalRamp": [
+          "#000033",
+          "#003366",
+          "#003399",
+          "#336699",
+          "#6699cc",
+          "#99ccff",
+          "#ccccff",
+          "#ffffff"
+        ]
+      },
+      "midnight": {
+        "role": "primary",
+        "displayName": "Midnight",
+        "canonical": "#000033",
+        "cssVar": "--midnight",
+        "tonalRamp": [
+          "#000000",
+          "#000033",
+          "#000066",
+          "#003366",
+          "#336699",
+          "#6699cc",
+          "#99ccff",
+          "#ccccff"
+        ]
+      },
+      "navy": {
+        "role": "primary",
+        "displayName": "Deep Navy",
+        "canonical": "#003366",
+        "cssVar": "--navy",
+        "tonalRamp": [
+          "#000033",
+          "#003366",
+          "#003399",
+          "#336699",
+          "#6699cc",
+          "#99ccff",
+          "#ccccff",
+          "#ffffff"
+        ]
+      },
+      "sky": {
+        "role": "secondary",
+        "displayName": "Sky",
+        "canonical": "#99ccff",
+        "cssVar": "--sky",
+        "tonalRamp": [
+          "#003366",
+          "#336699",
+          "#3399cc",
+          "#6699cc",
+          "#66ccff",
+          "#99ccff",
+          "#ccccff",
+          "#ffffff"
+        ]
+      },
+      "gold": {
+        "role": "secondary",
+        "displayName": "Signal Gold",
+        "canonical": "#ffcc00",
+        "cssVar": "--gold",
+        "tonalRamp": [
+          "#333300",
+          "#663300",
+          "#996600",
+          "#cc9900",
+          "#ffcc00",
+          "#ffcc33",
+          "#ffff99",
+          "#ffffcc"
+        ]
+      },
+      "gold-light": {
+        "role": "secondary",
+        "displayName": "Gold Light",
+        "canonical": "#ffff99",
+        "cssVar": "--gold-light",
+        "tonalRamp": [
+          "#333300",
+          "#663300",
+          "#996600",
+          "#cc9900",
+          "#ffcc00",
+          "#ffcc33",
+          "#ffff99",
+          "#ffffcc"
+        ]
+      },
+      "gold-dark": {
+        "role": "secondary",
+        "displayName": "Gold Dark",
+        "canonical": "#996600",
+        "cssVar": "--gold-dark",
+        "tonalRamp": [
+          "#333300",
+          "#663300",
+          "#996600",
+          "#cc9900",
+          "#ffcc00",
+          "#ffcc33",
+          "#ffff99",
+          "#ffffcc"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "cssVar": "--paper",
+        "tonalRamp": [
+          "#000000",
+          "#333333",
+          "#666666",
+          "#999999",
+          "#cccccc",
+          "#ffffff"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#000000",
+        "cssVar": "--ink",
+        "tonalRamp": [
+          "#000000",
+          "#333333",
+          "#666666",
+          "#999999",
+          "#cccccc",
+          "#ffffff"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "#333333",
+        "cssVar": "--ink-soft",
+        "tonalRamp": [
+          "#000000",
+          "#333333",
+          "#666666",
+          "#999999",
+          "#cccccc",
+          "#ffffff"
+        ]
+      },
+      "ink-faint": {
+        "role": "neutral",
+        "displayName": "Ink Faint",
+        "canonical": "#666666",
+        "cssVar": "--ink-faint",
+        "tonalRamp": [
+          "#000000",
+          "#333333",
+          "#666666",
+          "#999999",
+          "#cccccc",
+          "#ffffff"
+        ]
+      },
+      "shade": {
+        "role": "neutral",
+        "displayName": "Shade",
+        "canonical": "#666666",
+        "cssVar": "--shade",
+        "tonalRamp": [
+          "#000000",
+          "#333333",
+          "#666666",
+          "#999999",
+          "#cccccc",
+          "#ffffff"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#999999",
+        "cssVar": "--rule",
+        "tonalRamp": [
+          "#000000",
+          "#333333",
+          "#666666",
+          "#999999",
+          "#cccccc",
+          "#ffffff"
+        ]
+      },
+      "silver": {
+        "role": "neutral",
+        "displayName": "Silver",
+        "canonical": "#cccccc",
+        "cssVar": "--silver",
+        "tonalRamp": [
+          "#000000",
+          "#333333",
+          "#666666",
+          "#999999",
+          "#cccccc",
+          "#ffffff"
+        ]
+      },
+      "link": {
+        "role": "tertiary",
+        "displayName": "Link Blue",
+        "canonical": "#0000cc",
+        "cssVar": "--link",
+        "tonalRamp": [
+          "#000033",
+          "#000066",
+          "#000099",
+          "#0000cc",
+          "#0000ff",
+          "#3333ff",
+          "#6666ff",
+          "#9999ff"
+        ]
+      },
+      "visited": {
+        "role": "tertiary",
+        "displayName": "Visited Purple",
+        "canonical": "#663399",
+        "cssVar": "--visited",
+        "tonalRamp": [
+          "#330033",
+          "#330066",
+          "#663399",
+          "#6633cc",
+          "#9966cc",
+          "#9999cc",
+          "#cc99ff",
+          "#ccccff"
+        ]
+      },
+      "hover": {
+        "role": "tertiary",
+        "displayName": "Hover Red",
+        "canonical": "#cc0000",
+        "cssVar": "--hover",
+        "tonalRamp": [
+          "#330000",
+          "#660000",
+          "#990000",
+          "#cc0000",
+          "#ff0000",
+          "#ff3333",
+          "#ff9999",
+          "#ffcccc"
+        ]
+      },
+      "mark": {
+        "role": "tertiary",
+        "displayName": "Highlighter",
+        "canonical": "#ffff99",
+        "cssVar": "--mark",
+        "tonalRamp": [
+          "#333300",
+          "#666600",
+          "#999900",
+          "#cccc00",
+          "#ffff00",
+          "#ffff66",
+          "#ffff99",
+          "#ffffcc"
+        ]
+      },
+      "syntax-keyword": {
+        "role": "tertiary",
+        "displayName": "Keyword Blue",
+        "canonical": "#0000ff",
+        "tonalRamp": [
+          "#000033",
+          "#000066",
+          "#000099",
+          "#0000cc",
+          "#0000ff",
+          "#3333ff",
+          "#6666ff",
+          "#9999ff"
+        ]
+      },
+      "syntax-comment": {
+        "role": "tertiary",
+        "displayName": "Comment Green",
+        "canonical": "#006600",
+        "tonalRamp": [
+          "#003300",
+          "#006600",
+          "#009900",
+          "#00cc00",
+          "#33cc33",
+          "#66cc66",
+          "#99cc99",
+          "#ccffcc"
+        ]
+      },
+      "syntax-string": {
+        "role": "tertiary",
+        "displayName": "String Maroon",
+        "canonical": "#990000",
+        "tonalRamp": [
+          "#330000",
+          "#660000",
+          "#990000",
+          "#cc0000",
+          "#ff0000",
+          "#ff3333",
+          "#ff9999",
+          "#ffcccc"
+        ]
+      },
+      "syntax-number": {
+        "role": "tertiary",
+        "displayName": "Number Rust",
+        "canonical": "#993300",
+        "tonalRamp": [
+          "#330000",
+          "#663300",
+          "#993300",
+          "#cc6600",
+          "#ff6600",
+          "#ff9933",
+          "#ffcc99",
+          "#ffffcc"
+        ]
+      },
+      "syntax-builtin": {
+        "role": "tertiary",
+        "displayName": "Builtin Teal",
+        "canonical": "#006666",
+        "tonalRamp": [
+          "#003333",
+          "#006666",
+          "#009999",
+          "#00cccc",
+          "#33cccc",
+          "#66cccc",
+          "#99cccc",
+          "#ccffff"
+        ]
+      }
+    },
+    "rampNote": "Ramps use web-safe values only, so the grey ramp has the palette's six steps rather than eight.",
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The site name in the banner only, gold with a 1px emboss. 1.625rem below 900px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "One page title per page (article, About, Articles, taxonomy, term, 404), midnight. 1.625rem below 900px."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "In-article h2, navy, led by a 12px beveled gold square. 1.1875rem below 900px."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "In-article h3, navy. h4 to h6 are 0.9375rem in ink."
+      },
+      "list-title": {
+        "displayName": "List Title",
+        "purpose": "Article titles in lists, as link-coloured Georgia."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Article prose at a 40rem measure. Deks use it in italic Ink Soft."
+      },
+      "chrome": {
+        "displayName": "Chrome",
+        "purpose": "Base frame size: navigation (bold), tables, 404 actions."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Contents entries, meta, breadcrumbs, counts, topics, footer, buttons, captions."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code wells, tab-size 4. 0.8125rem below 900px. Inline code is 0.85em."
+      },
+      "headline-compact": {
+        "displayName": "Headline Compact",
+        "purpose": "Page titles and the banner name below 900px."
+      },
+      "title-compact": {
+        "displayName": "Title Compact",
+        "purpose": "In-article h2 below 900px."
+      },
+      "minor": {
+        "displayName": "Minor",
+        "purpose": "In-article h4 to h6 and the navy year bars; pager titles use the same size in Georgia."
+      },
+      "body-large": {
+        "displayName": "Body Large",
+        "purpose": "The About bio on the home page."
+      },
+      "summary": {
+        "displayName": "Summary",
+        "purpose": "Article summaries in lists."
+      }
+    },
+    "shadows": [
+      {
+        "name": "outset-frame",
+        "value": "border: 2px solid; border-color: #ffffff #666666 #666666 #ffffff",
+        "purpose": "Silver containers: code panels, tables, figures, index grid."
+      },
+      {
+        "name": "inset-well",
+        "value": "border: 1px solid; border-color: #666666 #ffffff #ffffff #666666",
+        "purpose": "White wells sunk in silver frames: code well, table cells, figure image, index tiles."
+      },
+      {
+        "name": "button-raised",
+        "value": "border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; box-shadow: inset -1px -1px 0 #666666",
+        "purpose": "Push buttons and pager links at rest."
+      },
+      {
+        "name": "button-pressed",
+        "value": "border-color: #000000 #ffffff #ffffff #000000; box-shadow: inset 1px 1px 0 #666666",
+        "purpose": "Push buttons on :active and while reporting Copied."
+      },
+      {
+        "name": "table-edge",
+        "value": "border: 2px solid; border-color: #6699cc #000033 #000033 #6699cc",
+        "purpose": "The outer edge of the whole site table."
+      },
+      {
+        "name": "sunken-meter",
+        "value": "border: 1px solid; border-color: #000033 #6699cc #6699cc #000033",
+        "purpose": "The progress trough in the navy column."
+      },
+      {
+        "name": "gold-bevel",
+        "value": "border: 1px solid; border-color: #ffff99 #996600 #996600 #ffff99",
+        "purpose": "Square nav bullets and h2 markers."
+      },
+      {
+        "name": "emboss",
+        "value": "text-shadow: -1px -1px 0 #ffff99, 1px 1px 0 #996600",
+        "purpose": "The banner name only."
+      },
+      {
+        "name": "rule-shade",
+        "value": "linear-gradient(#999999 0 1px, #cccccc 1px 2px)",
+        "purpose": "2px shaded rule drawn as a background on white: under headers, over pagers, between list entries."
+      }
+    ],
+    "motion": [
+      {
+        "name": "none",
+        "value": "no transitions or animation",
+        "purpose": "Every state change is instant, as in a 1998 browser."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "max-width: 899px",
+        "purpose": "One-column table, navigation in a row, page tools in a sticky 42px navy bar."
+      },
+      {
+        "name": "min",
+        "value": "320px",
+        "purpose": "Body min-width."
+      }
+    ],
+    "focus": [
+      {
+        "name": "default",
+        "value": "outline: 2px dotted #000000; outline-offset: 2px",
+        "purpose": "All focusable elements on white."
+      },
+      {
+        "name": "dark-chrome",
+        "value": "outline-color: #ffcc00",
+        "purpose": "Banner, column, footer and tools bar."
+      },
+      {
+        "name": "button",
+        "value": "outline: 1px dotted #000000; outline-offset: -6px",
+        "purpose": "Inside the face of push buttons."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Push Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Grey 1998 form button, used for Copy and the About and 404 actions. The bevel inverts instantly when pressed.",
+      "html": "<button class=\"ds-btn\" type=\"button\">Copy</button>",
+      "css": ".ds-btn { display: inline-flex; min-height: 28px; align-items: center; justify-content: center; padding: 2px 14px; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; border-radius: 0; color: #000000; background: #cccccc; box-shadow: inset -1px -1px 0 #666666; font-family: Verdana, \"DejaVu Sans\", sans-serif; font-size: 0.75rem; line-height: 1.2; cursor: pointer; } .ds-btn:active { border-color: #000000 #ffffff #ffffff #000000; box-shadow: inset 1px 1px 0 #666666; } .ds-btn:focus-visible { outline: 1px dotted #000000; outline-offset: -6px; }"
+    },
+    {
+      "name": "Navigation Column",
+      "kind": "nav",
+      "refersTo": "nav-column",
+      "description": "Navy column with white bold Verdana links on beveled gold square bullets. The current page turns gold.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">About</a><a href=\"#\">Blog</a><a href=\"#\">RSS</a></nav>",
+      "css": ".ds-nav { display: flex; flex-direction: column; width: 230px; padding: 16px 14px 24px; background: #003366; font-family: Verdana, \"DejaVu Sans\", sans-serif; font-size: 0.8125rem; line-height: 1.5; } .ds-nav a { position: relative; padding: 4px 0 4px 18px; color: #ffffff; font-weight: 700; text-decoration: none; } .ds-nav a::before { position: absolute; top: calc(4px + 0.75em - 5px); left: 1px; width: 9px; height: 9px; border: 1px solid; border-color: #ffff99 #996600 #996600 #ffff99; background: #ffcc00; content: \"\"; } .ds-nav a:hover { text-decoration: underline; } .ds-nav a[aria-current=\"page\"] { color: #ffcc00; } .ds-nav a:focus-visible { outline: 2px dotted #ffcc00; outline-offset: 2px; }"
+    },
+    {
+      "name": "Contents With Current Bar",
+      "kind": "nav",
+      "refersTo": "toc-entry-current",
+      "description": "The column's contents list. The current section sits on a solid gold bar and steps instantly as the reader scrolls.",
+      "html": "<div class=\"ds-toc\"><p class=\"ds-toc__title\">In this article</p><ul><li><a href=\"#\">The conventional copy</a></li><li><a class=\"is-active\" href=\"#\">Moving the allocation</a><ul><li><a href=\"#\">Passing strings</a></li></ul></li></ul></div>",
+      "css": ".ds-toc { width: 230px; padding: 14px; background: #003366; font-family: Verdana, \"DejaVu Sans\", sans-serif; } .ds-toc__title { margin: 0 0 8px; color: #ffcc00; font-size: 0.8125rem; font-weight: 700; } .ds-toc ul { margin: 0; padding: 0; list-style: none; } .ds-toc a { display: block; margin-inline: -14px; padding: 3px 14px; color: #ffffff; font-size: 0.75rem; line-height: 1.45; text-decoration: none; } .ds-toc ul ul a { padding-left: 28px; color: #99ccff; } .ds-toc a:hover { color: #ffcc00; text-decoration: underline; } .ds-toc a.is-active { color: #000033; background: #ffcc00; } .ds-toc a:focus-visible { outline: 2px dotted #ffcc00; outline-offset: 2px; }"
+    },
+    {
+      "name": "Progress Meter",
+      "kind": "custom",
+      "refersTo": "progress-meter",
+      "description": "Sunken midnight trough filled with flat gold as the article is read.",
+      "html": "<div class=\"ds-meter\" role=\"progressbar\" aria-valuenow=\"42\" aria-valuemin=\"0\" aria-valuemax=\"100\"><span style=\"width:42%\"></span></div>",
+      "css": ".ds-meter { width: 200px; height: 16px; padding: 2px; border: 1px solid; border-color: #000033 #6699cc #6699cc #000033; background: #000033; } .ds-meter span { display: block; height: 100%; background: #ffcc00; }"
+    },
+    {
+      "name": "Code Panel",
+      "kind": "custom",
+      "refersTo": "code-panel",
+      "description": "Raised silver panel with a language label and Copy button over a sunken white well. Syntax colours follow Visual C++ 6 in web-safe values, and highlighted lines run edge to edge.",
+      "html": "<div class=\"ds-code\"><div class=\"ds-code__bar\"><span class=\"ds-code__lang\">c</span><button class=\"ds-code__btn\" type=\"button\">Copy</button></div><pre><span class=\"k\">int</span> main(<span class=\"k\">void</span>) {\n<span class=\"hl\">    <span class=\"c\">// fast path</span></span>\n    puts(<span class=\"s\">\"ok\"</span>);\n    <span class=\"k\">return</span> <span class=\"m\">0</span>;\n}</pre></div>",
+      "css": ".ds-code { padding: 0 3px 3px; border: 2px solid; border-color: #ffffff #666666 #666666 #ffffff; background: #cccccc; font-family: Verdana, \"DejaVu Sans\", sans-serif; } .ds-code__bar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; padding: 3px 0 3px 6px; } .ds-code__lang { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; } .ds-code__btn { min-height: 28px; padding: 2px 14px; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; background: #cccccc; box-shadow: inset -1px -1px 0 #666666; font: 0.75rem Verdana, sans-serif; cursor: pointer; } .ds-code__btn:active { border-color: #000000 #ffffff #ffffff #000000; box-shadow: inset 1px 1px 0 #666666; } .ds-code__btn:focus-visible { outline: 1px dotted #000000; outline-offset: -6px; } .ds-code pre { margin: 0; overflow-x: auto; padding: 12px 14px; border: 1px solid; border-color: #666666 #ffffff #ffffff #666666; background: #ffffff; font-family: \"Lucida Console\", Monaco, \"Courier New\", monospace; font-size: 0.875rem; line-height: 1.55; } .ds-code .hl { display: block; margin-inline: -14px; padding-inline: 14px; background: #ffff99; } .ds-code .k { color: #0000ff; } .ds-code .c { color: #006600; } .ds-code .s { color: #990000; } .ds-code .m { color: #993300; }"
+    },
+    {
+      "name": "Netscape Table",
+      "kind": "custom",
+      "refersTo": "table-cell",
+      "description": "border=1 cellspacing=2: outset silver frame, 2px spacing, silver header cells, white sunken data cells.",
+      "html": "<table class=\"ds-table\"><tr><th>Method</th><th>ns/op</th></tr><tr><td>copy</td><td>412</td></tr><tr><td>borrow</td><td>38</td></tr></table>",
+      "css": ".ds-table { border: 2px solid; border-color: #ffffff #666666 #666666 #ffffff; border-spacing: 2px; background: #cccccc; font-family: Verdana, \"DejaVu Sans\", sans-serif; font-size: 0.8125rem; font-variant-numeric: tabular-nums; line-height: 1.45; } .ds-table th, .ds-table td { padding: 6px 10px; border: 1px solid; border-color: #666666 #ffffff #ffffff #666666; text-align: left; vertical-align: top; } .ds-table th { background: #cccccc; white-space: nowrap; } .ds-table td { background: #ffffff; }"
+    },
+    {
+      "name": "Banner Row",
+      "kind": "custom",
+      "refersTo": "banner",
+      "description": "Midnight banner with the name embossed in gold Georgia and a sky tagline, closed by a 3px gold rule.",
+      "html": "<header class=\"ds-banner\"><a href=\"#\"><strong class=\"ds-banner__name\">Dawid Macek</strong><small class=\"ds-banner__tag\">Systems Programming</small></a></header>",
+      "css": ".ds-banner { padding: 14px 22px 12px; border-bottom: 3px solid #ffcc00; background: #000033; } .ds-banner a { display: inline-block; text-decoration: none; } .ds-banner__name { display: block; color: #ffcc00; font-family: Georgia, Gelasio, serif; font-size: 2.125rem; font-weight: 700; letter-spacing: 0.01em; line-height: 1.1; text-shadow: -1px -1px 0 #ffff99, 1px 1px 0 #996600; } .ds-banner a:hover .ds-banner__name { color: #ffff99; } .ds-banner__tag { display: block; margin-top: 5px; color: #99ccff; font-family: Verdana, sans-serif; font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; } .ds-banner a:focus-visible { outline: 2px dotted #ffcc00; outline-offset: 2px; }"
+    },
+    {
+      "name": "Article Heading With Shaded Rule",
+      "kind": "custom",
+      "refersTo": "title",
+      "description": "Reading-cell prose: navy Verdana h2 on a beveled gold square, Georgia body, classic link states, and a 2px shaded rule.",
+      "html": "<div class=\"ds-prose\"><h2>Moving the allocation</h2><p>Moving rather than copying changes the FFI contract. See <a href=\"#\">the previous note</a>.</p><hr></div>",
+      "css": ".ds-prose { max-width: 40rem; padding: 22px 32px; background: #ffffff; color: #000000; font-family: Georgia, Gelasio, serif; font-size: 1.0625rem; line-height: 1.65; } .ds-prose h2 { margin: 0 0 0.7em; color: #003366; font-family: Verdana, \"DejaVu Sans\", sans-serif; font-size: 1.3125rem; font-weight: 700; line-height: 1.3; } .ds-prose h2::before { display: inline-block; width: 12px; height: 12px; margin-right: 10px; border: 1px solid; border-color: #ffff99 #996600 #996600 #ffff99; background: #ffcc00; content: \"\"; vertical-align: 0.02em; } .ds-prose a { color: #0000cc; } .ds-prose a:visited { color: #663399; } .ds-prose a:hover { color: #cc0000; } .ds-prose a:focus-visible { outline: 2px dotted #000000; outline-offset: 2px; } .ds-prose hr { height: 2px; margin: 2em 0; border: 0; background: linear-gradient(#999999 0 1px, #cccccc 1px 2px); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Engineer's 1998 Homepage",
+    "overview": "The site is one centred table, built by hand the way a careful engineer built a homepage in 1998: a midnight banner row with the name embossed in gold, a navy navigation column, a white reading cell, and a midnight footer row, all floating on a steel-blue ground. Every colour comes from the 216-colour web-safe palette. The period lives in the frame: square gold bullets, two-tone shaded rules, outset and inset bevels, grey push buttons, Netscape-style spaced tables.\n\nThe reading cell stays calm and modern in proportion. Long articles are set in 17px Georgia, black on white, at about a 40rem measure, so a 4,000-word deep dive reads comfortably end to end. The period treatment frames the reading and never interrupts it.\n\nThere is no motion. Every state change (hover, current section, pressed button, copied, menu open) is instant, as it was in a 1998 browser. The frame is dense and utilitarian, with small Verdana chrome, and the column follows the reader: the gold bar steps to the current section and the progress meter fills.",
+    "keyCharacteristics": [
+      "One centred table: banner row, navy column, white cell, footer row, on a steel-blue ground.",
+      "Web-safe palette only (channels 00, 33, 66, 99, CC, FF).",
+      "Georgia for display and reading, Verdana for chrome and in-article headings, Lucida Console for code.",
+      "Depth from 1px and 2px bevels (light top-left, dark bottom-right), never from blur.",
+      "Square corners everywhere.",
+      "No transitions or animation."
+    ],
+    "rules": [
+      {
+        "name": "The 216 Rule",
+        "body": "Every colour is a web-safe value. A new colour must have channels from 00, 33, 66, 99, CC, FF only, and should be one of the tokens above.",
+        "section": "colors"
+      },
+      {
+        "name": "The Gold Means Here Rule",
+        "body": "Gold marks identity and current state: the name, where you are, how far you have read. Do not use it as decoration on the white cell, except for the square that leads each h2.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Screen Faces Rule",
+        "body": "Georgia reads, Verdana frames. Do not set long prose in Verdana or chrome in Georgia. The exceptions are fixed: page and list titles, deks, and pager titles are Georgia.",
+        "section": "typography"
+      },
+      {
+        "name": "The Light From Top-Left Rule",
+        "body": "Every bevel takes its light from the top left. Raised means a light top-left and a dark bottom-right, and sunken means the reverse. Never blur a shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Shaded Rule Rule",
+        "body": "Horizontal dividers on white are 2px shaded rules: a Rule-grey line over a Silver line (`--rule-shade`), drawn as a background so they can sit under headers, over pagers, and between list entries. In the navy column the same idea uses midnight over steel.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** draw every colour from the web-safe tokens. Syntax colours stay inside code wells.",
+      "**Do** make depth with two-colour bevels lit from the top left: outset frames for containers, inset wells for content.",
+      "**Do** keep reading text in 17px Georgia at line-height 1.65 within the 40rem measure, black on white.",
+      "**Do** use gold for identity and current state: the name, the current nav item, the current contents entry, progress.",
+      "**Do** separate sections on white with the 2px shaded rule.",
+      "**Do** change state instantly. Pressed, current, open, and copied states swap with no transition.",
+      "**Do** collapse to one column below 900px and move page tools into the sticky navy bar."
+    ],
+    "donts": [
+      "**Don't** add border-radius, blurred box-shadows, gradients other than the shaded rule, or transitions and animation.",
+      "**Don't** use colours outside the 216 web-safe palette, or reuse syntax colours outside code.",
+      "**Don't** set long prose in Verdana or stretch it past the 40rem measure.",
+      "**Don't** add icon fonts or glyph icons. Bullets, markers, arrows, and toggles are CSS squares and triangles.",
+      "**Don't** add costume furniture: no hit counters, award badges, guestbooks, \"under construction\" art, marquees, blinking text, or Windows-98 window chrome. The world is a carefully built homepage, not GeoCities.",
+      "**Don't** add new visible copy to dress the period. Labels are the site's existing words.",
+      "**Don't** spread wide letter-spacing beyond the banner tagline."
+    ]
+  }
+}

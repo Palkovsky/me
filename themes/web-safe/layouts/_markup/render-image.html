@@ -1,0 +1,19 @@
+{{- /* Give page images their size up front so lazy loading never shifts the
+       text around them: from the viewBox for SVG, from the pixels otherwise. */ -}}
+{{- $width := 0 -}}
+{{- $height := 0 -}}
+{{- with .Page.Resources.Get .Destination -}}
+  {{- if eq .MediaType.SubType "svg" -}}
+    {{- with findRESubmatch `viewBox="\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*"` .Content 1 -}}
+      {{- $width = index . 0 1 | float | math.Round | int -}}
+      {{- $height = index . 0 2 | float | math.Round | int -}}
+    {{- end -}}
+  {{- else if in (slice "png" "jpeg" "gif" "webp" "bmp" "tiff") .MediaType.SubType -}}
+    {{- $width = .Width -}}
+    {{- $height = .Height -}}
+  {{- end -}}
+{{- end -}}
+<span class="figure">
+  <span class="figure__well"><img src="{{ .Destination | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if and $width $height }} width="{{ $width }}" height="{{ $height }}"{{ end }} loading="lazy" decoding="async"></span>
+  {{ with .Title }}<span class="figure__caption">{{ . }}</span>{{ end }}
+</span>

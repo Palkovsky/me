@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <header class="page-head">
+    <h1>{{ .Title }}</h1>
+    <p class="page-head__sub">Subject index</p>
+  </header>
+  <ul class="index">
+    {{ range .Data.Terms.ByCount }}
+      <li>
+        <a href="{{ .Page.RelPermalink }}">
+          <span class="index__name">{{ .Page.LinkTitle }}</span>
+          <span class="index__count"><strong>{{ .Count }}</strong> {{ if eq .Count 1 }}article{{ else }}articles{{ end }}</span>
+        </a>
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

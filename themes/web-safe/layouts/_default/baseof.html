@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="{{ .Site.Language.Locale | default "en" }}">
+<head>
+  {{- $seo := partial "head/seo-values.html" . }}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#336699">
+  <title>{{ $seo.browserTitle }}</title>
+  <link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | absURL }}" title="{{ .Site.Title }}">
+  <link rel="icon" href="{{ "/favicon.ico" | relURL }}" sizes="48x48">
+  <link rel="icon" href="{{ "/favicon.svg" | relURL }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ "/apple-touch-icon.png" | relURL }}">
+  {{ partial "head/seo.html" (dict "page" . "values" $seo) }}
+  {{ partial "head/css.html" . }}
+  {{ partial "head/js.html" . }}
+</head>
+<body class="page-kind-{{ .Kind }}{{ if eq .Section "posts" }} section-posts{{ end }}">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="site">
+    <header class="banner">
+      <a class="banner__brand" href="{{ "/" | relURL }}" aria-label="{{ .Site.Title }} home">
+        <strong class="banner__name">{{ .Site.Title }}</strong>
+        <small class="banner__tagline">Systems Programming</small>
+      </a>
+    </header>
+
+    <aside class="side">
+      <div class="side__inner">
+        <nav class="site-nav" aria-label="Main navigation">
+          {{ range .Site.Menus.main }}
+            {{- $active := false -}}
+            {{- if and (eq .URL "/") $.IsHome -}}
+              {{- $active = true -}}
+            {{- else if and (ne .URL "/") (hasPrefix $.RelPermalink .URL) -}}
+              {{- $active = true -}}
+            {{- end -}}
+            <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+          {{ end }}
+          {{ if not .Site.Params.stealth }}
+            {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+          {{ end }}
+          <a href="{{ "/index.xml" | relURL }}">RSS</a>
+        </nav>
+        {{ partial "tools.html" (dict "page" . "mode" "column") }}
+      </div>
+    </aside>
+
+    <main id="main-content" class="cell">
+      {{ partial "tools.html" (dict "page" . "mode" "bar") }}
+      <div class="cell__body">
+        {{ block "main" . }}{{ end }}
+      </div>
+    </main>
+
+    <footer class="foot">
+      <p class="foot__copyright">© {{ now.Format "2006" }} {{ .Site.Params.author }}</p>
+      <div class="foot__links" aria-label="Contact links">
+        {{ with .Site.Params.email }}<a href="mailto:{{ . }}">Email</a>{{ end }}
+        {{ if not .Site.Params.stealth }}
+          {{ with .Site.Params.linkedin }}<a href="{{ . }}" rel="noopener me">LinkedIn</a>{{ end }}
+          {{ with .Site.Params.resume }}<a href="{{ . }}">Résumé</a>{{ end }}
+        {{ end }}
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

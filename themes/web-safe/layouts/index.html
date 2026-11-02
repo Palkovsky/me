@@ -1,0 +1,28 @@
+{{ define "main" }}
+  {{- $posts := where .Site.RegularPages "Section" "posts" -}}
+  {{- $posts = $posts.ByDate.Reverse -}}
+
+  {{ with .Content }}
+  <section class="about" aria-labelledby="home-about-title">
+    <h1 id="home-about-title">About</h1>
+    <div class="about__copy">{{ . }}</div>
+    <p class="about__links">
+      {{ with $.Site.Params.email }}<a class="btn" href="mailto:{{ . }}">Email</a>{{ end }}
+      {{ if not $.Site.Params.stealth }}
+        {{ with $.Site.Params.linkedin }}<a class="btn" href="{{ . }}" rel="noopener me">Connect on LinkedIn</a>{{ end }}
+      {{ end }}
+    </p>
+    {{/* Photo temporarily disabled.
+    <figure class="about__media">
+      <img src="{{ $.Site.Params.photo | relURL }}{{ with $.Site.Params.photo_version }}?v={{ . }}{{ end }}" alt="Dawid Macek" width="1086" height="1448" decoding="async">
+    </figure>
+    */}}
+  </section>
+  {{ end }}
+
+  <section class="notes">
+    {{ range $posts }}
+      {{ partial "note-row.html" (dict "page" . "level" 2) }}
+    {{ end }}
+  </section>
+{{ end }}

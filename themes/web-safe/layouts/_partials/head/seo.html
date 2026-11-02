@@ -1,0 +1,147 @@
+{{- $page := .page -}}
+{{- $values := .values -}}
+
+{{- $defaultImagePath := $page.Site.Params.og_image -}}
+{{- $image := $defaultImagePath | absURL -}}
+{{- $imageWidth := 0 -}}
+{{- $imageHeight := 0 -}}
+{{- $imageType := "" -}}
+{{- $imageAlt := $page.Params.og_image_alt | default "" -}}
+{{- with resources.Get $defaultImagePath -}}
+  {{- $image = .Permalink -}}
+  {{- $imageWidth = .Width -}}
+  {{- $imageHeight = .Height -}}
+  {{- $imageType = .MediaType.Type -}}
+{{- end -}}
+{{- with $page.Params.og_image -}}
+  {{- $pageImagePath := . -}}
+  {{- with $page.Resources.GetMatch $pageImagePath -}}
+    {{- $image = .Permalink -}}
+    {{- $imageWidth = .Width -}}
+    {{- $imageHeight = .Height -}}
+    {{- $imageType = .MediaType.Type -}}
+  {{- else -}}
+    {{- $image = printf "%s%s" $page.Permalink $pageImagePath -}}
+    {{- $imageWidth = 0 -}}
+    {{- $imageHeight = 0 -}}
+    {{- $imageType = "" -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $sameAs := slice -}}
+{{- if not $page.Site.Params.stealth -}}
+  {{- with $page.Site.Params.linkedin -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- with $page.Site.Params.github -}}
+  {{- $sameAs = $sameAs | append . -}}
+{{- end -}}
+{{- $person := dict
+    "@id" (printf "%s#person" $page.Site.BaseURL)
+    "@type" "Person"
+    "name" $page.Site.Params.author
+    "url" $page.Site.BaseURL
+-}}
+{{- if $sameAs -}}
+  {{- $person = merge $person (dict "sameAs" $sameAs) -}}
+{{- end -}}
+{{- with $page.Site.Params.author_bio -}}
+  {{- $person = merge $person (dict "description" .) -}}
+{{- end -}}
+{{- with $page.Site.Params.expertise -}}
+  {{- $person = merge $person (dict "knowsAbout" .) -}}
+{{- end -}}
+{{/* Photo temporarily disabled.
+{{- with $page.Site.Params.photo -}}
+  {{- $person = merge $person (dict "image" (. | absURL)) -}}
+{{- end -}}
+*/}}
+{{- $language := $page.Site.Language.Locale | default "en" -}}
+
+<meta name="author" content="{{ $page.Site.Params.author }}">
+<meta name="description" content="{{ $values.description }}">
+<link rel="canonical" href="{{ $values.canonical }}">
+{{ with $page.Params.og_image }}<meta name="robots" content="max-image-preview:large">{{ end }}
+{{ with $page.Params.tags }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
+<meta property="og:site_name" content="{{ $page.Site.Title }}">
+<meta property="og:type" content="{{ if and $page.IsPage (eq $page.Section "posts") }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $values.shortTitle }}">
+<meta property="og:description" content="{{ $values.description }}">
+<meta property="og:url" content="{{ $values.canonical }}">
+<meta property="og:image" content="{{ $image }}">
+{{ with $imageWidth }}<meta property="og:image:width" content="{{ . }}">{{ end }}
+{{ with $imageHeight }}<meta property="og:image:height" content="{{ . }}">{{ end }}
+{{ with $imageType }}<meta property="og:image:type" content="{{ . }}">{{ end }}
+{{ with $imageAlt }}<meta property="og:image:alt" content="{{ . }}">{{ end }}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $values.shortTitle }}">
+<meta name="twitter:description" content="{{ $values.description }}">
+<meta name="twitter:image" content="{{ $image }}">
+{{ with $imageAlt }}<meta name="twitter:image:alt" content="{{ . }}">{{ end }}
+{{ with $page.Site.Params.twitter }}<meta name="twitter:creator" content="{{ . }}">{{ end }}
+
+{{ if and $page.IsPage (eq $page.Section "posts") }}
+  <meta property="article:published_time" content="{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}">
+  <meta property="article:modified_time" content="{{ $page.Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+  {{ with $page.Params.tags }}{{ range . }}<meta property="article:tag" content="{{ . }}">{{ end }}{{ end }}
+  {{- $schema := dict
+      "@context" "https://schema.org"
+      "@type" "BlogPosting"
+      "mainEntityOfPage" (dict "@type" "WebPage" "@id" $values.canonical)
+      "headline" $page.Title
+      "description" $values.description
+      "url" $values.canonical
+      "datePublished" ($page.Date.Format "2006-01-02T15:04:05Z07:00")
+      "dateModified" ($page.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+      "author" $person
+      "publisher" $person
+      "image" $image
+      "inLanguage" $language
+  -}}
+  <script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
+
+  {{- $breadcrumbs := slice
+      (dict "@type" "ListItem" "position" 1 "name" "Home" "item" $page.Site.BaseURL)
+      (dict "@type" "ListItem" "position" 2 "name" "Articles" "item" ("/posts/" | absURL))
+  -}}
+  {{- $position := 3 -}}
+  {{- range first 1 ($page.GetTerms "years") -}}
+    {{- $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" $position "name" .LinkTitle "item" .Permalink) -}}
+    {{- $position = add $position 1 -}}
+  {{- end -}}
+  {{- $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" $position "name" $page.Title "item" $values.canonical) -}}
+  {{- $breadcrumbSchema := dict
+      "@context" "https://schema.org"
+      "@type" "BreadcrumbList"
+      "itemListElement" $breadcrumbs
+  -}}
+  <script type="application/ld+json">{{ $breadcrumbSchema | jsonify | safeJS }}</script>
+{{ else if $page.IsHome }}
+  {{- $personRef := dict "@id" (printf "%s#person" $page.Site.BaseURL) -}}
+  {{- $websiteID := printf "%s#website" $page.Site.BaseURL -}}
+  {{- $website := dict
+      "@id" $websiteID
+      "@type" "WebSite"
+      "name" $page.Site.Title
+      "description" $values.description
+      "url" $page.Site.BaseURL
+      "publisher" $personRef
+      "inLanguage" $language
+  -}}
+  {{- $profile := dict
+      "@id" (printf "%s#profile" $values.canonical)
+      "@type" "ProfilePage"
+      "name" $page.Site.Params.author
+      "description" $values.description
+      "url" $values.canonical
+      "mainEntity" $personRef
+      "isPartOf" (dict "@id" $websiteID)
+      "inLanguage" $language
+  -}}
+  {{- $schema := dict
+      "@context" "https://schema.org"
+      "@graph" (slice $website $profile $person)
+  -}}
+  <script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
+{{ end }}

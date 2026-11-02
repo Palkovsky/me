@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Table-layout homepage, 1998</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1440px;height:900px;overflow:hidden}
+body{background:#336699;font:13px Verdana,"DejaVu Sans",sans-serif;color:#000;padding-top:18px}
+a{color:#0000cc}
+table.page{width:1080px;margin:0 auto;border-collapse:separate;border-spacing:0;border:2px outset #6699cc;background:#fff}
+td{vertical-align:top}
+.banner{background:#000033;height:84px;padding:0 22px;border-bottom:3px solid #ffcc00}
+.banner b{display:block;padding-top:16px;font:bold 34px Georgia,serif;color:#ffcc00;text-shadow:2px 2px 0 #000,-1px -1px 0 #996600;letter-spacing:.02em}
+.banner small{display:block;color:#99ccff;font-size:11px;letter-spacing:.3em;margin-top:2px}
+.nav{width:220px;background:#003366;color:#fff;padding:16px 14px;height:800px}
+.nav a{color:#fff;font-weight:bold;text-decoration:none;display:block;padding:5px 0 5px 16px;position:relative}
+.nav a::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;background:#ffcc00;box-shadow:1px 1px 0 #000}
+.nav a.cur{color:#ffcc00}
+.nav hr{border:0;border-top:1px solid #000033;border-bottom:1px solid #336699;margin:12px 0}
+.nav h4{margin:0 0 6px;color:#ffcc00;font-size:12px}
+.toc{list-style:none;margin:0;padding:0;font-size:12px;line-height:1.45}
+.toc li{padding:3px 0 3px 12px;color:#ccddee}
+.toc li.on{color:#000033;background:#ffcc00;font-weight:bold;margin-left:-14px;padding-left:26px;margin-right:-14px}
+.toc ul{list-style:none;padding-left:12px;margin:2px 0}
+.prog{margin-top:14px;font-size:11px;color:#ffcc00;font-weight:bold}
+.pt{height:13px;margin-top:4px;border:2px inset #6699cc;background:#000033}
+.pt i{display:block;height:100%;width:12%;background:#ffcc00}
+.main{padding:20px 36px 0 32px}
+.crumbs{font-size:11px}
+h1{font:bold 31px/1.15 Georgia,serif;color:#000033;margin:10px 0 10px}
+.meta{font-size:11px;color:#333;margin-bottom:10px}
+.tags a{font-size:11px;margin-right:6px}
+hr.g{border:0;border-top:1px solid #999;border-bottom:1px solid #fff;box-shadow:0 1px 0 #ddd;margin:14px 0}
+.read{max-width:700px;font:17px/1.62 Georgia,"Gelasio",serif;color:#111}
+.read p{margin:0 0 15px}
+h2{font:bold 19px Verdana,sans-serif;color:#003366;margin:22px 0 10px}
+h2 span{display:inline-block;width:12px;height:12px;background:#ffcc00;border:1px solid #996600;margin-right:9px;vertical-align:1px}
+table.code{width:100%;border:2px outset #cccccc;border-spacing:0;margin:12px 0 14px;background:#eeeeee}
+table.code th{background:#cccccc;text-align:left;font:bold 11px Verdana,sans-serif;padding:3px 8px;border:1px inset #ccc}
+table.code th span{float:right;background:#ccc;border:2px outset #eee;padding:0 8px;font-weight:normal}
+table.code td{padding:10px 12px;font:14px/1.5 "Courier New",monospace;white-space:pre;border:1px inset #ccc}
+</style></head>
+<body>
+<table class="page">
+  <tr><td colspan="2" class="banner"><b>Dawid Macek</b><small>SYSTEMS PROGRAMMING</small></td></tr>
+  <tr>
+    <td class="nav">
+      <a href="#">About</a><a href="#" class="cur">Blog</a><a href="#">RSS</a>
+      <hr>
+      <h4>Table of contents</h4>
+      <ul class="toc">
+        <li class="on">The conventional copy</li>
+        <li>Moving the allocation
+          <ul><li>Owning foreign bytes</li><li>Foreign strings</li><li>The FFI adapter</li><li>The Text wrapper</li></ul></li>
+        <li>Copy vs. move performance</li>
+        <li>The price of avoiding the copy</li>
+      </ul>
+      <div class="prog">Progress 12%<div class="pt"><i></i></div></div>
+    </td>
+    <td class="main">
+      <div class="crumbs"><a href="#">Blog</a> › <a href="#">Articles</a> › <a href="#">2026</a></div>
+      <h1>Moving ownership from C to Rust without cloning</h1>
+      <div class="meta">Published July 7, 2026 &nbsp;|&nbsp; Length 11 minute read &nbsp;|&nbsp; <span class="tags"><a href="#">rust</a><a href="#">c</a><a href="#">ffi</a><a href="#">performance</a></span></div>
+      <hr class="g">
+      <div class="read">
+        <p>The event processing engine I'm building is written in Rust and integrates with an existing C codebase. It retains events for future correlation, so borrowing their data for a single FFI call is not enough: Rust must take ownership. In this article, I'm exploring a zero-copy FFI handoff for C-allocated UTF-8 strings: moving the allocation and its destructor into Rust without copying the contents.</p>
+        <h2><span></span>The conventional copy</h2>
+        <p>We'll start with the unsurprising C API. It accepts a pointer and an exact byte length, so a NUL terminator is not required and embedded NUL bytes are allowed.</p>
+        <table class="code"><tr><th>C <span>Copy</span></th></tr><tr><td>typedef struct Event Event;
+
+Event* event_new(const char* ptr, size_t len);
+Event* event_new_unchecked(const char* ptr, size_t len);
+void event_print(const Event* event);
+void event_free(Event* event);</td></tr></table>
+        <p>It exposes two API variants: checked and unchecked.</p>
+      </div>
+    </td>
+  </tr>
+</table>
+</body></html>

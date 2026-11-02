@@ -1,0 +1,10 @@
+{{- $result := transform.HighlightCodeBlock . -}}
+{{- $lang := .Type | default "code" -}}
+<div class="code">
+  <div class="code__bar">
+    <span class="code__lang">{{ $lang }}</span>
+    <button class="btn code__copy" type="button" hidden>Copy</button>
+  </div>
+  {{- /* Hugo already makes the scrolling <pre> focusable; name it after the visible language label. */}}
+  {{ replace $result.Wrapped `<pre tabindex="0"` (printf `<pre tabindex="0" role="region" aria-label="%s"` $lang) | safeHTML }}
+</div>
